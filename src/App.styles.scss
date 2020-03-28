@@ -1,0 +1,23 @@
+@import "~bootstrap/scss/bootstrap";
+
+.total-row {
+  background-color: darkgray !important;
+}
+
+.nav-link.active {
+  background-color: #1CD4E7 !important;
+}
+
+.btn-primary {
+  background-image: linear-gradient(to right, #1CD4E7, #3EFC9A);
+}
+
+.btn-primary:hover {
+  background-image: linear-gradient(to right, #3EFC9A, #1CD4E7);
+}
+
+td,
+th,
+input {
+  max-width: 70px;
+}
