@@ -1,5 +1,11 @@
 import React, { Component } from 'react';
-import SelectDropdown from './components/select-dropdown/select-dropdown.component';
+
+import CustomSelect from './components/custom-select/custom-select.component';
+import CustomButton from './components/custom-button/custom-button.component';
+import CustomTab from './components/custom-tab/custom-tab.component';
+import OverviewTable from './components/overview-table/overview-table.component';
+import ExpenseTable from './components/expense-table/expense-table.component';
+import StaticTable from './components/static-table/static-table.component';
 
 class App extends Component {
   constructor() {
@@ -27,11 +33,79 @@ class App extends Component {
       { value: 2017, label: 2017 },
     ];
 
+    let tabs = [
+      { value: 0, label: 'Overview'},
+      { value: 1, label: 'Extra Expense'},
+      { value: 2, label: 'Ibrahim Expense'},
+      { value: 3, label: 'Baby Expense'},
+      { value: 4, label: 'Monthly Shopping Expense'},
+      { value: 5, label: 'Food Week 1 Expense'},
+      { value: 6, label: 'Food Week 2 Expense'},
+      { value: 7, label: 'Food Week 3 Expense'},
+      { value: 8, label: 'Food Week 4 Expense'},
+      { value: 9, label: 'Eating Out Expense'},
+      { value: 10, label: 'Car Gas Expense'},
+      { value: 11, label: 'Car Maintenance Expense'},
+      { value: 12, label: 'Unknown Expense'},
+      { value: 13, label: 'Monthly Withdrawal Calculation'},
+    ];
+
+    let overviewTable = [
+      { 
+        tableName: 'Overview',
+        headers: { 
+          colHeaders: ['Expense', 'Last Month Paid', 'Expected Due', 'Paid', 'Date'],
+          rowHeaders: [
+            { isSummation: false, hasOwnTable: false, label: 'Rent'},
+            { isSummation: false, hasOwnTable: false, label: 'Ameneties + Heat'},
+            { isSummation: false, hasOwnTable: false, label: 'Electricity'},
+            { isSummation: false, hasOwnTable: false, label: 'Water'},
+            { isSummation: false, hasOwnTable: false, label: 'Gas'},
+            { isSummation: true, hasOwnTable: true, label: 'Car Gas'},
+            { isSummation: true, hasOwnTable: true, label: 'Car Maintenance'},
+            { isSummation: false, hasOwnTable: false, label: 'Car Insurance'},
+            { isSummation: false, hasOwnTable: false, label: 'Car Taxes'},
+            { isSummation: false, hasOwnTable: false, label: 'Internet'},
+            { isSummation: false, hasOwnTable: false, label: 'Serap Phone Bill'},
+            { isSummation: false, hasOwnTable: false, label: 'Moms Phone Bill'},
+            { isSummation: false, hasOwnTable: false, label: 'Stamatios Phone Bill'},
+            { isSummation: true, hasOwnTable: true, label: 'Monthly Shopping'},
+            { isSummation: true, hasOwnTable: true, label: 'Food Week 1'},
+            { isSummation: true, hasOwnTable: true, label: 'Food Week 2'},
+            { isSummation: true, hasOwnTable: true, label: 'Food Week 3'},
+            { isSummation: true, hasOwnTable: true, label: 'Food Week 4'},
+            { isSummation: true, hasOwnTable: true, label: 'Eating Out'},
+            { isSummation: false, hasOwnTable: false, label: 'Yatim'},
+            { isSummation: true, hasOwnTable: true, label: 'Ibrahim'},
+            { isSummation: true, hasOwnTable: true, label: 'Baby'},
+            { isSummation: true, hasOwnTable: true, label: 'Extra'},
+            { isSummation: false, hasOwnTable: false, label: 'Hair Cut'},
+            { isSummation: false, hasOwnTable: false, label: 'Qurban Savings'},
+            { isSummation: false, hasOwnTable: false, label: 'Cleaning'},
+            { isSummation: false, hasOwnTable: false, label: 'Monthly Withdrawal'},
+            { isSummation: true, hasOwnTable: true, label: 'Unknown'},
+            { isSummation: true, hasOwnTable: false, label: 'Total Bills'},
+            { isSummation: true, hasOwnTable: false, label: 'Left Over Last Month'},
+            { isSummation: false, hasOwnTable: false, label: 'Serap Payment'},
+            { isSummation: false, hasOwnTable: false, label: 'Stamatios Payment'},
+            { isSummation: false, hasOwnTable: false, label: 'Extra Payment'},
+            { isSummation: false, hasOwnTable: false, label: 'Deposits'},
+            { isSummation: true, hasOwnTable: false, label: 'Total Savings'},
+          ],
+        },
+      },
+    ];
+
     this.state = {
+      tabOptions: tabs,
+      selectedTab: tabs[0],
       monthOptions: months,
-      selectedMonth: months[0],
+      selectedMonth: months[(new Date()).getMonth()],
       yearOptions: years,
       selectedYear: years[0],
+      activeTab: tabs[0],
+      tabs: tabs,
+      overviewTable: overviewTable,
     };
   }
 
@@ -47,23 +121,35 @@ class App extends Component {
     });
   }
 
+  handleTabSelectChange = (option) => {
+    this.setState({
+      selectedTab: option,
+    });
+  }
+
+  handleTabChange = (selectedTab) => {
+    this.setState({
+      activeTab: selectedTab,
+    });
+  }
+
   render() {
     return (
       <div className="App">
         <div className="container">
           <div className="text-center py-3">
-            <header>Monthly Expense Report</header>
-            <div className="row d-flex justify-content-center">
-              <div className="col-6 text-left">
-                <SelectDropdown 
+            <header className="h1">Monthly Expense Report</header>
+            <div className="row mt-5 d-flex justify-content-center">
+              <div className="col-6 col-md-4 col-lg-4 col-xl-3 text-left">
+                <CustomSelect 
                   identifier="months"
                   handler={this.handleMonthSelectChange}
                   options={this.state.monthOptions}
                   selectedItem={this.state.selectedMonth}
                 />
               </div>
-              <div className="col-6 text-left">
-                <SelectDropdown 
+              <div className="col-6 col-md-4 col-lg-4 col-xl-3 text-left">
+                <CustomSelect 
                   identifier="years"
                   handler={this.handleYearSelectChange}
                   options={this.state.yearOptions}
@@ -72,753 +158,33 @@ class App extends Component {
               </div>
             </div>
           </div>
-          <button type="button" className="btn btn-primary btn-lg btn-block mb-5">Start A New Month</button>
-          <ul className="nav nav-tabs nav-fill">
-            <li className="nav-item">
-              <a className="nav-link active" href="/#">Overview</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="/#">Expense List</a>
-            </li>
-          </ul>
-          <div className="table-responsive float-left w-100 text-center">
-            <table className="table table-striped table-hover table-sm mb-0">
-              <thead>
-                <tr>
-                  <th scope="col">Expense</th>
-                  <th scope="col">Last Month Paid</th>
-                  <th scope="col">Expected Due</th>
-                  <th scope="col">Paid</th>
-                  <th scope="col">Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th scope="row">Rent</th>
-                  <td>Mark</td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="date" /></td>
-                </tr>
-                <tr>
-                  <th scope="row">Ameneties + Heat</th>
-                  <td>Mark</td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr>
-                  <th scope="row">Electricity</th>
-                  <td>Mark</td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr>
-                  <th scope="row">Water</th>
-                  <td>Mark</td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr>
-                  <th scope="row">Gas</th>
-                  <td>Mark</td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr>
-                  <th scope="row">Car Gas</th>
-                  <td>Mark</td>
-                  <td><input type="number" /></td>
-                  <td>$</td>
-                  <td>See Column</td>
-                </tr>
-                <tr>
-                  <th scope="row">Car Maintenance</th>
-                  <td>Mark</td>
-                  <td><input type="number" /></td>
-                  <td>$</td>
-                  <td colSpan="2">See Column</td>
-                </tr>
-                <tr>
-                  <th scope="row">Car Insurance</th>
-                  <td>Mark</td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr>
-                  <th scope="row">Car Taxes</th>
-                  <td>Mark</td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr>
-                  <th scope="row">Internet</th>
-                  <td>Mark</td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr>
-                  <th scope="row">Serap Phone Bill</th>
-                  <td>Mark</td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr>
-                  <th scope="row">Moms Phone Bill</th>
-                  <td>Mark</td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr>
-                  <th scope="row">Stamatios Phone Bill</th>
-                  <td>Mark</td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr>
-                  <th scope="row">Monthly Shopping</th>
-                  <td>Mark</td>
-                  <td><input type="number" /></td>
-                  <td>$</td>
-                  <td>See Column</td>
-                </tr>
-                <tr>
-                  <th scope="row">Food Week 1</th>
-                  <td>Mark</td>
-                  <td><input type="number" /></td>
-                  <td>$</td>
-                  <td>See Column</td>
-                </tr>
-                <tr>
-                  <th scope="row">Food Week 2</th>
-                  <td>Mark</td>
-                  <td><input type="number" /></td>
-                  <td>$</td>
-                  <td>See Column</td>
-                </tr>
-                <tr>
-                  <th scope="row">Food Week 3</th>
-                  <td>Mark</td>
-                  <td><input type="number" /></td>
-                  <td>$</td>
-                  <td>See Column</td>
-                </tr>
-                <tr>
-                  <th scope="row">Food Week 4</th>
-                  <td>Mark</td>
-                  <td><input type="number" /></td>
-                  <td>$</td>
-                  <td>See Column</td>
-                </tr>
-                <tr>
-                  <th scope="row">Eating Out</th>
-                  <td>Mark</td>
-                  <td><input type="number" /></td>
-                  <td>$</td>
-                  <td>See Column</td>
-                </tr>
-                <tr>
-                  <th scope="row">Yatim</th>
-                  <td>Mark</td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr>
-                  <th scope="row">Ibrahim</th>
-                  <td>Mark</td>
-                  <td><input type="number" /></td>
-                  <td>$</td>
-                  <td>See Column</td>
-                </tr>
-                <tr>
-                  <th scope="row">Baby</th>
-                  <td>Mark</td>
-                  <td><input type="number" /></td>
-                  <td>$</td>
-                  <td>See Column</td>
-                </tr>
-                <tr>
-                  <th scope="row">Extra</th>
-                  <td>Mark</td>
-                  <td><input type="number" /></td>
-                  <td>$</td>
-                  <td>See Column</td>
-                </tr>
-                <tr>
-                  <th scope="row">Hair Cut</th>
-                  <td>Mark</td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr>
-                  <th scope="row">Qurban Savings</th>
-                  <td>Mark</td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr>
-                  <th scope="row">Cleaning</th>
-                  <td>Mark</td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr>
-                  <th scope="row">Monthly Withdrawal</th>
-                  <td>Mark</td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr>
-                  <th scope="row">Unknown</th>
-                  <td>Mark</td>
-                  <td><input type="number" /></td>
-                  <td>$</td>
-                  <td>See Column</td>
-                </tr>
-                <tr>
-                  <th scope="row">Total Bills</th>
-                  <td>Mark</td>
-                  <td><input type="number" /></td>
-                  <td>$</td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <th scope="row">Left Over Last Month</th>
-                  <td>Mark</td>
-                  <td><input type="number" /></td>
-                  <td>$</td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <th scope="row">Serap Payment</th>
-                  <td>Mark</td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr>
-                  <th scope="row">Stamatios Payment</th>
-                  <td>Mark</td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr>
-                  <th scope="row">Extra Payment</th>
-                  <td>Mark</td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr>
-                  <th scope="row">Deposits</th>
-                  <td>Mark</td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr className="total-row">
-                  <th scope="row">Total Savings</th>
-                  <td>$</td>
-                  <td>$</td>
-                  <td>$</td>
-                  <td></td>
-                </tr>
-              </tbody>
-            </table>
+          <CustomButton text="Start A New Month" />
+          {/*
+          <CustomTab 
+            activeTab={this.state.activeTab} 
+            tabItems={this.state.tabs} 
+            handler={this.handleTabChange} 
+          />
+          */}
+          <div className="row my-5 d-flex justify-content-center">
+            <div className="col-6 col-md-7 col-lg-4 col-xl-3 text-left">
+              <CustomSelect 
+                identifier="tabs"
+                handler={this.handleTabSelectChange}
+                options={this.state.tabOptions}
+                selectedItem={this.state.selectedTab}
+              />
+            </div>
           </div>
-          <div className="table-responsive float-right w-100 pl-5 text-center">
-            <select className="w-100">
-              <option>Extra Expense</option>
-              <option>Ibrahim Expense</option>
-              <option>Baby Expense</option>
-              <option>Monthly Shopping Expense</option>
-              <option>Food Week 1 Expense</option>
-              <option>Food Week 2 Expense</option>
-              <option>Food Week 3 Expense</option>
-              <option>Food Week 4 Expense</option>
-              <option>Eating Out Expense</option>
-              <option>Car Gas Expense</option>
-              <option>Car Maintenance Expense</option>
-              <option>Unknown Expense</option>
-              <option>Monthly Withdrawal Calculation</option>
-            </select>
-          </div>
-          <div className="table-responsive float-right w-100 pl-5 text-center">
-            <div className="text-center">Extra Expense</div>
-            <table className="table table-striped table-hover table-sm mb-0">
-              <thead>
-                <tr>
-                  <th scope="col">Remove Row</th>
-                  <th scope="col">Expense</th>
-                  <th scope="col">Paid</th>
-                  <th scope="col">Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th scope="row"><a href="/#">[-]</a></th>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr className="total-row">
-                  <th scope="row" colSpan="2">Total</th>
-                  <td colSpan="2">$</td>
-                </tr>
-              </tbody>
-            </table>
-            <button type="button" className="btn btn-primary btn-lg btn-block mb-5">Add New Expense</button>
-          </div>
-          <div className="table-responsive float-right w-100 pl-5 text-center">
-            <div className="text-center">Ibrahim Expense</div>
-            <table className="table table-striped table-hover table-sm mb-0">
-              <thead>
-                <tr>
-                  <th scope="col">Remove Row</th>
-                  <th scope="col">Expense</th>
-                  <th scope="col">Paid</th>
-                  <th scope="col">Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th scope="row"><a href="/#">[-]</a></th>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr className="total-row">
-                  <th scope="row" colSpan="2">Total</th>
-                  <td colSpan="2">$</td>
-                </tr>
-              </tbody>
-            </table>
-            <button type="button" className="btn btn-primary btn-lg btn-block mb-5">Add New Expense</button>
-          </div>
-          <div className="table-responsive float-right w-100 pl-5 text-center">
-            <div className="text-center">Baby Expense</div>
-            <table className="table table-striped table-hover table-sm mb-0">
-              <thead>
-                <tr>
-                  <th scope="col">Remove Row</th>
-                  <th scope="col">Expense</th>
-                  <th scope="col">Paid</th>
-                  <th scope="col">Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th scope="row"><a href="/#">[-]</a></th>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr className="total-row">
-                  <th scope="row" colSpan="2">Total</th>
-                  <td colSpan="2">$</td>
-                </tr>
-              </tbody>
-            </table>
-            <button type="button" className="btn btn-primary btn-lg btn-block mb-5">Add New Expense</button>
-          </div>
-          <div className="table-responsive float-right w-100 pl-5 text-center">
-            <div className="text-center">Monthly Shopping Expense</div>
-            <table className="table table-striped table-hover table-sm mb-0">
-              <thead>
-                <tr>
-                  <th scope="col">Remove Row</th>
-                  <th scope="col">Expense</th>
-                  <th scope="col">Paid</th>
-                  <th scope="col">Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th scope="row"><a href="/#">[-]</a></th>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr className="total-row">
-                  <th scope="row" colSpan="2">Total</th>
-                  <td colSpan="2">$</td>
-                </tr>
-              </tbody>
-            </table>
-            <button type="button" className="btn btn-primary btn-lg btn-block mb-5">Add New Expense</button>
-          </div>
-          <div className="table-responsive float-right w-100 pl-5 text-center">
-            <div className="text-center">Food Week 1 Expense</div>
-            <table className="table table-striped table-hover table-sm mb-0">
-              <thead>
-                <tr>
-                  <th scope="col">Remove Row</th>
-                  <th scope="col">Expense</th>
-                  <th scope="col">Paid</th>
-                  <th scope="col">Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th scope="row"><a href="/#">[-]</a></th>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr className="total-row">
-                  <th scope="row" colSpan="2">Total</th>
-                  <td colSpan="2">$</td>
-                </tr>
-              </tbody>
-            </table>
-            <button type="button" className="btn btn-primary btn-lg btn-block mb-5">Add New Expense</button>
-          </div>
-          <div className="table-responsive float-right w-100 pl-5 text-center">
-            <div className="text-center">Food Week 2 Expense</div>
-            <table className="table table-striped table-hover table-sm mb-0">
-              <thead>
-                <tr>
-                  <th scope="col">Remove Row</th>
-                  <th scope="col">Expense</th>
-                  <th scope="col">Paid</th>
-                  <th scope="col">Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th scope="row"><a href="/#">[-]</a></th>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr className="total-row">
-                  <th scope="row" colSpan="2">Total</th>
-                  <td colSpan="2">$</td>
-                </tr>
-              </tbody>
-            </table>
-            <button type="button" className="btn btn-primary btn-lg btn-block mb-5">Add New Expense</button>
-          </div>
-          <div className="table-responsive float-right w-100 pl-5 text-center">
-            <div className="text-center">Food Week 3 Expense</div>
-            <table className="table table-striped table-hover table-sm mb-0">
-              <thead>
-                <tr>
-                  <th scope="col">Remove Row</th>
-                  <th scope="col">Expense</th>
-                  <th scope="col">Paid</th>
-                  <th scope="col">Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th scope="row"><a href="/#">[-]</a></th>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr className="total-row">
-                  <th scope="row" colSpan="2">Total</th>
-                  <td colSpan="2">$</td>
-                </tr>
-              </tbody>
-            </table>
-            <button type="button" className="btn btn-primary btn-lg btn-block mb-5">Add New Expense</button>
-          </div>
-          <div className="table-responsive float-right w-100 pl-5 text-center">
-            <div className="text-center">Food Week 4 Expense</div>
-            <table className="table table-striped table-hover table-sm mb-0">
-              <thead>
-                <tr>
-                  <th scope="col">Remove Row</th>
-                  <th scope="col">Expense</th>
-                  <th scope="col">Paid</th>
-                  <th scope="col">Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th scope="row"><a href="/#">[-]</a></th>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr className="total-row">
-                  <th scope="row" colSpan="2">Total</th>
-                  <td colSpan="2">$</td>
-                </tr>
-              </tbody>
-            </table>
-            <button type="button" className="btn btn-primary btn-lg btn-block mb-5">Add New Expense</button>
-          </div>
-          <div className="table-responsive float-right w-100 pl-5 text-center">
-            <div className="text-center">Eating Out Expense</div>
-            <table className="table table-striped table-hover table-sm mb-0">
-              <thead>
-                <tr>
-                  <th scope="col">Remove Row</th>
-                  <th scope="col">Expense</th>
-                  <th scope="col">Paid</th>
-                  <th scope="col">Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th scope="row"><a href="/#">[-]</a></th>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr className="total-row">
-                  <th scope="row" colSpan="2">Total</th>
-                  <td colSpan="2">$</td>
-                </tr>
-              </tbody>
-            </table>
-            <button type="button" className="btn btn-primary btn-lg btn-block mb-5">Add New Expense</button>
-          </div>
-          <div className="table-responsive float-right w-100 pl-5 text-center">
-            <div className="text-center">Car Gas Expense</div>
-            <table className="table table-striped table-hover table-sm mb-0">
-              <thead>
-                <tr>
-                  <th scope="col">Remove Row</th>
-                  <th scope="col">Expense</th>
-                  <th scope="col">Paid</th>
-                  <th scope="col">Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th scope="row"><a href="/#">[-]</a></th>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr>
-                  <th scope="row"><a href="/#">[-]</a></th>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr>
-                  <th scope="row"><a href="/#">[-]</a></th>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr>
-                  <th scope="row"><a href="/#">[-]</a></th>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr>
-                  <th scope="row"><a href="/#">[-]</a></th>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr>
-                  <th scope="row"><a href="/#">[-]</a></th>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr>
-                  <th scope="row"><a href="/#">[-]</a></th>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr>
-                  <th scope="row"><a href="/#">[-]</a></th>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr>
-                  <th scope="row"><a href="/#">[-]</a></th>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr>
-                  <th scope="row"><a href="/#">[-]</a></th>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr>
-                  <th scope="row"><a href="/#">[-]</a></th>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr>
-                  <th scope="row"><a href="/#">[-]</a></th>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr>
-                  <th scope="row"><a href="/#">[-]</a></th>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr>
-                  <th scope="row"><a href="/#">[-]</a></th>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr>
-                  <th scope="row"><a href="/#">[-]</a></th>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr>
-                  <th scope="row"><a href="/#">[-]</a></th>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr>
-                  <th scope="row"><a href="/#">[-]</a></th>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr>
-                  <th scope="row"><a href="/#">[-]</a></th>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr>
-                  <th scope="row"><a href="/#">[-]</a></th>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr className="total-row">
-                  <th scope="row" colSpan="2">Total</th>
-                  <td colSpan="2">$</td>
-                </tr>
-              </tbody>
-            </table>
-            <button type="button" className="btn btn-primary btn-lg btn-block mb-5">Add New Expense</button>
-          </div>
-          <div className="table-responsive float-right w-100 pl-5 text-center">
-            <div className="text-center">Car Maintenance Expense</div>
-            <table className="table table-striped table-hover table-sm mb-0">
-              <thead>
-                <tr>
-                  <th scope="col">Remove Row</th>
-                  <th scope="col">Expense</th>
-                  <th scope="col">Paid</th>
-                  <th scope="col">Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th scope="row"><a href="/#">[-]</a></th>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr className="total-row">
-                  <th scope="row" colSpan="2">Total</th>
-                  <td colSpan="2">$</td>
-                </tr>
-              </tbody>
-            </table>
-            <button type="button" className="btn btn-primary btn-lg btn-block mb-5">Add New Expense</button>
-          </div>
-          <div className="table-responsive float-right w-100 pl-5 text-center">
-            <div className="text-center">Unknown Expense</div>
-            <table className="table table-striped table-hover table-sm mb-0">
-              <thead>
-                <tr>
-                  <th scope="col">Remove Row</th>
-                  <th scope="col">Expense</th>
-                  <th scope="col">Paid</th>
-                  <th scope="col">Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th scope="row"><a href="/#">[-]</a></th>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                  <td><input type="number" /></td>
-                </tr>
-                <tr className="total-row">
-                  <th scope="row" colSpan="2">Total</th>
-                  <td colSpan="2">$</td>
-                </tr>
-              </tbody>
-            </table>
-            <button type="button" className="btn btn-primary btn-lg btn-block mb-5">Add New Expense</button>
-          </div>
-          <div className="table-responsive float-right w-100 pl-5 text-center">
-            <div className="text-center">Monthly Withdrawal Calculation</div>
-            <table className="table table-striped table-hover table-sm mb-0">
-              <thead>
-                <tr>
-                  <th scope="col">Expense</th>
-                  <th scope="col">Due</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th scope="row">Car Maintenance</th>
-                  <td>60</td>
-                </tr>
-                <tr>
-                  <th scope="row">Car Insurance</th>
-                  <td>72.08</td>
-                </tr>
-                <tr>
-                  <th scope="row">Car Taxes</th>
-                  <td>104.85</td>
-                </tr>
-                <tr>
-                  <th scope="row">Qurban Savings</th>
-                  <td>125</td>
-                </tr>
-                <tr>
-                  <th scope="row">Yetim</th>
-                  <td>100</td>
-                </tr>
-                <tr>
-                  <th scope="row">Monthly Savings</th>
-                  <td>1000</td>
-                </tr>
-                <tr className="total-row">
-                  <th scope="row">Total</th>
-                  <td>1461.93</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          {
+            this.state.selectedTab.value === 0 ?
+              <OverviewTable tableData={this.state.overviewTable[this.state.selectedTab.value]} />
+            :
+            this.state.selectedTab.value === 13 ?
+              <StaticTable />
+            :
+              <ExpenseTable tableData={this.state.overviewTable[this.state.selectedTab.value]} />
+          }
         </div>
       </div>
     );

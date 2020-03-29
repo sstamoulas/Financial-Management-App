@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 
-import SelectDropdownItem from '../select-dropdown-item/select-dropdown-item.component';
+import CustomSelectItem from '../custom-select-item/custom-select-item.component';
 
-import './select-dropdown.styles.scss';
+import './custom-select.styles.scss';
 
-class SelectDropdown extends Component {
+class CustomSelect extends Component {
   constructor(props) {
     super(props);
 
@@ -44,7 +44,7 @@ class SelectDropdown extends Component {
     return (
       <div className="container">
         <div className={`cool-select ${isOpen ? 'open' : ''}`}>
-          <div className="input-wrap preview-autocomplete d-flex justify-content-center">
+          <div className="input-wrap d-flex justify-content-center">
             <input 
               className={`input-control ${identifier}`} 
               placeholder={selectedItem.label} 
@@ -56,7 +56,11 @@ class SelectDropdown extends Component {
               <nav className="select-nav">
                 {
                   options.map((option) => (
-                    <SelectDropdownItem key={option.value} option={option} handler={handler} />
+                    <CustomSelectItem 
+                      key={option.value} 
+                      option={option} 
+                      handler={handler}
+                    />
                   ))
                 }
               </nav>
@@ -68,4 +72,4 @@ class SelectDropdown extends Component {
   }
 }
 
-export default SelectDropdown;
+export default CustomSelect;
