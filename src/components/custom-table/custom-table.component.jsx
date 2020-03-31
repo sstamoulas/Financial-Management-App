@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 
 import CustomButton from '../custom-button/custom-button.component';
 
-import './expense-table.styles.scss';
+import './custom-table.styles.scss';
 
-class ExpenseTable extends Component {
+class CustomTable extends Component {
   constructor(props) {
     super(props);
 
@@ -103,4 +103,4 @@ class ExpenseTable extends Component {
   }
 }
 
-export default ExpenseTable;
+export default CustomTable;

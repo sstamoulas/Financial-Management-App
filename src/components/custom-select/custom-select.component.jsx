@@ -38,21 +38,21 @@ class CustomSelect extends Component {
   }
   
   render() {
-    let { identifier, options, handler, selectedItem } = this.props;
+    let { size, identifier, options, handler, selectedItem } = this.props;
     let { isOpen } = this.state;
 
     return (
       <div className="container">
         <div className={`cool-select ${isOpen ? 'open' : ''}`}>
-          <div className="input-wrap d-flex justify-content-center">
+          <div className={`input-wrap ${size} d-flex justify-content-center`}>
             <input 
-              className={`input-control ${identifier}`} 
+              className={`input-control ${identifier} ${size}`} 
               placeholder={selectedItem.label} 
             />
           </div>
-          <div className="dropdown-wrap">
+          <div className={`dropdown-wrap ${size}`}>
             <div className="close"></div>
-            <div className="dropdown-body">
+            <div className={`dropdown-body ${size}`}>
               <nav className="select-nav">
                 {
                   options.map((option) => (
