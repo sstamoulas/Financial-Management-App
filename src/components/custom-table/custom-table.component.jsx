@@ -19,35 +19,11 @@ class CustomTable extends Component {
     });
   }
 
-  updateExpenseName = (index, e) => {
+  updateExpense = (index, e, type) => {
     this.setState({
       expenses: this.state.expenses.map((expense, expenseIndex) => {
         if(index === expenseIndex) {
-          expense.name = e.target.value;
-        }
-
-        return expense;
-      }),
-    });
-  }
-
-  updateExpenseAmount = (index, e) => {
-    this.setState({
-      expenses: this.state.expenses.map((expense, expenseIndex) => {
-        if(index === expenseIndex) {
-          expense.amount = e.target.value;
-        }
-
-        return expense;
-      }),
-    });
-  }
-
-  updateExpenseDate = (index, e) => {
-    this.setState({
-      expenses: this.state.expenses.map((expense, expenseIndex) => {
-        if(index === expenseIndex) {
-          expense.date = e.target.value;
+          expense[type] = e.target.value;
         }
 
         return expense;
@@ -83,9 +59,9 @@ class CustomTable extends Component {
               expenses.map((expense, index) => (
                 <tr key={`expense-${index}`}>
                   <th scope="row"><a href="/#" onClick={() => this.removeRow(index)}>[-]</a></th>
-                  <td><input type="text" value={expense.name} onChange={(e) => this.updateExpenseName(index, e)} /></td>
-                  <td><input type="number" value={expense.amount} onChange={(e) => this.updateExpenseAmount(index, e)} /></td>
-                  <td><input type="date" value={expense.date} onChange={(e) => this.updateExpenseDate(index, e)} /></td>
+                  <td><input type="text" value={expense.name} onChange={(e) => this.updateExpense(index, e, 'name')} /></td>
+                  <td><input type="number" value={expense.amount} onChange={(e) => this.updateExpense(index, e, 'amount')} /></td>
+                  <td><input type="date" value={expense.date} onChange={(e) => this.updateExpense(index, e, 'date')} /></td>
                 </tr>
               ))
             }
