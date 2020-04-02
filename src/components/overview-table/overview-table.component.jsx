@@ -1,365 +1,74 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import { 
   firestore,
-  createFiscalMonthlyDocument, 
   updateFiscalMonthlyDocument, 
   convertCollectionsSnapshotToMap,
 } from '../../firebase/firebase.utils';
+import { fetchCollectionsStart } from '../../redux/expense/expense.actions';
 
 import './overview-table.styles.scss';
 
 class OverviewTable extends Component {
-  constructor(props) {
-    super(props);
-
-    let expenseData = {
-      expenses: [
-        {
-          'expenseType': 'Rent',
-          'Last Month Paid': 0,
-          'Expected': 1,
-          'Paid': 1,
-          'Date': '2020-04-20',
-          'hasOwnTable': false,
-        },
-        {
-          'expenseType': 'Ameneties + Heat',
-          'Last Month Paid': 0,
-          'Expected': 0,
-          'Paid': 0,
-          'Date': '',
-          'hasOwnTable': false,
-        },
-        {
-          'expenseType': 'Electricity',
-          'Last Month Paid': 0,
-          'Expected': 0,
-          'Paid': 0,
-          'Date': '',
-          'hasOwnTable': false,
-        },
-        {
-          'expenseType': 'Water',
-          'Last Month Paid': 0,
-          'Expected': 0,
-          'Paid': 0,
-          'Date': '',
-          'hasOwnTable': false,
-        },
-        {
-          'expenseType': 'Gas',
-          'Last Month Paid': 0,
-          'Expected': 0,
-          'Paid': 0,
-          'Date': '',
-          'hasOwnTable': false,
-        },
-        {
-          'expenseType': 'Car Gas',
-          'Last Month Paid': 0,
-          'Expected': 0,
-          'Paid': 0,
-          'Date': '',
-          'hasOwnTable': true,
-        },
-        {
-          'expenseType': 'Car Maintenance',
-          'Last Month Paid': 0,
-          'Expected': 0,
-          'Paid': 0,
-          'Date': '',
-          'hasOwnTable': true,
-        },
-        {
-          'expenseType': 'Car Insurance',
-          'Last Month Paid': 0,
-          'Expected': 0,
-          'Paid': 0,
-          'Date': '',
-          'hasOwnTable': false,
-        },
-        {
-          'expenseType': 'Car Taxes',
-          'Last Month Paid': 0,
-          'Expected': 0,
-          'Paid': 0,
-          'Date': '',
-          'hasOwnTable': false,
-        },
-        {
-          'expenseType': 'Internet',
-          'Last Month Paid': 0,
-          'Expected': 0,
-          'Paid': 0,
-          'Date': '',
-          'hasOwnTable': false,
-        },
-        {
-          'expenseType': 'Serap Phone Bill',
-          'Last Month Paid': 0,
-          'Expected': 0,
-          'Paid': 0,
-          'Date': '',
-          'hasOwnTable': false,
-        },
-        {
-          'expenseType': 'Moms Phone Bill',
-          'Last Month Paid': 0,
-          'Expected': 0,
-          'Paid': 0,
-          'Date': '',
-          'hasOwnTable': false,
-        },
-        {
-          'expenseType': 'Stamatios Phone Bill',
-          'Last Month Paid': 0,
-          'Expected': 0,
-          'Paid': 0,
-          'Date': '',
-          'hasOwnTable': false,
-        },
-        {
-          'expenseType': 'Monthly Shopping',
-          'Last Month Paid': 0,
-          'Expected': 0,
-          'Paid': 0,
-          'Date': '',
-          'hasOwnTable': true,
-        },
-        {
-          'expenseType': 'Food Week 1',
-          'Last Month Paid': 0,
-          'Expected': 0,
-          'Paid': 0,
-          'Date': '',
-          'hasOwnTable': true,
-        },
-        {
-          'expenseType': 'Food Week 2',
-          'Last Month Paid': 0,
-          'Expected': 0,
-          'Paid': 0,
-          'Date': '',
-          'hasOwnTable': true,
-        },
-        {
-          'expenseType': 'Food Week 3',
-          'Last Month Paid': 0,
-          'Expected': 0,
-          'Paid': 0,
-          'Date': '',
-          'hasOwnTable': true,
-        },
-        {
-          'expenseType': 'Food Week 4',
-          'Last Month Paid': 0,
-          'Expected': 0,
-          'Paid': 0,
-          'Date': '',
-          'hasOwnTable': true,
-        },
-        {
-          'expenseType': 'Eating Out',
-          'Last Month Paid': 0,
-          'Expected': 0,
-          'Paid': 0,
-          'Date': '',
-          'hasOwnTable': true,
-        },
-        {
-          'expenseType': 'Yatim',
-          'Last Month Paid': 0,
-          'Expected': 0,
-          'Paid': 0,
-          'Date': '',
-          'hasOwnTable': false,
-        },
-        {
-          'expenseType': 'Ibrahim',
-          'Last Month Paid': 0,
-          'Expected': 0,
-          'Paid': 0,
-          'Date': '',
-          'hasOwnTable': true,
-        },
-        {
-          'expenseType': 'Baby',
-          'Last Month Paid': 0,
-          'Expected': 0,
-          'Paid': 0,
-          'Date': '',
-          'hasOwnTable': true,
-        },
-        {
-          'expenseType': 'Extra',
-          'Last Month Paid': 0,
-          'Expected': 0,
-          'Paid': 0,
-          'Date': '',
-          'hasOwnTable': true,
-        },
-        {
-          'expenseType': 'Hair Cut',
-          'Last Month Paid': 0,
-          'Expected': 0,
-          'Paid': 0,
-          'Date': '',
-          'hasOwnTable': false,
-        },
-        {
-          'expenseType': 'Qurban Savings',
-          'Last Month Paid': 0,
-          'Expected': 0,
-          'Paid': 0,
-          'Date': '',
-          'hasOwnTable': false,
-        },
-        {
-          'expenseType': 'Cleaning',
-          'Last Month Paid': 0,
-          'Expected': 0,
-          'Paid': 0,
-          'Date': '',
-          'hasOwnTable': false,
-        },
-        {
-          'expenseType': 'Monthly Withdrawal',
-          'Last Month Paid': 0,
-          'Expected': 0,
-          'Paid': 0,
-          'Date': '',
-          'hasOwnTable': false,
-        },
-        {
-          'expenseType': 'Unknown',
-          'Last Month Paid': 0,
-          'Expected': 0,
-          'Paid': 0,
-          'Date': '',
-          'hasOwnTable': true,
-        },
-      ],
-    };
-
-    let depositData = {
-      deposits: [
-        {
-          'expenseType': 'Serap Payment',
-          'Last Month Paid': 0,
-          'Expected': 0,
-          'Paid': 0,
-          'Date': '',
-          'hasOwnTable': false,
-        },
-        {
-          'expenseType': 'Stamatios Payment',
-          'Last Month Paid': 0,
-          'Expected': 0,
-          'Paid': 0,
-          'Date': '',
-          'hasOwnTable': false,
-        },
-        {
-          'expenseType': 'Extra Payment',
-          'Last Month Paid': 0,
-          'Expected': 0,
-          'Paid': 0,
-          'Date': '',
-          'hasOwnTable': false,
-        },
-        {
-          'expenseType': 'Deposits',
-          'Last Month Paid': 0,
-          'Expected': 0,
-          'Paid': 0,
-          'Date': '',
-          'hasOwnTable': false,
-        },
-      ]
-    };
-
-      this.state = {
-        selectedExpenses: expenseData,
-        selectedDeposits: depositData,
-      };
-
-    // const collectionRef = firestore.collection(`March-${2020}`);
-
-    // collectionRef
-    // .get()
-    // .then(snapshot => {
-    //   const { expenses, deposits } = convertCollectionsSnapshotToMap(snapshot);
-    //   console.log(expenses, deposits);
-
-    //   this.state = {
-    //     selectedExpenses: expenses,
-    //     selectedDeposits: deposits,
-    //   };
-    // });
-
-    //createFiscalMonthlyDocument(`March-${2020}`, this.props.tableName.label, expenseData, depositData);
-  }
-
   updateExpenseAmount = (e, label, type) => {
-    let {selectedExpenses: { expenses }} = this.state;
+    let {overviewExpenses} = this.props;
 
     if(!isNaN(e.target.value)) {
-      let expenseIndex = expenses.map(expense => expense.expenseType).indexOf(label);
+      let expenseIndex = overviewExpenses.map(expense => expense.expenseType).indexOf(label);
 
       if(e.target.value === "") {
-        expenses[expenseIndex][type] = 0;
+        overviewExpenses[expenseIndex][type] = 0;
       }
       else {
-        expenses[expenseIndex][type] = e.target.value;
+        overviewExpenses[expenseIndex][type] = e.target.value;
       }
     }
 
     this.setState({
-      selectedExpenses: {
-        expenses
+      overviewExpenses: {
+        expenses: overviewExpenses
       }
-    }, () => updateFiscalMonthlyDocument(`March-${2020}`, this.props.tableName.label, this.state.selectedExpenses, this.state.selectedDeposits));
+    }, () => updateFiscalMonthlyDocument(`March-${2020}`, this.props.tableName.label, this.state.overviewExpenses, this.state.overviewDeposits));
   }
 
   updateDepositAmount = (e, label, type) => {
-    let {selectedDeposits: { deposits }} = this.state;
+    let {overviewDeposits} = this.props;
 
     if(!isNaN(e.target.value)) {
-      let depositIndex = deposits.map(deposit => deposit.expenseType).indexOf(label);
+      let depositIndex = overviewDeposits.map(deposit => deposit.expenseType).indexOf(label);
 
       if(e.target.value === "") {
-        deposits[depositIndex][type] = 0;
+        overviewDeposits[depositIndex][type] = 0;
       }
       else {
-        deposits[depositIndex][type] = e.target.value;
+        overviewDeposits[depositIndex][type] = e.target.value;
       }
     }
 
     this.setState({
-      selectedDeposits: {
-        deposits
+      overviewDeposits: {
+        deposits: overviewDeposits
       }
-    }, () => updateFiscalMonthlyDocument(`March-${2020}`, this.props.tableName.label, this.state.selectedExpenses, this.state.selectedDeposits));
+    }, () => updateFiscalMonthlyDocument(`March-${2020}`, this.props.tableName.label, this.state.overviewExpenses, this.state.overviewDeposits));
   }
   
   render() {
-    let {selectedExpenses: { expenses }, selectedDeposits: { deposits }} = this.state;
-    let {options, tabHandler} = this.props;
+    let {overviewExpenses, overviewDeposits, options, tabHandler} = this.props;
 
-    let lastMonthExpenseTotal = expenses.reduce(
+    let lastMonthExpenseTotal = overviewExpenses.reduce(
                       (accumulator, expense) => accumulator + parseFloat(expense['Last Month Paid']), 0);
-    let expectedExpenseTotal = expenses.reduce(
+    let expectedExpenseTotal = overviewExpenses.reduce(
                       (accumulator, expense) => accumulator + parseFloat(expense['Expected']), 0);
-    let paidExpenseTotal = expenses.reduce(
+    let paidExpenseTotal = overviewExpenses.reduce(
                       (accumulator, expense) => accumulator + parseFloat(expense['Paid']), 0);
 
-    let lastMonthDepositTotal = deposits.reduce(
-                      (accumulator, deposist) => accumulator + parseFloat(deposist['Last Month Paid']), 0);
-    let expectedDepositTotal = deposits.reduce(
-                      (accumulator, deposist) => accumulator + parseFloat(deposist['Expected']), 0);
-    let paidDepositTotal = deposits.reduce(
-                      (accumulator, deposist) => accumulator + parseFloat(deposist['Paid']), 0);
+    let lastMonthDepositTotal = overviewDeposits.reduce(
+                      (accumulator, deposit) => accumulator + parseFloat(deposit['Last Month Paid']), 0);
+    let expectedDepositTotal = overviewDeposits.reduce(
+                      (accumulator, deposit) => accumulator + parseFloat(deposit['Expected']), 0);
+    let paidDepositTotal = overviewDeposits.reduce(
+                      (accumulator, deposit) => accumulator + parseFloat(deposit['Paid']), 0);
 
     return (
       <div className="table-responsive w-100 text-center">
@@ -375,8 +84,7 @@ class OverviewTable extends Component {
           </thead>
           <tbody>
             {
-              //'Last Month Paid', 'Expected Due', 'Paid', 'Date']
-              expenses.map((expense, index) => {
+              overviewExpenses.map((expense, index) => {
                 return (
                   <tr key={`expenseRowHeader-${index}`}>
                     <th scope="row">{expense.expenseType}</th>
@@ -439,7 +147,7 @@ class OverviewTable extends Component {
               <td><span>---</span></td>
             </tr>
             {
-              deposits.map((deposit, index) => {
+              overviewDeposits.map((deposit, index) => {
                 return (
                   <tr key={`depositRowHeader-${index}`}>
                     <th scope="row">{deposit.expenseType}</th>
@@ -489,4 +197,25 @@ class OverviewTable extends Component {
   }
 }
 
-export default OverviewTable;
+
+const mapStateToProps = (state) => ({
+  overviewExpenses: state.expense.overviewExpenses,
+  overviewDeposits: state.expense.overviewDeposits,
+  // tableOptions: state.expense.tableOptions,
+  // monthOptions: state.expense.monthOptions, 
+  // yearOptions: state.expense.yearOptions,
+  // selectedTable: state.expense.selectedTable,
+  // selectedMonth: state.expense.selectedMonth,
+  // selectedYear: state.expense.selectedYear,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  // updateTable: (option) => dispatch(updateTable(option)),
+  // updateMonth: (option) => dispatch(updateMonth(option)),
+  // updateYear: (option) => dispatch(updateYear(option)),
+  // fetchCollectionsStart: 
+  //   (selectedTable, selectedMonth, selectedYear) => 
+  //     dispatch(fetchCollectionsStart(selectedTable, selectedMonth, selectedYear)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(OverviewTable);

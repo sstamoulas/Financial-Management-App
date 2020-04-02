@@ -10,7 +10,6 @@ class CustomSelect extends Component {
 
     this.state = {
       isOpen: false,
-      selectedItem: props.selectedItem,
     };
   }
   
@@ -19,7 +18,7 @@ class CustomSelect extends Component {
   }
   
   componentWillUnmount() {
-    document.removeEventListener(this.checkForOutsideClick)
+    document.removeEventListener('click', this.checkForOutsideClick)
   }
 
   checkForOutsideClick = (e) => {

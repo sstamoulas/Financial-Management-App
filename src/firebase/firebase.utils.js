@@ -25,7 +25,7 @@ export const createFiscalMonthlyDocument = async (path, tableName, expenses, dep
         ...deposits,
       });
     } catch(error) {
-      console.log('error creating month', error.message);
+      console.log('error creating collection', error.message);
     }
   }
 

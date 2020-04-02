@@ -7,90 +7,39 @@ import OverviewTable from './components/overview-table/overview-table.component'
 import CustomTable from './components/custom-table/custom-table.component';
 import StaticTable from './components/static-table/static-table.component';
 
+import { 
+  updateMonth, 
+  updateYear, 
+  updateTable, 
+  fetchCollectionsStart 
+} from './redux/expense/expense.actions';
+
 class App extends Component {
-  constructor() {
-    super();
-
-    let months = [
-      { value: 0, label: 'January'},
-      { value: 1, label: 'February'},
-      { value: 2, label: 'March'},
-      { value: 3, label: 'April'},
-      { value: 4, label: 'May'},
-      { value: 5, label: 'June'},
-      { value: 6, label: 'July'},
-      { value: 7, label: 'August'},
-      { value: 8, label: 'September'},
-      { value: 9, label: 'October'},
-      { value: 10, label: 'November'},
-      { value: 11, label: 'December'},
-    ];
-
-    let years = [
-      { value: 2020, label: 2020 },
-      { value: 2019, label: 2019 },
-      { value: 2018, label: 2018 },
-      { value: 2017, label: 2017 },
-    ];
-
-    let tabs = [
-      { value: 0, label: 'Overview'},
-      { value: 1, label: 'Extra Expense'},
-      { value: 2, label: 'Ibrahim Expense'},
-      { value: 3, label: 'Baby Expense'},
-      { value: 4, label: 'Monthly Shopping Expense'},
-      { value: 5, label: 'Food Week 1 Expense'},
-      { value: 6, label: 'Food Week 2 Expense'},
-      { value: 7, label: 'Food Week 3 Expense'},
-      { value: 8, label: 'Food Week 4 Expense'},
-      { value: 9, label: 'Eating Out Expense'},
-      { value: 10, label: 'Car Gas Expense'},
-      { value: 11, label: 'Car Maintenance Expense'},
-      { value: 12, label: 'Unknown Expense'},
-      { value: 13, label: 'Monthly Withdrawal Calculation'},
-    ];
-
-    this.state = {
-      tabOptions: tabs,
-      selectedTab: tabs[0],
-      monthOptions: months,
-      selectedMonth: months[(new Date()).getMonth()],
-      yearOptions: years,
-      selectedYear: years[0],
-    };
+  componentDidMount() {
+    const { fetchCollectionsStart, selectedTable, selectedMonth, selectedYear } = this.props;
+    fetchCollectionsStart(selectedTable, selectedMonth, selectedYear);
   }
 
   handleMonthSelectChange = (option) => {
-    let {data, selectedYear} = this.state;
-    let currentData = data.find(
-      item => item.year === selectedYear.label && item.month === option.label
-    );
-
-    this.setState({
-      selectedMonth: option,
-      selectedData: currentData,
-    });
+    let {updateMonth, fetchCollectionsStart, selectedTable, selectedYear} = this.props;
+    updateMonth(option);
+    fetchCollectionsStart(selectedTable, option, selectedYear);
   }
 
   handleYearSelectChange = (option) => {
-    let {data, selectedMonth} = this.state;
-    let currentData = data.find(
-      item => item.year === option.label && item.month === selectedMonth.label
-    );
-
-    this.setState({
-      selectedYear: option,
-      selectedData: currentData,
-    });
+    let {updateYear, fetchCollectionsStart, selectedTable, selectedMonth} = this.props;
+    updateYear(option);
+    fetchCollectionsStart(selectedTable, selectedMonth, option);
   }
 
-  handleTabSelectChange = (option) => {
-    this.setState({
-      selectedTab: option,
-    });
+  handleTableSelectChange = (option) => {
+    let {updateTable, fetchCollectionsStart, selectedYear, selectedMonth} = this.props;
+    updateTable(option);
+    fetchCollectionsStart(option, selectedMonth, selectedYear);
   }
 
   render() {
+    const { monthOptions, yearOptions, tableOptions, selectedMonth, selectedYear, selectedTable, } = this.props;
     return (
       <div className="App">
         <div className="container">
@@ -102,8 +51,8 @@ class App extends Component {
                   size="small-size"
                   identifier="months"
                   handler={this.handleMonthSelectChange}
-                  options={this.state.monthOptions}
-                  selectedItem={this.state.selectedMonth}
+                  options={monthOptions}
+                  selectedItem={selectedMonth}
                 />
               </div>
               <div className="text-left">
@@ -111,8 +60,8 @@ class App extends Component {
                   size="small-size"
                   identifier="years"
                   handler={this.handleYearSelectChange}
-                  options={this.state.yearOptions}
-                  selectedItem={this.state.selectedYear}
+                  options={yearOptions}
+                  selectedItem={selectedYear}
                 />
               </div>
             </div>
@@ -123,21 +72,21 @@ class App extends Component {
               <CustomSelect 
                 size="medium-size"
                 identifier="tabs"
-                handler={this.handleTabSelectChange}
-                options={this.state.tabOptions}
-                selectedItem={this.state.selectedTab}
+                handler={this.handleTableSelectChange}
+                options={tableOptions}
+                selectedItem={selectedTable}
               />
             </div>
           </div>
           {
-            this.state.selectedTab.value === 0 ?
+            selectedTable.value === 0 ?
               <OverviewTable 
-                tabHandler={this.handleTabSelectChange}
-                options={this.state.tabOptions}
-                tableName={this.state.selectedTab}
+                tabHandler={this.handleTableSelectChange}
+                options={tableOptions}
+                tableName={selectedTable}
               />
             :
-            this.state.selectedTab.value === 13 ?
+            selectedTable.value === 13 ?
               <StaticTable />
             :
               <CustomTable />
@@ -148,4 +97,22 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapStateToProps = (state) => ({
+  tableOptions: state.expense.tableOptions,
+  monthOptions: state.expense.monthOptions, 
+  yearOptions: state.expense.yearOptions,
+  selectedTable: state.expense.selectedTable,
+  selectedMonth: state.expense.selectedMonth,
+  selectedYear: state.expense.selectedYear,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  updateTable: (option) => dispatch(updateTable(option)),
+  updateMonth: (option) => dispatch(updateMonth(option)),
+  updateYear: (option) => dispatch(updateYear(option)),
+  fetchCollectionsStart: 
+    (selectedTable, selectedMonth, selectedYear) => 
+      dispatch(fetchCollectionsStart(selectedTable, selectedMonth, selectedYear)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
