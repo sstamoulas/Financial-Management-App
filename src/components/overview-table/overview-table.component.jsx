@@ -1,73 +1,27 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { 
-  firestore,
-  updateFiscalMonthlyDocument, 
-  convertCollectionsSnapshotToMap,
-} from '../../firebase/firebase.utils';
-import { fetchCollectionsStart } from '../../redux/expense/expense.actions';
+import { updateDepositStart, updateExpenseStart } from '../../redux/expense/expense.actions';
 
 import './overview-table.styles.scss';
 
 class OverviewTable extends Component {
-  updateExpenseAmount = (e, label, type) => {
-    let {overviewExpenses} = this.props;
-
-    if(!isNaN(e.target.value)) {
-      let expenseIndex = overviewExpenses.map(expense => expense.expenseType).indexOf(label);
-
-      if(e.target.value === "") {
-        overviewExpenses[expenseIndex][type] = 0;
-      }
-      else {
-        overviewExpenses[expenseIndex][type] = e.target.value;
-      }
-    }
-
-    this.setState({
-      overviewExpenses: {
-        expenses: overviewExpenses
-      }
-    }, () => updateFiscalMonthlyDocument(`March-${2020}`, this.props.tableName.label, this.state.overviewExpenses, this.state.overviewDeposits));
-  }
-
-  updateDepositAmount = (e, label, type) => {
-    let {overviewDeposits} = this.props;
-
-    if(!isNaN(e.target.value)) {
-      let depositIndex = overviewDeposits.map(deposit => deposit.expenseType).indexOf(label);
-
-      if(e.target.value === "") {
-        overviewDeposits[depositIndex][type] = 0;
-      }
-      else {
-        overviewDeposits[depositIndex][type] = e.target.value;
-      }
-    }
-
-    this.setState({
-      overviewDeposits: {
-        deposits: overviewDeposits
-      }
-    }, () => updateFiscalMonthlyDocument(`March-${2020}`, this.props.tableName.label, this.state.overviewExpenses, this.state.overviewDeposits));
-  }
-  
   render() {
-    let {overviewExpenses, overviewDeposits, options, tabHandler} = this.props;
+    console.log(this.props)
+    let {expenses, deposits, options, tabHandler, updateExpense, updateDeposit} = this.props;
 
-    let lastMonthExpenseTotal = overviewExpenses.reduce(
+    let lastMonthExpenseTotal = expenses.reduce(
                       (accumulator, expense) => accumulator + parseFloat(expense['Last Month Paid']), 0);
-    let expectedExpenseTotal = overviewExpenses.reduce(
+    let expectedExpenseTotal = expenses.reduce(
                       (accumulator, expense) => accumulator + parseFloat(expense['Expected']), 0);
-    let paidExpenseTotal = overviewExpenses.reduce(
+    let paidExpenseTotal = expenses.reduce(
                       (accumulator, expense) => accumulator + parseFloat(expense['Paid']), 0);
 
-    let lastMonthDepositTotal = overviewDeposits.reduce(
+    let lastMonthDepositTotal = deposits.reduce(
                       (accumulator, deposit) => accumulator + parseFloat(deposit['Last Month Paid']), 0);
-    let expectedDepositTotal = overviewDeposits.reduce(
+    let expectedDepositTotal = deposits.reduce(
                       (accumulator, deposit) => accumulator + parseFloat(deposit['Expected']), 0);
-    let paidDepositTotal = overviewDeposits.reduce(
+    let paidDepositTotal = deposits.reduce(
                       (accumulator, deposit) => accumulator + parseFloat(deposit['Paid']), 0);
 
     return (
@@ -84,7 +38,7 @@ class OverviewTable extends Component {
           </thead>
           <tbody>
             {
-              overviewExpenses.map((expense, index) => {
+              expenses.map((expense, index) => {
                 return (
                   <tr key={`expenseRowHeader-${index}`}>
                     <th scope="row">{expense.expenseType}</th>
@@ -99,7 +53,7 @@ class OverviewTable extends Component {
                           <input 
                             type="string"
                             value={expense['Expected']} 
-                            onChange={(e) => this.updateExpenseAmount(e, expense.expenseType, 'Expected')} 
+                            onChange={(e) => updateExpense(e, expense.expenseType, 'Expected')} 
                           />
                       }
                     </td>
@@ -111,7 +65,7 @@ class OverviewTable extends Component {
                           <input 
                             type="string"
                             value={expense['Paid']} 
-                            onChange={(e) => this.updateExpenseAmount(e, expense.expenseType, 'Paid')} 
+                            onChange={(e) => updateExpense(e, expense.expenseType, 'Paid')} 
                           />
                       }
                     </td>
@@ -124,7 +78,7 @@ class OverviewTable extends Component {
                           <input 
                             type="date" 
                             value={expense['Date']} 
-                            onChange={(e) => this.updateExpenseAmount(e, expense.expenseType, 'Date')} 
+                            onChange={(e) => updateExpense(e, expense.expenseType, 'Date')} 
                           />
                       }
                     </td>
@@ -147,7 +101,7 @@ class OverviewTable extends Component {
               <td><span>---</span></td>
             </tr>
             {
-              overviewDeposits.map((deposit, index) => {
+              deposits.map((deposit, index) => {
                 return (
                   <tr key={`depositRowHeader-${index}`}>
                     <th scope="row">{deposit.expenseType}</th>
@@ -162,7 +116,7 @@ class OverviewTable extends Component {
                           <input 
                             type="string"
                             value={deposit['Expected']} 
-                            onChange={(e) => this.updateDepositAmount(e, deposit.expenseType, 'Expected')} 
+                            onChange={(e) => updateDeposit(e, deposit.expenseType, 'Expected')} 
                           />
                       }
                     </td>
@@ -174,7 +128,7 @@ class OverviewTable extends Component {
                           <input 
                             type="string"
                             value={deposit['Paid']} 
-                            onChange={(e) => this.updateDepositAmount(e, deposit.expenseType, 'Paid')} 
+                            onChange={(e) => updateDeposit(e, deposit.expenseType, 'Paid')} 
                           />
                       }
                     </td>
@@ -199,8 +153,8 @@ class OverviewTable extends Component {
 
 
 const mapStateToProps = (state) => ({
-  overviewExpenses: state.expense.overviewExpenses,
-  overviewDeposits: state.expense.overviewDeposits,
+  expenses: state.expense.expenses,
+  deposits: state.expense.deposits,
   // tableOptions: state.expense.tableOptions,
   // monthOptions: state.expense.monthOptions, 
   // yearOptions: state.expense.yearOptions,
@@ -210,6 +164,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  updateDeposit: (e, type, label) => dispatch(updateDepositStart(e, type, label)),
+  updateExpense: (e, type, label) => dispatch(updateExpenseStart(e, type, label)),
   // updateTable: (option) => dispatch(updateTable(option)),
   // updateMonth: (option) => dispatch(updateMonth(option)),
   // updateYear: (option) => dispatch(updateYear(option)),

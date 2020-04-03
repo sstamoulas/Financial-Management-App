@@ -14,7 +14,7 @@ var firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
-export const createFiscalMonthlyDocument = async (path, tableName, expenses, deposits) => {
+export const createFiscalMonthlyDocument = async (path, tableName, expenses) => {
   const docRef = firestore.doc(`${path}/${tableName}`);
   const snapShot = await docRef.get();
 
@@ -22,7 +22,6 @@ export const createFiscalMonthlyDocument = async (path, tableName, expenses, dep
     try {
       await docRef.set({
         ...expenses,
-        ...deposits,
       });
     } catch(error) {
       console.log('error creating collection', error.message);
@@ -32,13 +31,12 @@ export const createFiscalMonthlyDocument = async (path, tableName, expenses, dep
   return docRef;
 }
 
-export const updateFiscalMonthlyDocument = async (path, tableName, expenses, deposits) => {
+export const updateFiscalMonthlyDocument = async (path, tableName, expenses) => {
   const docRef = firestore.collection(path).doc(tableName);
 
   try {
     await docRef.update({
       ...expenses,
-      ...deposits,
     });
   } catch(error) {
     console.log(`error updating collection ${path}/${tableName}`, error.message);

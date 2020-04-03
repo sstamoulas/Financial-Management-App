@@ -42,7 +42,7 @@ const CustomTable = ({ expenses, addExpense}) => {
 }
 
 const mapStateToProps = (state) => ({
-  expenses: state.expense.overviewExpenses,
+  expenses: state.expense.expenses,
 });
 
 const mapDispatchToProps = (dispatch) => ({

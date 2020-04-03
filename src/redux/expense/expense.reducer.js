@@ -1,9 +1,9 @@
 import ExpenseActionTypes from './expense.types';
-import { updateExpense, months, years, tables } from './expense.utils';
+import { updateAmount, months, years, tables } from './expense.utils';
 
 const INITIAL_STATE = {
-  overviewExpenses: [],
-  overviewDeposits: [],
+  expenses: [],
+  deposits: [],
   tableOptions: tables,
   selectedTable: tables[0],
   monthOptions: months,
@@ -19,24 +19,24 @@ const expenseReducer = (state = INITIAL_STATE, action) => {
     case ExpenseActionTypes.ADD_EXPENSE: 
       return {
         ...state,
-        overviewExpenses: [...state.overviewExpenses, {name: '', value: 0, date: ''}],
+        expenses: [...state.expenses, {name: '', value: 0, date: ''}],
       };
     case ExpenseActionTypes.REMOVE_EXPENSE:
       return {
         ...state,
-        overviewExpenses: state.overviewExpenses.filter(
+        expenses: state.expenses.filter(
           (expense, expenseIndex) => action.payload.index !== expenseIndex
         ),
       };
     case ExpenseActionTypes.UPDATE_EXPENSE:
       return {
         ...state,
-        overviewExpenses: updateExpense(state.overviewExpenses, action.payload),
+        expenses: updateAmount(state, action.payload, true),
       };
     case ExpenseActionTypes.UPDATE_DEPOSIT:
       return {
         ...state,
-        overviewDeposits: updateExpense(state.overviewDeposits, action.payload),
+        deposits: updateAmount(state, action.payload, false),
       };
     case ExpenseActionTypes.UPDATE_MONTH:
       return {
@@ -62,8 +62,8 @@ const expenseReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         isFetching: false,
-        overviewExpenses: action.payload.expenses,
-        overviewDeposits: action.payload.deposits,
+        expenses: action.payload.expenses,
+        deposits: action.payload.deposits,
       };
     case ExpenseActionTypes.FETCH_COLLECTIONS_FAILURE:
       return {

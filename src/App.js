@@ -84,6 +84,8 @@ class App extends Component {
                 tabHandler={this.handleTableSelectChange}
                 options={tableOptions}
                 tableName={selectedTable}
+                selectedMonth={selectedMonth}
+                selectedYear={selectedYear}
               />
             :
             selectedTable.value === 13 ?

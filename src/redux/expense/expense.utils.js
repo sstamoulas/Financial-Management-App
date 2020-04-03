@@ -1,11 +1,42 @@
-export const updateExpense = (overviewExpenses, {index, value, type}) => {
-  return overviewExpenses.map((expense, expenseIndex) => {
+import { updateFiscalMonthlyDocument } from '../../firebase/firebase.utils';
+
+export const updateExpense = (expenses, {index, value, type}) => {
+  return expenses.map((expense, expenseIndex) => {
     if(index === expenseIndex) {
       expense[type] = value;
     }
 
     return expense;
   });
+}
+
+export const updateAmount = (state, {value, type, label}, isExpense) => {
+  console.log(state);
+  let {expenses, deposits, selectedTable, selectedMonth, selectedYear} = state;
+
+  if(isExpense) {
+    updateArray(expenses, value, type, label);
+    updateFiscalMonthlyDocument(`${selectedMonth.label}-${selectedYear.label}`, selectedTable.label, {expenses: expenses});
+  }
+  else {
+    updateArray(deposits, value, type, label);
+    updateFiscalMonthlyDocument(`${selectedMonth.label}-${selectedYear.label}`, selectedTable.label, {deposits: deposits});
+  }
+}
+
+const updateArray = (arrayItems, value, type, label) => {
+  console.log(arrayItems, value, type, label);
+  if(!isNaN(value)) {
+    let index = arrayItems.map(item => item.expenseType).indexOf(type);
+    console.log(index);
+
+    if(value === "") {
+      arrayItems[index][label] = 0;
+    }
+    else {
+      arrayItems[index][label] = value;
+    }
+  }
 }
 
 export const months = [

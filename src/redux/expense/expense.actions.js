@@ -9,14 +9,14 @@ export const removeExpenseStart = (index) => ({
   payload: {index},
 });
 
-export const updateExpenseStart = (index, e, type) => ({
+export const updateExpenseStart = (e, type, label) => ({
   type: ExpenseActionTypes.UPDATE_EXPENSE,
-  payload: {index, value: e.target.value, type},
+  payload: {value: e.target.value, type, label},
 });
 
-export const updateDepositStart = (index, e, type) => ({
+export const updateDepositStart = (e, type, label) => ({
   type: ExpenseActionTypes.UPDATE_DEPOSIT,
-  payload: {index, value: e.target.value, type},
+  payload: {value: e.target.value, type, label},
 });
 
 export const updateMonth = (option) => ({
