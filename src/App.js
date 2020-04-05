@@ -91,7 +91,7 @@ class App extends Component {
             selectedTable.value === 13 ?
               <StaticTable />
             :
-              <CustomTable />
+              // <CustomTable />
           }
         </div>
       </div>

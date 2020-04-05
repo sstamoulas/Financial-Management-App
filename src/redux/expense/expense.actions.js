@@ -9,16 +9,6 @@ export const removeExpenseStart = (index) => ({
   payload: {index},
 });
 
-export const updateExpenseStart = (e, type, label) => ({
-  type: ExpenseActionTypes.UPDATE_EXPENSE,
-  payload: {value: e.target.value, type, label},
-});
-
-export const updateDepositStart = (e, type, label) => ({
-  type: ExpenseActionTypes.UPDATE_DEPOSIT,
-  payload: {value: e.target.value, type, label},
-});
-
 export const updateMonth = (option) => ({
   type: ExpenseActionTypes.UPDATE_MONTH,
   payload: {option},
@@ -32,6 +22,21 @@ export const updateYear = (option) => ({
 export const updateTable = (option) => ({
   type: ExpenseActionTypes.UPDATE_TABLE,
   payload: {option},
+});
+
+export const updateCollectionsStart = (e, type, label, isExpense, selectedTable, selectedMonth, selectedYear) => ({
+  type: ExpenseActionTypes.UPDATE_COLLECTIONS_START,
+  payload: {value: e.target.value, type, label, isExpense, selectedTable, selectedMonth, selectedYear},
+});
+
+export const updateCollectionsSuccess = ({expenses, deposits}) => ({
+  type: ExpenseActionTypes.UPDATE_COLLECTIONS_SUCCESS,
+  payload: {expenses, deposits},
+});
+
+export const updateCollectionsFailure = (errorMessage) => ({
+  type: ExpenseActionTypes.UPDATE_COLLECTIONS_FAILURE,
+  payload: errorMessage,
 });
 
 export const fetchCollectionsStart = (selectedTable, selectedMonth, selectedYear) => ({

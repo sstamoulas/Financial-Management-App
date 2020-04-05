@@ -1,4 +1,4 @@
-import { updateFiscalMonthlyDocument } from '../../firebase/firebase.utils';
+import { updateCollectionsStart } from '../../redux/expense/expense.actions';
 
 export const updateExpense = (expenses, {index, value, type}) => {
   return expenses.map((expense, expenseIndex) => {
@@ -10,17 +10,17 @@ export const updateExpense = (expenses, {index, value, type}) => {
   });
 }
 
-export const updateAmount = (state, {value, type, label}, isExpense) => {
+export const updateAmount = (state, {value, type, label, isExpense}) => {
   console.log(state);
   let {expenses, deposits, selectedTable, selectedMonth, selectedYear} = state;
 
   if(isExpense) {
     updateArray(expenses, value, type, label);
-    updateFiscalMonthlyDocument(`${selectedMonth.label}-${selectedYear.label}`, selectedTable.label, {expenses: expenses});
+    updateCollectionsStart(`${selectedMonth.label}-${selectedYear.label}`, selectedTable.label, {expenses: expenses});
   }
   else {
     updateArray(deposits, value, type, label);
-    updateFiscalMonthlyDocument(`${selectedMonth.label}-${selectedYear.label}`, selectedTable.label, {deposits: deposits});
+    updateCollectionsStart(`${selectedMonth.label}-${selectedYear.label}`, selectedTable.label, {deposits: deposits});
   }
 }
 

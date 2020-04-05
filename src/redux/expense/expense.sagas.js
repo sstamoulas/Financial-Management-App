@@ -1,11 +1,17 @@
 import { takeLatest, call, put, all } from 'redux-saga/effects';
+import ExpenseActionTypes from './expense.types';
 import { 
   firestore,
   createFiscalMonthlyDocument, 
+  updateFiscalMonthlyDocument,
   convertCollectionsSnapshotToMap,
 } from '../../firebase/firebase.utils';
-import { fetchCollectionsSuccess, fetchCollectionsFailure } from './expense.actions';
-import ExpenseActionTypes from './expense.types';
+import { 
+  fetchCollectionsSuccess, 
+  fetchCollectionsFailure,
+  updateCollectionsSuccess,
+  updateCollectionsFailure
+} from './expense.actions';
 import { 
   defaultExpenses,
   defaultDeposits,
@@ -27,18 +33,33 @@ export function* fetchCollectionsAsync({payload: {selectedTable, selectedMonth, 
   }
 }
 
-export function* updateCollectionsAsync({payload: {selectedTable, selectedMonth, selectedYear}}) {
+export function* updateCollectionsAsync({payload: {expenses, deposits, isExpense, selectedTable, selectedMonth, selectedYear}}) {
   try {
-    const collectionRef = firestore.collection(`${selectedMonth.label}-${selectedYear.label}`);
-    const snapshot = yield collectionRef.get();
-    const collectionsMap = yield call(convertCollectionsSnapshotToMap, snapshot);
+    if(isExpense) {
+      expenses = yield call(updateFiscalMonthlyDocument, `${selectedMonth.label}-${selectedYear.label}`, selectedTable.label, {expenses: expenses});
+    }
+    else {
+      updateArray(deposits, value, type, label);
+      deposits = yield call(updateFiscalMonthlyDocument, `${selectedMonth.label}-${selectedYear.label}`, selectedTable.label, {deposits: deposits});
+    }
 
-    yield put(fetchCollectionsSuccess(collectionsMap));
+    yield put(updateCollectionsSuccess({expenses, deposits}));
   } catch(error) {
-    try {
-      yield put(createFiscalMonthlyDocument(`${selectedMonth.label}-${selectedYear.label}`, selectedTable.label, defaultExpenses, defaultDeposits));
-    } catch(error) {
-      yield put(fetchCollectionsFailure(error.message));
+    yield put(updateCollectionsFailure(error.message));
+  }
+}
+
+const updateArray = (arrayItems, value, type, label) => {
+  console.log(arrayItems, value, type, label);
+  if(!isNaN(value)) {
+    let index = arrayItems.map(item => item.expenseType).indexOf(type);
+    console.log(index);
+
+    if(value === "") {
+      arrayItems[index][label] = 0;
+    }
+    else {
+      arrayItems[index][label] = value;
     }
   }
 }

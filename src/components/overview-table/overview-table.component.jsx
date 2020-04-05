@@ -1,14 +1,23 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { updateDepositStart, updateExpenseStart } from '../../redux/expense/expense.actions';
+import { updateCollectionsStart } from '../../redux/expense/expense.actions';
 
 import './overview-table.styles.scss';
 
 class OverviewTable extends Component {
   render() {
     console.log(this.props)
-    let {expenses, deposits, options, tabHandler, updateExpense, updateDeposit} = this.props;
+    let {
+      expenses, 
+      deposits, 
+      options,
+      selectedTable,
+      selectedMonth,
+      selectedYear, 
+      tabHandler, 
+      updateCollectionsStart
+    } = this.props;
 
     let lastMonthExpenseTotal = expenses.reduce(
                       (accumulator, expense) => accumulator + parseFloat(expense['Last Month Paid']), 0);
@@ -53,7 +62,7 @@ class OverviewTable extends Component {
                           <input 
                             type="string"
                             value={expense['Expected']} 
-                            onChange={(e) => updateExpense(e, expense.expenseType, 'Expected')} 
+                            onChange={(e) => updateCollectionsStart(e, expense.expenseType, 'Expected', true)}
                           />
                       }
                     </td>
@@ -65,7 +74,7 @@ class OverviewTable extends Component {
                           <input 
                             type="string"
                             value={expense['Paid']} 
-                            onChange={(e) => updateExpense(e, expense.expenseType, 'Paid')} 
+                            onChange={(e) => updateCollectionsStart(e, expense.expenseType, 'Paid', true)}
                           />
                       }
                     </td>
@@ -78,7 +87,7 @@ class OverviewTable extends Component {
                           <input 
                             type="date" 
                             value={expense['Date']} 
-                            onChange={(e) => updateExpense(e, expense.expenseType, 'Date')} 
+                            onChange={(e) => updateCollectionsStart(e, expense.expenseType, 'Date', true)}
                           />
                       }
                     </td>
@@ -116,7 +125,7 @@ class OverviewTable extends Component {
                           <input 
                             type="string"
                             value={deposit['Expected']} 
-                            onChange={(e) => updateDeposit(e, deposit.expenseType, 'Expected')} 
+                            onChange={(e) => updateCollectionsStart(e, deposit.expenseType, 'Expected', false)}
                           />
                       }
                     </td>
@@ -128,7 +137,8 @@ class OverviewTable extends Component {
                           <input 
                             type="string"
                             value={deposit['Paid']} 
-                            onChange={(e) => updateDeposit(e, deposit.expenseType, 'Paid')} 
+                            onChange={(e) => 
+                              updateCollectionsStart(e, deposit.expenseType, 'Paid', false)} 
                           />
                       }
                     </td>
@@ -155,23 +165,15 @@ class OverviewTable extends Component {
 const mapStateToProps = (state) => ({
   expenses: state.expense.expenses,
   deposits: state.expense.deposits,
-  // tableOptions: state.expense.tableOptions,
-  // monthOptions: state.expense.monthOptions, 
-  // yearOptions: state.expense.yearOptions,
-  // selectedTable: state.expense.selectedTable,
-  // selectedMonth: state.expense.selectedMonth,
-  // selectedYear: state.expense.selectedYear,
+  selectedTable: state.expense.selectedTable,
+  selectedMonth: state.expense.selectedMonth,
+  selectedYear: state.expense.selectedYear,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  updateDeposit: (e, type, label) => dispatch(updateDepositStart(e, type, label)),
-  updateExpense: (e, type, label) => dispatch(updateExpenseStart(e, type, label)),
-  // updateTable: (option) => dispatch(updateTable(option)),
-  // updateMonth: (option) => dispatch(updateMonth(option)),
-  // updateYear: (option) => dispatch(updateYear(option)),
-  // fetchCollectionsStart: 
-  //   (selectedTable, selectedMonth, selectedYear) => 
-  //     dispatch(fetchCollectionsStart(selectedTable, selectedMonth, selectedYear)),
+  updateCollectionsStart: 
+    (e, type, label, isExpense, selectedTable, selectedMonth, selectedYear) => 
+      dispatch(updateCollectionsStart(e, type, label, isExpense, selectedTable, selectedMonth, selectedYear)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(OverviewTable);

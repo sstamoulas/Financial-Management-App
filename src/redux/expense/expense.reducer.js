@@ -11,6 +11,7 @@ const INITIAL_STATE = {
   yearOptions: years,
   selectedYear: years[0],
   isFetching: false,
+  isUpdating: false,
   errorMessage: undefined,
 };
 
@@ -28,16 +29,6 @@ const expenseReducer = (state = INITIAL_STATE, action) => {
           (expense, expenseIndex) => action.payload.index !== expenseIndex
         ),
       };
-    case ExpenseActionTypes.UPDATE_EXPENSE:
-      return {
-        ...state,
-        expenses: updateAmount(state, action.payload, true),
-      };
-    case ExpenseActionTypes.UPDATE_DEPOSIT:
-      return {
-        ...state,
-        deposits: updateAmount(state, action.payload, false),
-      };
     case ExpenseActionTypes.UPDATE_MONTH:
       return {
         ...state,
@@ -52,6 +43,24 @@ const expenseReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         selectedTable: action.payload.option,
+      };
+    case ExpenseActionTypes.UPDATE_COLLECTIONS_START:
+      return {
+        ...state,
+        isUpdating: true,
+      };
+    case ExpenseActionTypes.UPDATE_COLLECTIONS_SUCCESS:
+      return {
+        ...state,
+        isUpdating: false,
+        expenses: action.payload.expenses,
+        deposits: action.payload.deposits,
+      };
+    case ExpenseActionTypes.UPDATE_COLLECTIONS_FAILURE:
+      return {
+        ...state,
+        isUpdating: false,
+        errorMessage: action.payload,
       };
     case ExpenseActionTypes.FETCH_COLLECTIONS_START:
       return {
