@@ -31,12 +31,12 @@ export const createFiscalMonthlyDocument = async (path, tableName, expenses) => 
   return docRef;
 }
 
-export const updateFiscalMonthlyDocument = async (path, tableName, expenses) => {
+export const updateFiscalMonthlyDocument = async (path, tableName, items) => {
   const docRef = firestore.collection(path).doc(tableName);
 
   try {
     await docRef.update({
-      ...expenses,
+      ...items,
     });
   } catch(error) {
     console.log(`error updating collection ${path}/${tableName}`, error.message);

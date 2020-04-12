@@ -8,34 +8,31 @@ import CustomTable from './components/custom-table/custom-table.component';
 import StaticTable from './components/static-table/static-table.component';
 
 import { 
-  updateMonth, 
-  updateYear, 
-  updateTable, 
+  updateMonthStart, 
+  updateYearStart, 
+  updateTableStart, 
   fetchCollectionsStart 
 } from './redux/expense/expense.actions';
 
 class App extends Component {
   componentDidMount() {
-    const { fetchCollectionsStart, selectedTable, selectedMonth, selectedYear } = this.props;
-    fetchCollectionsStart(selectedTable, selectedMonth, selectedYear);
+    const { fetchCollectionsStart } = this.props;
+    fetchCollectionsStart();
   }
 
   handleMonthSelectChange = (option) => {
-    let {updateMonth, fetchCollectionsStart, selectedTable, selectedYear} = this.props;
-    updateMonth(option);
-    fetchCollectionsStart(selectedTable, option, selectedYear);
+    let {updateMonthStart} = this.props;
+    updateMonthStart(option);
   }
 
   handleYearSelectChange = (option) => {
-    let {updateYear, fetchCollectionsStart, selectedTable, selectedMonth} = this.props;
-    updateYear(option);
-    fetchCollectionsStart(selectedTable, selectedMonth, option);
+    let {updateYearStart} = this.props;
+    updateYearStart(option);
   }
 
   handleTableSelectChange = (option) => {
-    let {updateTable, fetchCollectionsStart, selectedYear, selectedMonth} = this.props;
-    updateTable(option);
-    fetchCollectionsStart(option, selectedMonth, selectedYear);
+    let {updateTableStart} = this.props;
+    updateTableStart(option);
   }
 
   render() {
@@ -91,7 +88,7 @@ class App extends Component {
             selectedTable.value === 13 ?
               <StaticTable />
             : 
-              ''
+              <CustomTable />
           }
         </div>
       </div>
@@ -100,21 +97,19 @@ class App extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  tableOptions: state.expense.tableOptions,
-  monthOptions: state.expense.monthOptions, 
-  yearOptions: state.expense.yearOptions,
-  selectedTable: state.expense.selectedTable,
-  selectedMonth: state.expense.selectedMonth,
-  selectedYear: state.expense.selectedYear,
+  tableOptions: state.root.tableOptions,
+  monthOptions: state.root.monthOptions, 
+  yearOptions: state.root.yearOptions,
+  selectedTable: state.root.selectedTable,
+  selectedMonth: state.root.selectedMonth,
+  selectedYear: state.root.selectedYear,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  updateTable: (option) => dispatch(updateTable(option)),
-  updateMonth: (option) => dispatch(updateMonth(option)),
-  updateYear: (option) => dispatch(updateYear(option)),
-  fetchCollectionsStart: 
-    (selectedTable, selectedMonth, selectedYear) => 
-      dispatch(fetchCollectionsStart(selectedTable, selectedMonth, selectedYear)),
+  updateTableStart: (option) => dispatch(updateTableStart(option)),
+  updateMonthStart: (option) => dispatch(updateMonthStart(option)),
+  updateYearStart: (option) => dispatch(updateYearStart(option)),
+  fetchCollectionsStart: () => dispatch(fetchCollectionsStart()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

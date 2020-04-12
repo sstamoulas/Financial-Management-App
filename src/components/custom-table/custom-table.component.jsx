@@ -4,13 +4,17 @@ import { connect } from 'react-redux';
 import CustomButton from '../custom-button/custom-button.component';
 import CustomTableRow from '../custom-table-row/custom-table-row.component';
 
-import { addExpenseStart } from '../../redux/expense/expense.actions';
+import { addExpenseStart, updateCollectionsStart } from '../../redux/expense/expense.actions';
 
 import './custom-table.styles.scss';
 
-const CustomTable = ({ expenses, addExpense}) => {
-  const total = expenses.reduce((accumulator, currentExpense) => accumulator + parseFloat(currentExpense.value), 0);
-  
+const CustomTable = ({ expenses, addExpense, selectedTable, selectedMonth, selectedYear, updateCollectionsStart }) => {
+  const total = !!expenses.length ? 0 : expenses.reduce((accumulator, currentExpense) => accumulator + parseFloat(currentExpense.value), 0);
+
+  const updateRowItem = (index, e, label) => {
+    updateCollectionsStart({index, value: e.target.value, label, items: expenses}, true)
+  }
+
   return (
     <div className="table-responsive w-100 pl-5 text-center">
       <table className="table table-striped table-hover table-sm mb-0">
@@ -25,7 +29,7 @@ const CustomTable = ({ expenses, addExpense}) => {
         <tbody>
           {
             expenses.map((expense, index) => 
-              <CustomTableRow key={`expense-${index}`} index={index} {...expense} />
+              <CustomTableRow key={`expense-${index}`} index={index} updateRowItem={updateRowItem} {...expense} />
             )
           }
           <tr className="total-row">
@@ -42,11 +46,15 @@ const CustomTable = ({ expenses, addExpense}) => {
 }
 
 const mapStateToProps = (state) => ({
-  expenses: state.expense.expenses,
+  expenses: state.root.expenses,
+  selectedTable: state.root.selectedTable,
+  selectedMonth: state.root.selectedMonth,
+  selectedYear: state.root.selectedYear,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   addExpense: () => dispatch(addExpenseStart()),
+  updateCollectionsStart: (rowData, isExpense) => dispatch(updateCollectionsStart(rowData, isExpense)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CustomTable);

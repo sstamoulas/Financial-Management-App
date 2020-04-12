@@ -1,41 +1,15 @@
-import { updateCollectionsStart } from '../../redux/expense/expense.actions';
-
-export const updateExpense = (expenses, {index, value, type}) => {
-  return expenses.map((expense, expenseIndex) => {
-    if(index === expenseIndex) {
-      expense[type] = value;
-    }
-
-    return expense;
-  });
-}
-
-export const updateAmount = (state, {value, type, label, isExpense}) => {
-  console.log(state);
-  let {expenses, deposits, selectedTable, selectedMonth, selectedYear} = state;
-
-  if(isExpense) {
-    updateArray(expenses, value, type, label);
-    updateCollectionsStart(`${selectedMonth.label}-${selectedYear.label}`, selectedTable.label, {expenses: expenses});
+export const defaultTable = (tableName) => {
+  if(tableName.value) {
+    return {
+        expenses: [],
+        deposits: [],
+    };
   }
   else {
-    updateArray(deposits, value, type, label);
-    updateCollectionsStart(`${selectedMonth.label}-${selectedYear.label}`, selectedTable.label, {deposits: deposits});
-  }
-}
-
-const updateArray = (arrayItems, value, type, label) => {
-  console.log(arrayItems, value, type, label);
-  if(!isNaN(value)) {
-    let index = arrayItems.map(item => item.expenseType).indexOf(type);
-    console.log(index);
-
-    if(value === "") {
-      arrayItems[index][label] = 0;
-    }
-    else {
-      arrayItems[index][label] = value;
-    }
+    return {
+      ...defaultExpenses, 
+      ...defaultDeposits
+    };
   }
 }
 
@@ -85,7 +59,7 @@ export const defaultDeposits = {
       'Last Month Paid': 0,
       'Expected': 0,
       'Paid': 0,
-      'Date': '',
+      'Date': `${(new Date()).getMonth() + 1}-${(new Date()).getDate()}-${(new Date()).getFullYear()}`,
       'hasOwnTable': false,
     },
     {
@@ -93,7 +67,7 @@ export const defaultDeposits = {
       'Last Month Paid': 0,
       'Expected': 0,
       'Paid': 0,
-      'Date': '',
+      'Date': `${(new Date()).getMonth() + 1}-${(new Date()).getDate()}-${(new Date()).getFullYear()}`,
       'hasOwnTable': false,
     },
     {
@@ -101,7 +75,7 @@ export const defaultDeposits = {
       'Last Month Paid': 0,
       'Expected': 0,
       'Paid': 0,
-      'Date': '',
+      'Date': `${(new Date()).getMonth() + 1}-${(new Date()).getDate()}-${(new Date()).getFullYear()}`,
       'hasOwnTable': false,
     },
     {
@@ -109,7 +83,7 @@ export const defaultDeposits = {
       'Last Month Paid': 0,
       'Expected': 0,
       'Paid': 0,
-      'Date': '',
+      'Date': `${(new Date()).getMonth() + 1}-${(new Date()).getDate()}-${(new Date()).getFullYear()}`,
       'hasOwnTable': false,
     },
   ]
@@ -122,7 +96,7 @@ export const defaultExpenses = {
       'Last Month Paid': 0,
       'Expected': 0,
       'Paid': 0,
-      'Date': '',
+      'Date': `${(new Date()).getMonth() + 1}-${(new Date()).getDate()}-${(new Date()).getFullYear()}`,
       'hasOwnTable': false,
     },
     {
@@ -130,7 +104,7 @@ export const defaultExpenses = {
       'Last Month Paid': 0,
       'Expected': 0,
       'Paid': 0,
-      'Date': '',
+      'Date': `${(new Date()).getMonth() + 1}-${(new Date()).getDate()}-${(new Date()).getFullYear()}`,
       'hasOwnTable': false,
     },
     {
@@ -138,7 +112,7 @@ export const defaultExpenses = {
       'Last Month Paid': 0,
       'Expected': 0,
       'Paid': 0,
-      'Date': '',
+      'Date': `${(new Date()).getMonth() + 1}-${(new Date()).getDate()}-${(new Date()).getFullYear()}`,
       'hasOwnTable': false,
     },
     {
@@ -146,7 +120,7 @@ export const defaultExpenses = {
       'Last Month Paid': 0,
       'Expected': 0,
       'Paid': 0,
-      'Date': '',
+      'Date': `${(new Date()).getMonth() + 1}-${(new Date()).getDate()}-${(new Date()).getFullYear()}`,
       'hasOwnTable': false,
     },
     {
@@ -154,7 +128,7 @@ export const defaultExpenses = {
       'Last Month Paid': 0,
       'Expected': 0,
       'Paid': 0,
-      'Date': '',
+      'Date': `${(new Date()).getMonth() + 1}-${(new Date()).getDate()}-${(new Date()).getFullYear()}`,
       'hasOwnTable': false,
     },
     {
@@ -162,7 +136,7 @@ export const defaultExpenses = {
       'Last Month Paid': 0,
       'Expected': 0,
       'Paid': 0,
-      'Date': '',
+      'Date': `${(new Date()).getMonth() + 1}-${(new Date()).getDate()}-${(new Date()).getFullYear()}`,
       'hasOwnTable': true,
     },
     {
@@ -170,7 +144,7 @@ export const defaultExpenses = {
       'Last Month Paid': 0,
       'Expected': 0,
       'Paid': 0,
-      'Date': '',
+      'Date': `${(new Date()).getMonth() + 1}-${(new Date()).getDate()}-${(new Date()).getFullYear()}`,
       'hasOwnTable': true,
     },
     {
@@ -178,7 +152,7 @@ export const defaultExpenses = {
       'Last Month Paid': 0,
       'Expected': 0,
       'Paid': 0,
-      'Date': '',
+      'Date': `${(new Date()).getMonth() + 1}-${(new Date()).getDate()}-${(new Date()).getFullYear()}`,
       'hasOwnTable': false,
     },
     {
@@ -186,7 +160,7 @@ export const defaultExpenses = {
       'Last Month Paid': 0,
       'Expected': 0,
       'Paid': 0,
-      'Date': '',
+      'Date': `${(new Date()).getMonth() + 1}-${(new Date()).getDate()}-${(new Date()).getFullYear()}`,
       'hasOwnTable': false,
     },
     {
@@ -194,7 +168,7 @@ export const defaultExpenses = {
       'Last Month Paid': 0,
       'Expected': 0,
       'Paid': 0,
-      'Date': '',
+      'Date': `${(new Date()).getMonth() + 1}-${(new Date()).getDate()}-${(new Date()).getFullYear()}`,
       'hasOwnTable': false,
     },
     {
@@ -202,7 +176,7 @@ export const defaultExpenses = {
       'Last Month Paid': 0,
       'Expected': 0,
       'Paid': 0,
-      'Date': '',
+      'Date': `${(new Date()).getMonth() + 1}-${(new Date()).getDate()}-${(new Date()).getFullYear()}`,
       'hasOwnTable': false,
     },
     {
@@ -210,7 +184,7 @@ export const defaultExpenses = {
       'Last Month Paid': 0,
       'Expected': 0,
       'Paid': 0,
-      'Date': '',
+      'Date': `${(new Date()).getMonth() + 1}-${(new Date()).getDate()}-${(new Date()).getFullYear()}`,
       'hasOwnTable': false,
     },
     {
@@ -218,7 +192,7 @@ export const defaultExpenses = {
       'Last Month Paid': 0,
       'Expected': 0,
       'Paid': 0,
-      'Date': '',
+      'Date': `${(new Date()).getMonth() + 1}-${(new Date()).getDate()}-${(new Date()).getFullYear()}`,
       'hasOwnTable': false,
     },
     {
@@ -226,7 +200,7 @@ export const defaultExpenses = {
       'Last Month Paid': 0,
       'Expected': 0,
       'Paid': 0,
-      'Date': '',
+      'Date': `${(new Date()).getMonth() + 1}-${(new Date()).getDate()}-${(new Date()).getFullYear()}`,
       'hasOwnTable': true,
     },
     {
@@ -234,7 +208,7 @@ export const defaultExpenses = {
       'Last Month Paid': 0,
       'Expected': 0,
       'Paid': 0,
-      'Date': '',
+      'Date': `${(new Date()).getMonth() + 1}-${(new Date()).getDate()}-${(new Date()).getFullYear()}`,
       'hasOwnTable': true,
     },
     {
@@ -242,7 +216,7 @@ export const defaultExpenses = {
       'Last Month Paid': 0,
       'Expected': 0,
       'Paid': 0,
-      'Date': '',
+      'Date': `${(new Date()).getMonth() + 1}-${(new Date()).getDate()}-${(new Date()).getFullYear()}`,
       'hasOwnTable': true,
     },
     {
@@ -250,7 +224,7 @@ export const defaultExpenses = {
       'Last Month Paid': 0,
       'Expected': 0,
       'Paid': 0,
-      'Date': '',
+      'Date': `${(new Date()).getMonth() + 1}-${(new Date()).getDate()}-${(new Date()).getFullYear()}`,
       'hasOwnTable': true,
     },
     {
@@ -258,7 +232,7 @@ export const defaultExpenses = {
       'Last Month Paid': 0,
       'Expected': 0,
       'Paid': 0,
-      'Date': '',
+      'Date': `${(new Date()).getMonth() + 1}-${(new Date()).getDate()}-${(new Date()).getFullYear()}`,
       'hasOwnTable': true,
     },
     {
@@ -266,7 +240,7 @@ export const defaultExpenses = {
       'Last Month Paid': 0,
       'Expected': 0,
       'Paid': 0,
-      'Date': '',
+      'Date': `${(new Date()).getMonth() + 1}-${(new Date()).getDate()}-${(new Date()).getFullYear()}`,
       'hasOwnTable': true,
     },
     {
@@ -274,7 +248,7 @@ export const defaultExpenses = {
       'Last Month Paid': 0,
       'Expected': 0,
       'Paid': 0,
-      'Date': '',
+      'Date': `${(new Date()).getMonth() + 1}-${(new Date()).getDate()}-${(new Date()).getFullYear()}`,
       'hasOwnTable': false,
     },
     {
@@ -282,7 +256,7 @@ export const defaultExpenses = {
       'Last Month Paid': 0,
       'Expected': 0,
       'Paid': 0,
-      'Date': '',
+      'Date': `${(new Date()).getMonth() + 1}-${(new Date()).getDate()}-${(new Date()).getFullYear()}`,
       'hasOwnTable': true,
     },
     {
@@ -290,7 +264,7 @@ export const defaultExpenses = {
       'Last Month Paid': 0,
       'Expected': 0,
       'Paid': 0,
-      'Date': '',
+      'Date': `${(new Date()).getMonth() + 1}-${(new Date()).getDate()}-${(new Date()).getFullYear()}`,
       'hasOwnTable': true,
     },
     {
@@ -298,7 +272,7 @@ export const defaultExpenses = {
       'Last Month Paid': 0,
       'Expected': 0,
       'Paid': 0,
-      'Date': '',
+      'Date': `${(new Date()).getMonth() + 1}-${(new Date()).getDate()}-${(new Date()).getFullYear()}`,
       'hasOwnTable': true,
     },
     {
@@ -306,7 +280,7 @@ export const defaultExpenses = {
       'Last Month Paid': 0,
       'Expected': 0,
       'Paid': 0,
-      'Date': '',
+      'Date': `${(new Date()).getMonth() + 1}-${(new Date()).getDate()}-${(new Date()).getFullYear()}`,
       'hasOwnTable': false,
     },
     {
@@ -314,7 +288,7 @@ export const defaultExpenses = {
       'Last Month Paid': 0,
       'Expected': 0,
       'Paid': 0,
-      'Date': '',
+      'Date': `${(new Date()).getMonth() + 1}-${(new Date()).getDate()}-${(new Date()).getFullYear()}`,
       'hasOwnTable': false,
     },
     {
@@ -322,7 +296,7 @@ export const defaultExpenses = {
       'Last Month Paid': 0,
       'Expected': 0,
       'Paid': 0,
-      'Date': '',
+      'Date': `${(new Date()).getMonth() + 1}-${(new Date()).getDate()}-${(new Date()).getFullYear()}`,
       'hasOwnTable': false,
     },
     {
@@ -330,7 +304,7 @@ export const defaultExpenses = {
       'Last Month Paid': 0,
       'Expected': 0,
       'Paid': 0,
-      'Date': '',
+      'Date': `${(new Date()).getMonth() + 1}-${(new Date()).getDate()}-${(new Date()).getFullYear()}`,
       'hasOwnTable': false,
     },
     {
@@ -338,7 +312,7 @@ export const defaultExpenses = {
       'Last Month Paid': 0,
       'Expected': 0,
       'Paid': 0,
-      'Date': '',
+      'Date': `${(new Date()).getMonth() + 1}-${(new Date()).getDate()}-${(new Date()).getFullYear()}`,
       'hasOwnTable': true,
     },
   ],

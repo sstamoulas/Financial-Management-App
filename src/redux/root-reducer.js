@@ -11,7 +11,7 @@ const persistConfig = {
 }
 
 const rootReducer = combineReducers({
-  expense: expenseReducer,
+  root: expenseReducer,
 });
 
 export default persistReducer(persistConfig, rootReducer);

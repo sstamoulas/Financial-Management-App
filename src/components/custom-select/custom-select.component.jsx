@@ -46,7 +46,8 @@ class CustomSelect extends Component {
           <div className={`input-wrap ${size} d-flex justify-content-center`}>
             <input 
               className={`input-control ${identifier} ${size}`} 
-              placeholder={selectedItem.label} 
+              onChange={() => console.log('changed')}
+              value={selectedItem.label}
             />
           </div>
           <div className={`dropdown-wrap ${size}`}>
