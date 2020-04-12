@@ -51,7 +51,7 @@ class CustomSelect extends Component {
               onChange={() => console.log('changed')}
               value={selectedItem.label}
             />
-            <label htmlFor={`${identifier}`}></label>
+            <label className="visuallyhidden" htmlFor={`${identifier}`}>Choose {identifier}</label>
           </div>
           <div className={`dropdown-wrap ${size}`}>
             <div className="close"></div>
