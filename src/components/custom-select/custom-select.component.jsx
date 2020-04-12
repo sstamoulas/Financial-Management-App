@@ -45,10 +45,13 @@ class CustomSelect extends Component {
         <div className={`cool-select ${isOpen ? 'open' : ''}`}>
           <div className={`input-wrap ${size} d-flex justify-content-center`}>
             <input 
+              type="text"
+              id={`${identifier}`}
               className={`input-control ${identifier} ${size}`} 
               onChange={() => console.log('changed')}
               value={selectedItem.label}
             />
+            <label htmlFor={`${identifier}`}></label>
           </div>
           <div className={`dropdown-wrap ${size}`}>
             <div className="close"></div>
