@@ -32,6 +32,9 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
+
+
+      - run: npm rebuild node-sass --force
         
       # run tests!
       # - run: yarn test:unit
