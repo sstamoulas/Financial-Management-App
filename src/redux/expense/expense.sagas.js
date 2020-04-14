@@ -19,7 +19,7 @@ import {
   removeCollectionRowSuccess,
   removeCollectionRowFailure,
 } from './expense.actions';
-import { defaultTable } from './expense.utils';
+import { defaultTable, updateArray } from './expense.utils';
 
 export function* fetchCollectionsAsync() {
   const {root: {selectedTable, selectedMonth, selectedYear}} = yield select();
@@ -111,20 +111,6 @@ export function* updateTableAsync({payload: {option}}) {
     yield fetchCollectionsAsync();
   } catch(error) {
     yield put(updateTableFailure(error.message));
-  }
-}
-
-const updateArray = (arrayItems, index, value, label) => {
-  if(label === "value") {
-    if(isNaN(value)) {
-      arrayItems[index][label] = 0;
-    }
-    else {
-      arrayItems[index][label] = value;
-    }
-  }
-  else {
-    arrayItems[index][label] = value;
   }
 }
 

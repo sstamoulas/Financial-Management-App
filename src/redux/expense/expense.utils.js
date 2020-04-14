@@ -13,6 +13,20 @@ export const defaultTable = (tableName) => {
   }
 }
 
+export const updateArray = (arrayItems, index, value, label) => {
+  if(label === "value") {
+    if(isNaN(value)) {
+      arrayItems[index][label] = 0;
+    }
+    else {
+      arrayItems[index][label] = value;
+    }
+  }
+  else {
+    arrayItems[index][label] = value;
+  }
+}
+
 export const months = [
   { value: 0, label: 'January'},
   { value: 1, label: 'February'},
