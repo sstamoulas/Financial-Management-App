@@ -47,7 +47,7 @@ export function* updateCollectionsAsync({payload: {rowData, isExpense}}) {
   const {root: {selectedTable, selectedMonth, selectedYear}} = yield select();
 
   try {
-    const { index, value, label, items } = rowData;
+    const { index, value, label, items, hasOwnTable } = rowData;
 
     yield updateArray(items, index, value, label);
     

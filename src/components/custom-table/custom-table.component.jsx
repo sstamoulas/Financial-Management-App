@@ -11,12 +11,12 @@ import './custom-table.styles.scss';
 const CustomTable = ({ expenses, addExpense, selectedTable, selectedMonth, selectedYear, updateCollectionsStart }) => {
   const total = !!expenses.length ? 0 : expenses.reduce((accumulator, currentExpense) => accumulator + parseFloat(currentExpense.value), 0);
 
-  const updateRowItem = (index, e, label) => {
-    updateCollectionsStart({index, value: e.target.value, label, items: expenses}, true)
+  const updateRowItem = (index, value, label) => {
+    updateCollectionsStart({index, value, label, items: expenses, hasOwnTable: true}, true)
   }
 
   return (
-    <div className="table-responsive w-100 pl-5 text-center">
+    <div className="table-responsive text-center">
       <table className="table table-striped table-hover table-sm mb-0">
         <thead>
           <tr>

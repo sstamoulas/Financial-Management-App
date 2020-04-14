@@ -31,17 +31,17 @@ const OverviewTable = ({
 
   const updateItem = (index, value, label, isExpense) => {
     updateCollectionsStart(
-      {index, value, label, items: isExpense? expenses : deposits}, isExpense)
+      {index, value, label, items: isExpense? expenses : deposits, hasOwnTable: false}, isExpense)
   }
 
   return (
-    <div className="table-responsive w-100 text-center">
+    <div className="table-responsive text-center">
       <table className="table table-striped table-hover table-sm mb-0">
         <thead>
           <tr>
             <th scope="col">Expense</th>
-            <th scope="col">Last Month Paid</th>
-            <th scope="col">Expected Due</th>
+            <th scope="col" className="mobileColHide">Last Month Paid</th>
+            <th scope="col" className="mobileColHide">Expected Due</th>
             <th scope="col">Paid</th>
             <th scope="col">Date</th>
           </tr>
@@ -52,10 +52,10 @@ const OverviewTable = ({
               return (
                 <tr key={`expenseRowHeader-${index}`}>
                   <th scope="row">{expense.expenseType}</th>
-                  <td>
+                  <td className="mobileColHide">
                     <span>${expense['Last Month Paid']}</span>
                   </td>
-                  <td>
+                  <td className="mobileColHide">
                     {
                       expense.hasOwnTable ?
                         <span>${expense['Expected']}</span>
@@ -99,15 +99,15 @@ const OverviewTable = ({
           }
           <tr className='total-row'>
             <th scope="row">Total Bills</th>
-            <td>{lastMonthExpenseTotal}</td>
-            <td>{expectedExpenseTotal}</td>
+            <td className="mobileColHide">{lastMonthExpenseTotal}</td>
+            <td className="mobileColHide">{expectedExpenseTotal}</td>
             <td>{paidExpenseTotal}</td>
             <td><span>---</span></td>
           </tr>
           <tr className='total-row'>
             <th scope="row">Left Over Last Month</th>
-            <td>{lastMonthExpenseTotal}</td>
-            <td>{expectedExpenseTotal}</td>
+            <td className="mobileColHide">{lastMonthExpenseTotal}</td>
+            <td className="mobileColHide">{expectedExpenseTotal}</td>
             <td>{paidExpenseTotal}</td>
             <td><span>---</span></td>
           </tr>
@@ -116,10 +116,10 @@ const OverviewTable = ({
               return (
                 <tr key={`depositRowHeader-${index}`}>
                   <th scope="row">{deposit.expenseType}</th>
-                  <td>
+                  <td className="mobileColHide">
                     <span>${deposit['Last Month Paid']}</span>
                   </td>
-                  <td>
+                  <td className="mobileColHide">
                     {
                       deposit.hasOwnTable ?
                         <span>${deposit['Expected']}</span>
@@ -150,8 +150,8 @@ const OverviewTable = ({
           }
           <tr className='total-row'>
             <th scope="row">Total Savings</th>
-            <td>${lastMonthDepositTotal - lastMonthExpenseTotal}</td>
-            <td>${expectedDepositTotal - expectedExpenseTotal}</td>
+            <td className="mobileColHide">${lastMonthDepositTotal - lastMonthExpenseTotal}</td>
+            <td className="mobileColHide">${expectedDepositTotal - expectedExpenseTotal}</td>
             <td>${paidDepositTotal - paidExpenseTotal}</td>
             <td><span>---</span></td>
           </tr>

@@ -3,7 +3,7 @@ import React from 'react';
 import './static-table.styles.scss';
 
 const StaticTable = () => (
-  <div className="table-responsive w-100 pl-5 text-center">
+  <div className="table-responsive text-center">
     <table className="table table-striped table-hover table-sm mb-0">
       <thead>
         <tr>
