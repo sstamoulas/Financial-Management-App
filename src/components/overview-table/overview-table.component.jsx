@@ -6,8 +6,7 @@ import { updateCollectionsStart } from '../../redux/expense/expense.actions';
 import './overview-table.styles.scss';
 
 const OverviewTable = ({
-    expenses, 
-    deposits, 
+    data, 
     options,
     selectedTable,
     selectedMonth,
@@ -15,19 +14,22 @@ const OverviewTable = ({
     tabHandler, 
     updateCollectionsStart}) => {
 
-  let lastMonthExpenseTotal = !!expenses.length ? 0 : expenses.reduce(
-                    (accumulator, expense) => accumulator + parseFloat(expense['Last Month Paid']), 0);
-  let expectedExpenseTotal = !!expenses.length ? 0 : expenses.reduce(
-                    (accumulator, expense) => accumulator + parseFloat(expense['Expected']), 0);
-  let paidExpenseTotal = !!expenses.length ? 0 : expenses.reduce(
-                    (accumulator, expense) => accumulator + parseFloat(expense['Paid']), 0);
+  let expenses = data.filter(data => data.isExpense);
+  let deposits = data.filter(data => !data.isExpense);
 
-  let lastMonthDepositTotal = !!deposits.length ? 0 : deposits.reduce(
-                    (accumulator, deposit) => accumulator + parseFloat(deposit['Last Month Paid']), 0);
-  let expectedDepositTotal = !!deposits.length ? 0 : deposits.reduce(
-                    (accumulator, deposit) => accumulator + parseFloat(deposit['Expected']), 0);
-  let paidDepositTotal = !!deposits.length ? 0 : deposits.reduce(
-                    (accumulator, deposit) => accumulator + parseFloat(deposit['Paid']), 0);
+  let lastMonthExpenseTotal = !!expenses.length ? expenses.reduce(
+                    (accumulator, expense) => accumulator + parseFloat(expense['Last Month Paid']), 0) : 0;
+  let expectedExpenseTotal = !!expenses.length ? expenses.reduce(
+                    (accumulator, expense) => accumulator + parseFloat(expense['Expected']), 0) : 0;
+  let paidExpenseTotal = !!expenses.length ? expenses.reduce(
+                    (accumulator, expense) => accumulator + parseFloat(expense['Paid']), 0) : 0;
+
+  let lastMonthDepositTotal = !!deposits.length ? deposits.reduce(
+                    (accumulator, deposit) => accumulator + parseFloat(deposit['Last Month Paid']), 0) : 0;
+  let expectedDepositTotal = !!deposits.length ? deposits.reduce(
+                    (accumulator, deposit) => accumulator + parseFloat(deposit['Expected']), 0) : 0;
+  let paidDepositTotal = !!deposits.length ? deposits.reduce(
+                    (accumulator, deposit) => accumulator + parseFloat(deposit['Paid']), 0) : 0;
 
   const updateItem = (index, value, label, isExpense) => {
     updateCollectionsStart(
@@ -163,8 +165,7 @@ const OverviewTable = ({
 
 
 const mapStateToProps = (state) => ({
-  expenses: state.root.expenses,
-  deposits: state.root.deposits,
+  data: state.root.data,
   selectedTable: state.root.selectedTable,
   selectedMonth: state.root.selectedMonth,
   selectedYear: state.root.selectedYear,

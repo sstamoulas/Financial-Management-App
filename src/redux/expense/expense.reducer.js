@@ -2,8 +2,7 @@ import ExpenseActionTypes from './expense.types';
 import { months, years, tables } from './expense.utils';
 
 const INITIAL_STATE = {
-  expenses: [],
-  deposits: [],
+  data: [],
   tableOptions: tables,
   selectedTable: tables[0],
   monthOptions: months,
@@ -19,7 +18,7 @@ const expenseReducer = (state = INITIAL_STATE, action) => {
     case ExpenseActionTypes.ADD_EXPENSE: 
       return {
         ...state,
-        expenses: [...state.expenses, {name: '', value: 0, date: ''}],
+        data: [...state.data, {name: '', value: 0, date: ''}],
       };
     case ExpenseActionTypes.REMOVE_COLLECTION_ROW_START:
     case ExpenseActionTypes.UPDATE_MONTH_START:
@@ -37,8 +36,7 @@ const expenseReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         isFetching: false,
-        expenses: action.payload.expenses,
-        deposits: action.payload.deposits,
+        data: action.payload,
       };
     case ExpenseActionTypes.UPDATE_MONTH_SUCCESS:
       return {

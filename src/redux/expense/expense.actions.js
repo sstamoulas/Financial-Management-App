@@ -64,14 +64,19 @@ export const updateTableFailure  = (errorMessage) => ({
   payload: errorMessage,
 });
 
+export const updateOverviewCollectionsStart = (expenses, column) => ({
+  type: ExpenseActionTypes.UPDATE_OVERVIEW_COLLECTIONS_START,
+  payload: {expenses, column},
+});
+
 export const updateCollectionsStart = (rowData, isExpense) => ({
   type: ExpenseActionTypes.UPDATE_COLLECTIONS_START,
   payload: {rowData, isExpense},
 });
 
-export const updateCollectionsSuccess = ({expenses, deposits}) => ({
+export const updateCollectionsSuccess = ({expenses}) => ({
   type: ExpenseActionTypes.UPDATE_COLLECTIONS_SUCCESS,
-  payload: {expenses, deposits},
+  payload: expenses,
 });
 
 export const updateCollectionsFailure = (errorMessage) => ({
@@ -83,9 +88,9 @@ export const fetchCollectionsStart = () => ({
   type: ExpenseActionTypes.FETCH_COLLECTIONS_START,
 });
 
-export const fetchCollectionsSuccess = ({expenses, deposits}) => ({
+export const fetchCollectionsSuccess = ({expenses}) => ({
   type: ExpenseActionTypes.FETCH_COLLECTIONS_SUCCESS,
-  payload: {expenses, deposits},
+  payload: expenses,
 });
 
 export const fetchCollectionsFailure = (errorMessage) => ({

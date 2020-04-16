@@ -14,14 +14,14 @@ var firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
-export const createFiscalMonthlyDocument = async (path, tableName, expenses) => {
+export const createFiscalMonthlyDocument = async (path, tableName, data) => {
   const docRef = firestore.doc(`${path}/${tableName}`);
   const snapShot = await docRef.get();
 
   if(!snapShot.exists) {
     try {
       await docRef.set({
-        ...expenses,
+        ...data,
       });
     } catch(error) {
       console.log('error creating collection', error.message);

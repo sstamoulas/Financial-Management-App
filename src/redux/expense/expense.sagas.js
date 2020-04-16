@@ -42,21 +42,35 @@ export function* fetchCollectionsAsync() {
     }
   }
 }
+export function* updateOverviewCollectionsAsync({payload: {expenses, column}}) {
+  const {root: {selectedTable, selectedMonth, selectedYear}} = yield select();
+
+  const total = !!expenses.length ? expenses.reduce((accumulator, currentExpense) => accumulator + parseFloat(currentExpense.value), 0) : 0;
+
+  try {
+    const docRef = firestore.collection(`${selectedMonth.label}-${selectedYear.label}`).doc('Overview');
+    const snapshot = yield docRef.get();
+    let items = snapshot.data();
+    let index = items.expenses.findIndex(item => item.expenseType === column)
+
+    updateArray(items.expenses, index, total, 'Paid')
+
+    yield call(updateFiscalMonthlyDocument, `${selectedMonth.label}-${selectedYear.label}`, 'Overview', items);
+
+    // yield put(updateOverviewCollectionsSuccess());
+  } catch(error) {
+    // yield put(updateOverviewCollectionsFailure(error.message));
+  }
+}
 
 export function* updateCollectionsAsync({payload: {rowData, isExpense}}) {
   const {root: {selectedTable, selectedMonth, selectedYear}} = yield select();
 
   try {
-    const { index, value, label, items, hasOwnTable } = rowData;
+    const { index, value, label, items } = rowData;
 
     yield updateArray(items, index, value, label);
-    
-    if(isExpense) {
-      yield call(updateFiscalMonthlyDocument, `${selectedMonth.label}-${selectedYear.label}`, selectedTable.label, {expenses: items});
-    }
-    else {
-      yield call(updateFiscalMonthlyDocument, `${selectedMonth.label}-${selectedYear.label}`, selectedTable.label, {deposits: items});
-    }
+    yield call(updateFiscalMonthlyDocument, `${selectedMonth.label}-${selectedYear.label}`, selectedTable.label, {expenses: items});
 
     const docRef = firestore.collection(`${selectedMonth.label}-${selectedYear.label}`).doc(selectedTable.label);
     const snapshot = yield docRef.get();
@@ -128,6 +142,13 @@ export function* updateCollectionsStart() {
   );
 }
 
+export function* updateOverviewCollectionsStart() {
+  yield takeLatest(
+    ExpenseActionTypes.UPDATE_OVERVIEW_COLLECTIONS_START, 
+    updateOverviewCollectionsAsync
+  );
+}
+
 export function* removeCollectionRowStart() {
   yield takeLatest(
     ExpenseActionTypes.REMOVE_COLLECTION_ROW_START,
@@ -160,6 +181,7 @@ export function* expenseSagas() {
   yield all([
     call(fetchCollectionsStart),
     call(updateCollectionsStart),
+    call(updateOverviewCollectionsStart),
     call(removeCollectionRowStart),
     call(updateMonthStart),
     call(updateYearStart),
