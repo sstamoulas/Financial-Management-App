@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { updateCollectionsStart } from '../../redux/expense/expense.actions';
+import { updateCollectionsStart, updateLocalState } from '../../redux/expense/expense.actions';
 
 import './overview-table.styles.scss';
 
@@ -12,28 +12,29 @@ const OverviewTable = ({
     selectedMonth,
     selectedYear, 
     tabHandler, 
-    updateCollectionsStart}) => {
+    updateCollectionsStart,
+    updateLocalState}) => {
 
   let expenses = data.filter(data => data.isExpense);
   let deposits = data.filter(data => !data.isExpense);
 
   let lastMonthExpenseTotal = !!expenses.length ? expenses.reduce(
-                    (accumulator, expense) => accumulator + parseFloat(expense['Last Month Paid']), 0) : 0;
+                    (accumulator, expense) => accumulator + parseFloat(expense['lastMonthPaid']), 0) : 0;
   let expectedExpenseTotal = !!expenses.length ? expenses.reduce(
-                    (accumulator, expense) => accumulator + parseFloat(expense['Expected']), 0) : 0;
+                    (accumulator, expense) => accumulator + parseFloat(expense['expected']), 0) : 0;
   let paidExpenseTotal = !!expenses.length ? expenses.reduce(
-                    (accumulator, expense) => accumulator + parseFloat(expense['Paid']), 0) : 0;
+                    (accumulator, expense) => accumulator + parseFloat(expense['paid']), 0) : 0;
 
   let lastMonthDepositTotal = !!deposits.length ? deposits.reduce(
-                    (accumulator, deposit) => accumulator + parseFloat(deposit['Last Month Paid']), 0) : 0;
+                    (accumulator, deposit) => accumulator + parseFloat(deposit['lastMonthPaid']), 0) : 0;
   let expectedDepositTotal = !!deposits.length ? deposits.reduce(
-                    (accumulator, deposit) => accumulator + parseFloat(deposit['Expected']), 0) : 0;
+                    (accumulator, deposit) => accumulator + parseFloat(deposit['expected']), 0) : 0;
   let paidDepositTotal = !!deposits.length ? deposits.reduce(
-                    (accumulator, deposit) => accumulator + parseFloat(deposit['Paid']), 0) : 0;
+                    (accumulator, deposit) => accumulator + parseFloat(deposit['paid']), 0) : 0;
 
-  const updateItem = (index, value, label, isExpense) => {
-    updateCollectionsStart(
-      {index, value, label, items: isExpense? expenses : deposits, hasOwnTable: false}, isExpense)
+  const updateItem = (index, value, label) => {
+    updateLocalState({index, value, label});
+    updateCollectionsStart({index, value, label, items: data});
   }
 
   return (
@@ -55,29 +56,29 @@ const OverviewTable = ({
                 <tr key={`expenseRowHeader-${index}`}>
                   <th scope="row">{expense.expenseType}</th>
                   <td className="mobileColHide">
-                    <span>${expense['Last Month Paid']}</span>
+                    <span>${expense['lastMonthPaid']}</span>
                   </td>
                   <td className="mobileColHide">
                     {
                       expense.hasOwnTable ?
-                        <span>${expense['Expected']}</span>
+                        <span>${expense['expected']}</span>
                       :
                         <input 
                           type="number"
-                          value={expense['Expected']} 
-                          onChange={(e) => updateItem(index, e.target.value, 'Expected', true)}
+                          value={expense['expected'] || 0} 
+                          onChange={(e) => updateItem(index, e.target.value, 'expected')}
                         />
                     }
                   </td>
                   <td>
                     {
                       expense.hasOwnTable ? 
-                        <span>${expense['Paid']}</span>
+                        <span>${expense['paid']}</span>
                       :
                         <input 
                           type="number"
-                          value={expense['Paid']} 
-                          onChange={(e) => updateItem(index, e.target.value, 'Paid', true)}
+                          value={expense['paid'] || 0} 
+                          onChange={(e) => updateItem(index, e.target.value, 'paid')}
                         />
                     }
                   </td>
@@ -90,8 +91,8 @@ const OverviewTable = ({
                       :
                         <input 
                           type="date" 
-                          value={expense['Date']} 
-                          onChange={(e) => updateItem(index, e.target.value, 'Date', true)}
+                          value={expense['date'] || ''} 
+                          onChange={(e) => updateItem(index, e.target.value, 'date')}
                         />
                     }
                   </td>
@@ -119,29 +120,29 @@ const OverviewTable = ({
                 <tr key={`depositRowHeader-${index}`}>
                   <th scope="row">{deposit.expenseType}</th>
                   <td className="mobileColHide">
-                    <span>${deposit['Last Month Paid']}</span>
+                    <span>${deposit['lastMonthPaid']}</span>
                   </td>
                   <td className="mobileColHide">
                     {
                       deposit.hasOwnTable ?
-                        <span>${deposit['Expected']}</span>
+                        <span>${deposit['expected']}</span>
                       :
                         <input 
-                          type="string"
-                          value={deposit['Expected']} 
-                          onChange={(e) => updateItem(index, e.target.value, 'Expected', false)}
+                          type="number"
+                          value={deposit['expected'] || 0} 
+                          onChange={(e) => updateItem(expenses.length + index, e.target.value, 'expected')}
                         />
                     }
                   </td>
                   <td>
                     {
                       deposit.hasOwnTable ? 
-                        <span>${deposit['Paid']}</span>
+                        <span>${deposit['paid']}</span>
                       :
                         <input 
-                          type="string"
-                          value={deposit['Paid']} 
-                          onChange={(e) => updateItem(index, e.target.value, 'Paid', false)}
+                          type="number"
+                          value={deposit['paid'] || 0} 
+                          onChange={(e) => updateItem(expenses.length + index, e.target.value, 'paid')}
                         />
                     }
                   </td>
@@ -172,9 +173,10 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  updateLocalState:
+    (index, value, label) => dispatch(updateLocalState(index, value, label)),
   updateCollectionsStart: 
-    (rowData, isExpense, additionalData) => 
-      dispatch(updateCollectionsStart(rowData, isExpense)),
+    (index, value, label, items) => dispatch(updateCollectionsStart(index, value, label, items)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(OverviewTable);

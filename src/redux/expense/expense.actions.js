@@ -69,14 +69,18 @@ export const updateOverviewCollectionsStart = (expenses, column) => ({
   payload: {expenses, column},
 });
 
-export const updateCollectionsStart = (rowData, isExpense) => ({
-  type: ExpenseActionTypes.UPDATE_COLLECTIONS_START,
-  payload: {rowData, isExpense},
+export const updateLocalState = (index, value, label) => ({
+  type: ExpenseActionTypes.UPDATE_LOCAL_STATE,
+  payload: {index, value, label},
 });
 
-export const updateCollectionsSuccess = ({expenses}) => ({
+export const updateCollectionsStart = ({index, value, label, items}) => ({
+  type: ExpenseActionTypes.UPDATE_COLLECTIONS_START,
+  payload: {index, value, label, items},
+});
+
+export const updateCollectionsSuccess = () => ({
   type: ExpenseActionTypes.UPDATE_COLLECTIONS_SUCCESS,
-  payload: expenses,
 });
 
 export const updateCollectionsFailure = (errorMessage) => ({

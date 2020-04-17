@@ -10,6 +10,7 @@ const INITIAL_STATE = {
   yearOptions: years,
   selectedYear: years[0],
   isFetching: false,
+  isUpdating: false,
   errorMessage: undefined,
 };
 
@@ -20,11 +21,32 @@ const expenseReducer = (state = INITIAL_STATE, action) => {
         ...state,
         data: [...state.data, {name: '', value: 0, date: ''}],
       };
+    case ExpenseActionTypes.UPDATE_LOCAL_STATE:
+      return {
+        ...state,
+        data: state.data.map((item, index) => {
+          // Find the item with the matching id
+          if(index === action.payload.index) {
+            // Return a new object
+            return {
+              ...item,  // copy the existing item
+              [action.payload.label]: action.payload.value  // replace the email addr
+            }
+          }
+
+          // Leave every other item unchanged
+          return item;
+        }),
+      };
     case ExpenseActionTypes.REMOVE_COLLECTION_ROW_START:
     case ExpenseActionTypes.UPDATE_MONTH_START:
     case ExpenseActionTypes.UPDATE_YEAR_START:
     case ExpenseActionTypes.UPDATE_TABLE_START:
     case ExpenseActionTypes.UPDATE_COLLECTIONS_START:
+      return {
+        ...state,
+        isUpdating: true,
+      };
     case ExpenseActionTypes.FETCH_COLLECTIONS_START:
       return {
         ...state,
@@ -32,6 +54,10 @@ const expenseReducer = (state = INITIAL_STATE, action) => {
       };
     case ExpenseActionTypes.REMOVE_COLLECTION_ROW_SUCCESS:
     case ExpenseActionTypes.UPDATE_COLLECTIONS_SUCCESS:
+      return {
+        ...state,
+        isUpdating: false,
+      };
     case ExpenseActionTypes.FETCH_COLLECTIONS_SUCCESS:
       return {
         ...state,
@@ -61,6 +87,11 @@ const expenseReducer = (state = INITIAL_STATE, action) => {
     case ExpenseActionTypes.UPDATE_YEAR_FAILURE:
     case ExpenseActionTypes.UPDATE_TABLE_FAILURE:
     case ExpenseActionTypes.UPDATE_COLLECTIONS_FAILURE:
+      return {
+        ...state,
+        isUpdating: false,
+        errorMessage: action.payload,
+      };
     case ExpenseActionTypes.FETCH_COLLECTIONS_FAILURE:
       return {
         ...state,

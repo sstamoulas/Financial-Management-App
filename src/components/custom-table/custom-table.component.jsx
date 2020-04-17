@@ -6,17 +6,19 @@ import CustomTableRow from '../custom-table-row/custom-table-row.component';
 
 import { 
   addExpenseStart, 
+  updateLocalState,
   updateCollectionsStart, 
   updateOverviewCollectionsStart 
 } from '../../redux/expense/expense.actions';
 
 import './custom-table.styles.scss';
 
-const CustomTable = ({ expenses, addExpense, selectedTable, updateCollectionsStart, updateOverviewCollectionsStart }) => {
+const CustomTable = ({ expenses, addExpense, selectedTable, updateLocalState, updateCollectionsStart, updateOverviewCollectionsStart }) => {
   const total = !!expenses.length ? expenses.reduce((accumulator, currentExpense) => accumulator + parseFloat(currentExpense.value), 0) : 0;
 
   const updateRowItem = (index, value, label) => {
-    updateCollectionsStart({index, value, label, items: expenses, hasOwnTable: true}, true);
+    updateLocalState(index, value, label);
+    updateCollectionsStart({index, value, label, items: expenses});
     updateOverviewCollectionsStart(expenses, selectedTable.label.substring(0, selectedTable.label.indexOf(' Expense')));
   }
 
@@ -57,8 +59,12 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   addExpense: () => dispatch(addExpenseStart()),
-  updateCollectionsStart: (rowData, isExpense) => dispatch(updateCollectionsStart(rowData, isExpense)),
-  updateOverviewCollectionsStart: (expenses, column) => dispatch(updateOverviewCollectionsStart(expenses, column)),
+  updateLocalState:
+    (index, value, label) => dispatch(updateLocalState(index, value, label)),
+  updateCollectionsStart: 
+    (index, value, label, items) => dispatch(updateCollectionsStart(index, value, label, items)),
+  updateOverviewCollectionsStart: 
+    (expenses, column) => dispatch(updateOverviewCollectionsStart(expenses, column)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CustomTable);

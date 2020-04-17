@@ -1,4 +1,4 @@
-import { takeLatest, call, put, all, select } from 'redux-saga/effects';
+import { takeLatest, call, put, all, select, fork, join } from 'redux-saga/effects';
 import ExpenseActionTypes from './expense.types';
 import { 
   firestore,
@@ -21,8 +21,12 @@ import {
 } from './expense.actions';
 import { defaultTable, updateArray } from './expense.utils';
 
-export function* fetchCollectionsAsync() {
-  const {root: {selectedTable, selectedMonth, selectedYear}} = yield select();
+export function* fetchCollectionsAsync(option) {
+  let {root: {selectedTable, selectedMonth, selectedYear}} = yield select();
+
+  if(option !== undefined && option.label) {
+    selectedTable = option;
+  }
 
   try {
     const docRef = firestore.collection(`${selectedMonth.label}-${selectedYear.label}`).doc(selectedTable.label);
@@ -43,7 +47,7 @@ export function* fetchCollectionsAsync() {
   }
 }
 export function* updateOverviewCollectionsAsync({payload: {expenses, column}}) {
-  const {root: {selectedTable, selectedMonth, selectedYear}} = yield select();
+  const {root: {selectedMonth, selectedYear}} = yield select();
 
   const total = !!expenses.length ? expenses.reduce((accumulator, currentExpense) => accumulator + parseFloat(currentExpense.value), 0) : 0;
 
@@ -53,7 +57,7 @@ export function* updateOverviewCollectionsAsync({payload: {expenses, column}}) {
     let items = snapshot.data();
     let index = items.expenses.findIndex(item => item.expenseType === column)
 
-    updateArray(items.expenses, index, total, 'Paid')
+    updateArray(items.expenses, index, total, 'paid')
 
     yield call(updateFiscalMonthlyDocument, `${selectedMonth.label}-${selectedYear.label}`, 'Overview', items);
 
@@ -63,19 +67,14 @@ export function* updateOverviewCollectionsAsync({payload: {expenses, column}}) {
   }
 }
 
-export function* updateCollectionsAsync({payload: {rowData, isExpense}}) {
+export function* updateCollectionsAsync({payload: {index, value, label, items}}) {
   const {root: {selectedTable, selectedMonth, selectedYear}} = yield select();
 
   try {
-    const { index, value, label, items } = rowData;
-
     yield updateArray(items, index, value, label);
     yield call(updateFiscalMonthlyDocument, `${selectedMonth.label}-${selectedYear.label}`, selectedTable.label, {expenses: items});
 
-    const docRef = firestore.collection(`${selectedMonth.label}-${selectedYear.label}`).doc(selectedTable.label);
-    const snapshot = yield docRef.get();
-
-    yield put(updateCollectionsSuccess(snapshot.data()));
+    yield put(updateCollectionsSuccess());
   } catch(error) {
     yield put(updateCollectionsFailure(error.message));
   }
@@ -101,7 +100,6 @@ export function* removeCollectionRowAsync({payload: {index}}) {
 export function* updateMonthAsync({payload: {option}}) {
   try {
     yield put(updateMonthSuccess(option));
-
     yield fetchCollectionsAsync();
   } catch(error) {
     yield put(updateMonthFailure(error.message));
@@ -111,18 +109,26 @@ export function* updateMonthAsync({payload: {option}}) {
 export function* updateYearAsync({payload: {option}}) {
   try {
     yield put(updateYearSuccess(option));
-
     yield fetchCollectionsAsync();
   } catch(error) {
     yield put(updateYearFailure(error.message));
   }
 }
 
-export function* updateTableAsync({payload: {option}}) {
+export function* updateTable(option) {
   try {
     yield put(updateTableSuccess(option));
+  } catch(error) {
+    yield put(updateTableFailure(error.message));
+  }
+}
 
-    yield fetchCollectionsAsync();
+export function* updateTableAsync({payload: {option}}) {
+  try {
+    const task = yield fork(fetchCollectionsAsync, option);
+    yield join(task);
+
+    yield put(updateTableSuccess(option));
   } catch(error) {
     yield put(updateTableFailure(error.message));
   }
