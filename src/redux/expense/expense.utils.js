@@ -9,6 +9,18 @@ export const defaultTable = (tableName) => {
   }
 }
 
+export const generateTotal = (items, label) => {
+  return !!items.length ? items.reduce(
+    (accumulator, item) => {
+      let num = parseFloat(item[label]);
+      if(isNaN(num)) {
+        num = 0;
+      }
+
+      return accumulator + parseFloat(num);
+    }, 0) : 0;
+}
+
 export const updateArray = (arrayItems, index, value, label) => {
   if(label !== "name" && label !== "date") {
     if(isNaN(value)) {

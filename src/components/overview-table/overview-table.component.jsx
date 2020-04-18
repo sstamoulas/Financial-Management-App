@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { updateCollectionsStart, updateLocalState } from '../../redux/expense/expense.actions';
+import { generateTotal } from '../../redux/expense/expense.utils';
 
 import './overview-table.styles.scss';
 
@@ -15,27 +16,21 @@ const OverviewTable = ({
     updateCollectionsStart,
     updateLocalState}) => {
 
-  let expenses = data.filter(data => data.isExpense);
-  let deposits = data.filter(data => !data.isExpense);
-
-  let lastMonthExpenseTotal = !!expenses.length ? expenses.reduce(
-                    (accumulator, expense) => accumulator + parseFloat(expense['lastMonthPaid']), 0) : 0;
-  let expectedExpenseTotal = !!expenses.length ? expenses.reduce(
-                    (accumulator, expense) => accumulator + parseFloat(expense['expected']), 0) : 0;
-  let paidExpenseTotal = !!expenses.length ? expenses.reduce(
-                    (accumulator, expense) => accumulator + parseFloat(expense['paid']), 0) : 0;
-
-  let lastMonthDepositTotal = !!deposits.length ? deposits.reduce(
-                    (accumulator, deposit) => accumulator + parseFloat(deposit['lastMonthPaid']), 0) : 0;
-  let expectedDepositTotal = !!deposits.length ? deposits.reduce(
-                    (accumulator, deposit) => accumulator + parseFloat(deposit['expected']), 0) : 0;
-  let paidDepositTotal = !!deposits.length ? deposits.reduce(
-                    (accumulator, deposit) => accumulator + parseFloat(deposit['paid']), 0) : 0;
-
   const updateItem = (index, value, label) => {
     updateLocalState({index, value, label});
     updateCollectionsStart({index, value, label, items: data});
   }
+
+  let expenses = data.filter(data => data.isExpense);
+  let deposits = data.filter(data => !data.isExpense);
+
+  let lastMonthExpenseTotal = generateTotal(expenses, 'lastMonthPaid');
+  let expectedExpenseTotal = generateTotal(expenses, 'expected');
+  let paidExpenseTotal = generateTotal(expenses, 'paid');
+
+  let lastMonthDepositTotal = generateTotal(deposits, 'lastMonthPaid');
+  let expectedDepositTotal = generateTotal(deposits, 'expected');
+  let paidDepositTotal = generateTotal(deposits, 'paid');
 
   return (
     <div className="table-responsive text-center">
@@ -65,7 +60,7 @@ const OverviewTable = ({
                       :
                         <input 
                           type="number"
-                          value={expense['expected'] || 0} 
+                          value={expense['expected'] || ''} 
                           onChange={(e) => updateItem(index, e.target.value, 'expected')}
                         />
                     }
@@ -77,7 +72,7 @@ const OverviewTable = ({
                       :
                         <input 
                           type="number"
-                          value={expense['paid'] || 0} 
+                          value={expense['paid'] || ''} 
                           onChange={(e) => updateItem(index, e.target.value, 'paid')}
                         />
                     }
@@ -87,7 +82,11 @@ const OverviewTable = ({
                       expense.hasOwnTable ? 
                         <a 
                           href="/#" onClick={() => 
-                            tabHandler(options.find(option => option.label === `${expense.expenseType} Expense`))}>See Column</a>
+                            tabHandler(options.find(option => option.label === `${expense.expenseType} Expense`))
+                          }
+                        >
+                            See Column
+                        </a>
                       :
                         <input 
                           type="date" 
@@ -129,7 +128,7 @@ const OverviewTable = ({
                       :
                         <input 
                           type="number"
-                          value={deposit['expected'] || 0} 
+                          value={deposit['expected'] || ''} 
                           onChange={(e) => updateItem(expenses.length + index, e.target.value, 'expected')}
                         />
                     }
@@ -141,7 +140,7 @@ const OverviewTable = ({
                       :
                         <input 
                           type="number"
-                          value={deposit['paid'] || 0} 
+                          value={deposit['paid'] || ''} 
                           onChange={(e) => updateItem(expenses.length + index, e.target.value, 'paid')}
                         />
                     }

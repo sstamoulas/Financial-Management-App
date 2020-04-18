@@ -10,17 +10,26 @@ import {
   updateCollectionsStart, 
   updateOverviewCollectionsStart 
 } from '../../redux/expense/expense.actions';
+import { generateTotal } from '../../redux/expense/expense.utils';
 
 import './custom-table.styles.scss';
 
-const CustomTable = ({ expenses, addExpense, selectedTable, updateLocalState, updateCollectionsStart, updateOverviewCollectionsStart }) => {
-  const total = !!expenses.length ? expenses.reduce((accumulator, currentExpense) => accumulator + parseFloat(currentExpense.value), 0) : 0;
-
+const CustomTable = ({ 
+  expenses, 
+  addExpense, 
+  selectedTable, 
+  updateLocalState, 
+  updateCollectionsStart, 
+  updateOverviewCollectionsStart 
+}) => {
   const updateRowItem = (index, value, label) => {
     updateLocalState(index, value, label);
     updateCollectionsStart({index, value, label, items: expenses});
-    updateOverviewCollectionsStart(expenses, selectedTable.label.substring(0, selectedTable.label.indexOf(' Expense')));
+    let tableName = selectedTable.label.substring(0, selectedTable.label.indexOf(' Expense'));
+    updateOverviewCollectionsStart(expenses, tableName);
   }
+
+  const total = generateTotal(expenses, 'value');
 
   return (
     <div className="table-responsive text-center">
@@ -36,7 +45,12 @@ const CustomTable = ({ expenses, addExpense, selectedTable, updateLocalState, up
         <tbody>
           {
             expenses.map((expense, index) => 
-              <CustomTableRow key={`expense-${index}`} index={index} updateRowItem={updateRowItem} {...expense} />
+              <CustomTableRow 
+                key={`expense-${index}`} 
+                index={index} 
+                updateRowItem={updateRowItem} 
+                {...expense} 
+              />
             )
           }
           <tr className="total-row">
