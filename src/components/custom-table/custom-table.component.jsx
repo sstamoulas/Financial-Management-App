@@ -10,7 +10,7 @@ import {
   updateCollectionsStart, 
   updateOverviewCollectionsStart 
 } from '../../redux/expense/expense.actions';
-import { generateTotal } from '../../redux/expense/expense.utils';
+import { generateTotal, thousandsSeparator } from '../../redux/expense/expense.utils';
 
 import './custom-table.styles.scss';
 
@@ -56,7 +56,7 @@ const CustomTable = ({
           <tr className="total-row">
             <th scope="row">Total</th>
             <td></td>
-            <td>{total.toFixed(2)}</td>
+            <td>{thousandsSeparator(total.toFixed(2))}</td>
             <td></td>
           </tr>
         </tbody>

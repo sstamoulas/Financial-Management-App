@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { updateCollectionsStart, updateLocalState } from '../../redux/expense/expense.actions';
-import { generateTotal } from '../../redux/expense/expense.utils';
+import { generateTotal, thousandsSeparator } from '../../redux/expense/expense.utils';
 
 import './overview-table.styles.scss';
 
@@ -51,12 +51,12 @@ const OverviewTable = ({
                 <tr key={`expenseRowHeader-${index}`}>
                   <th scope="row">{expense.name}</th>
                   <td className="mobileColHide">
-                    <span>${expense['lastMonthPaid']}</span>
+                    <span>${expense['lastMonthPaid'].toFixed(2)}</span>
                   </td>
                   <td className="mobileColHide">
                     {
                       expense.hasOwnTable ?
-                        <span>${expense['due']}</span>
+                        <span>${expense['due'].toFixed(2)}</span>
                       :
                         <input 
                           type="number"
@@ -68,7 +68,7 @@ const OverviewTable = ({
                   <td>
                     {
                       expense.hasOwnTable ? 
-                        <span>${expense['paid']}</span>
+                        <span>${expense['paid'].toFixed(2)}</span>
                       :
                         <input 
                           type="number"
@@ -101,9 +101,9 @@ const OverviewTable = ({
           }
           <tr className='total-row'>
             <th scope="row">Total Bills</th>
-            <td className="mobileColHide">{lastMonthExpenseTotal}</td>
-            <td className="mobileColHide">{dueExpenseTotal}</td>
-            <td>{paidExpenseTotal}</td>
+            <td className="mobileColHide">{thousandsSeparator(lastMonthExpenseTotal)}</td>
+            <td className="mobileColHide">{thousandsSeparator(dueExpenseTotal)}</td>
+            <td>{thousandsSeparator(paidExpenseTotal)}</td>
             <td><span>---</span></td>
           </tr>
           {
@@ -117,7 +117,7 @@ const OverviewTable = ({
                   <td className="mobileColHide">
                     {
                       deposit.hasOwnTable ?
-                        <span>${deposit['due']}</span>
+                        <span>${deposit['due'].toFixed(2)}</span>
                       :
                         <input 
                           type="number"
@@ -129,7 +129,7 @@ const OverviewTable = ({
                   <td>
                     {
                       deposit.hasOwnTable ? 
-                        <span>${deposit['paid']}</span>
+                        <span>${deposit['paid'].toFixed(2)}</span>
                       :
                         <input 
                           type="number"
@@ -145,9 +145,9 @@ const OverviewTable = ({
           }
           <tr className='total-row'>
             <th scope="row">Total Savings</th>
-            <td className="mobileColHide">${lastMonthDepositTotal - lastMonthExpenseTotal}</td>
-            <td className="mobileColHide">${dueDepositTotal - dueExpenseTotal}</td>
-            <td>${paidDepositTotal - paidExpenseTotal}</td>
+            <td className="mobileColHide">${thousandsSeparator((lastMonthDepositTotal - lastMonthExpenseTotal).toFixed(2))}</td>
+            <td className="mobileColHide">${thousandsSeparator((dueDepositTotal - dueExpenseTotal).toFixed(2))}</td>
+            <td>${thousandsSeparator((paidDepositTotal - paidExpenseTotal).toFixed(2))}</td>
             <td><span>---</span></td>
           </tr>
         </tbody>

@@ -21,6 +21,10 @@ export const generateTotal = (items, label) => {
     }, 0) : 0;
 }
 
+export const thousandsSeparator = (number) => {
+  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 export const updateArray = (arrayItems, index, value, label) => {
   if(label !== "name" && label !== "date") {
     if(isNaN(value)) {
@@ -128,7 +132,7 @@ export const defaultData = {
     'isExpense': true,
   },
   {
-    'name': 'Serap Phone Bill',
+    'name': 'Phone Bill #1',
     'lastMonthPaid': 0,
     'due': 0,
     'paid': 0,
@@ -137,7 +141,7 @@ export const defaultData = {
     'isExpense': true,
   },
   {
-    'name': 'Moms Phone Bill',
+    'name': 'Phone Bill #2',
     'lastMonthPaid': 0,
     'due': 0,
     'paid': 0,
@@ -146,7 +150,7 @@ export const defaultData = {
     'isExpense': true,
   },
   {
-    'name': 'Stamatios Phone Bill',
+    'name': 'Phone Bill #3',
     'lastMonthPaid': 0,
     'due': 0,
     'paid': 0,
@@ -218,7 +222,7 @@ export const defaultData = {
     'isExpense': true,
   },
   {
-    'name': 'Ibrahim',
+    'name': 'Baby #1',
     'lastMonthPaid': 0,
     'due': 0,
     'paid': 0,
@@ -227,7 +231,7 @@ export const defaultData = {
     'isExpense': true,
   },
   {
-    'name': 'Baby',
+    'name': 'Baby #2',
     'lastMonthPaid': 0,
     'due': 0,
     'paid': 0,
@@ -299,7 +303,7 @@ export const defaultData = {
     'isExpense': false,
   },
   {
-    'name': 'Serap Payment',
+    'name': 'Payment #1',
     'lastMonthPaid': 0,
     'due': 0,
     'paid': 0,
@@ -308,7 +312,7 @@ export const defaultData = {
     'isExpense': false,
   },
   {
-    'name': 'Stamatios Payment',
+    'name': 'Payment #2',
     'lastMonthPaid': 0,
     'due': 0,
     'paid': 0,
