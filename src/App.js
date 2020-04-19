@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import CustomSelect from './components/custom-select/custom-select.component';
-import CustomButton from './components/custom-button/custom-button.component';
 import OverviewTable from './components/overview-table/overview-table.component';
 import CustomTable from './components/custom-table/custom-table.component';
 import StaticTable from './components/static-table/static-table.component';
@@ -11,13 +10,15 @@ import {
   updateMonthStart, 
   updateYearStart, 
   updateTableStart, 
-  fetchCollectionsStart 
+  fetchMetaStart
 } from './redux/expense/expense.actions';
 
 class App extends Component {
   componentDidMount() {
-    const { fetchCollectionsStart } = this.props;
-    fetchCollectionsStart();
+    const { fetchMetaStart } = this.props;
+
+    fetchMetaStart();
+    console.log('mounted')
   }
 
   handleMonthSelectChange = (option) => {
@@ -42,41 +43,34 @@ class App extends Component {
         <div className="container">
           <div className="text-center py-3">
             <header className="h1">Monthly Expense Report</header>
-            <div className="my-5 d-flex justify-content-center">
-              <div className="text-left">
-                <CustomSelect 
-                  size="small-size"
-                  identifier="months"
-                  handler={this.handleMonthSelectChange}
-                  options={monthOptions}
-                  selectedItem={selectedMonth}
-                />
-              </div>
-              <div className="text-left">
-                <CustomSelect 
-                  size="small-size"
-                  identifier="years"
-                  handler={this.handleYearSelectChange}
-                  options={yearOptions}
-                  selectedItem={selectedYear}
-                />
-              </div>
-            </div>
-          </div>
-          <CustomButton text="Start A New Month" />
-          <div className="my-5 d-flex justify-content-center">
-            <div className="text-left">
+            <div className="mt-5 d-flex justify-content-center">
               <CustomSelect 
-                size="medium-size"
-                identifier="tabs"
-                handler={this.handleTableSelectChange}
-                options={tableOptions}
-                selectedItem={selectedTable}
+                size="small-size"
+                identifier="months"
+                handler={this.handleMonthSelectChange}
+                options={monthOptions}
+                selectedItem={selectedMonth}
+              />
+              <CustomSelect 
+                size="small-size"
+                identifier="years"
+                handler={this.handleYearSelectChange}
+                options={yearOptions}
+                selectedItem={selectedYear}
               />
             </div>
           </div>
+          <div className="my-5 d-flex justify-content-center">
+            <CustomSelect 
+              size="medium-size"
+              identifier="tabs"
+              handler={this.handleTableSelectChange}
+              options={tableOptions}
+              selectedItem={selectedTable}
+            />
+          </div>
           {
-            selectedTable.value === 0 ?
+            selectedTable && selectedTable.value === 0 ?
               <OverviewTable 
                 tabHandler={this.handleTableSelectChange}
                 options={tableOptions}
@@ -85,7 +79,7 @@ class App extends Component {
                 selectedYear={selectedYear}
               />
             :
-            selectedTable.value === 13 ?
+            selectedTable && selectedTable.value === 13 ?
               <StaticTable />
             : 
               <CustomTable />
@@ -109,7 +103,7 @@ const mapDispatchToProps = (dispatch) => ({
   updateTableStart: (option) => dispatch(updateTableStart(option)),
   updateMonthStart: (option) => dispatch(updateMonthStart(option)),
   updateYearStart: (option) => dispatch(updateYearStart(option)),
-  fetchCollectionsStart: () => dispatch(fetchCollectionsStart()),
+  fetchMetaStart: () => dispatch(fetchMetaStart()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

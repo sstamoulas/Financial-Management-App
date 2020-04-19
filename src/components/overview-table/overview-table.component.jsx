@@ -16,7 +16,7 @@ const OverviewTable = ({
     updateCollectionsStart,
     updateLocalState}) => {
 
-  const updateItem = (index, value, label) => {
+  const updateRowItem = (index, value, label) => {
     updateLocalState({index, value, label});
     updateCollectionsStart({index, value, label, items: data});
   }
@@ -25,11 +25,11 @@ const OverviewTable = ({
   let deposits = data.filter(data => !data.isExpense);
 
   let lastMonthExpenseTotal = generateTotal(expenses, 'lastMonthPaid');
-  let expectedExpenseTotal = generateTotal(expenses, 'expected');
+  let dueExpenseTotal = generateTotal(expenses, 'due');
   let paidExpenseTotal = generateTotal(expenses, 'paid');
 
   let lastMonthDepositTotal = generateTotal(deposits, 'lastMonthPaid');
-  let expectedDepositTotal = generateTotal(deposits, 'expected');
+  let dueDepositTotal = generateTotal(deposits, 'due');
   let paidDepositTotal = generateTotal(deposits, 'paid');
 
   return (
@@ -37,9 +37,9 @@ const OverviewTable = ({
       <table className="table table-striped table-hover table-sm mb-0">
         <thead>
           <tr>
-            <th scope="col">Expense</th>
+            <th scope="col">Name</th>
             <th scope="col" className="mobileColHide">Last Month Paid</th>
-            <th scope="col" className="mobileColHide">Expected Due</th>
+            <th scope="col" className="mobileColHide">Due</th>
             <th scope="col">Paid</th>
             <th scope="col">Date</th>
           </tr>
@@ -49,19 +49,19 @@ const OverviewTable = ({
             expenses.map((expense, index) => {
               return (
                 <tr key={`expenseRowHeader-${index}`}>
-                  <th scope="row">{expense.expenseType}</th>
+                  <th scope="row">{expense.name}</th>
                   <td className="mobileColHide">
                     <span>${expense['lastMonthPaid']}</span>
                   </td>
                   <td className="mobileColHide">
                     {
                       expense.hasOwnTable ?
-                        <span>${expense['expected']}</span>
+                        <span>${expense['due']}</span>
                       :
                         <input 
                           type="number"
-                          value={expense['expected'] || ''} 
-                          onChange={(e) => updateItem(index, e.target.value, 'expected')}
+                          value={expense['due'] || ''} 
+                          onChange={(e) => updateRowItem(index, e.target.value, 'due')}
                         />
                     }
                   </td>
@@ -73,7 +73,7 @@ const OverviewTable = ({
                         <input 
                           type="number"
                           value={expense['paid'] || ''} 
-                          onChange={(e) => updateItem(index, e.target.value, 'paid')}
+                          onChange={(e) => updateRowItem(index, e.target.value, 'paid')}
                         />
                     }
                   </td>
@@ -82,7 +82,7 @@ const OverviewTable = ({
                       expense.hasOwnTable ? 
                         <a 
                           href="/#" onClick={() => 
-                            tabHandler(options.find(option => option.label === `${expense.expenseType} Expense`))
+                            tabHandler(options.find(option => option.label === `${expense.name} Expense`))
                           }
                         >
                             See Column
@@ -91,7 +91,7 @@ const OverviewTable = ({
                         <input 
                           type="date" 
                           value={expense['date'] || ''} 
-                          onChange={(e) => updateItem(index, e.target.value, 'date')}
+                          onChange={(e) => updateRowItem(index, e.target.value, 'date')}
                         />
                     }
                   </td>
@@ -102,14 +102,7 @@ const OverviewTable = ({
           <tr className='total-row'>
             <th scope="row">Total Bills</th>
             <td className="mobileColHide">{lastMonthExpenseTotal}</td>
-            <td className="mobileColHide">{expectedExpenseTotal}</td>
-            <td>{paidExpenseTotal}</td>
-            <td><span>---</span></td>
-          </tr>
-          <tr className='total-row'>
-            <th scope="row">Left Over Last Month</th>
-            <td className="mobileColHide">{lastMonthExpenseTotal}</td>
-            <td className="mobileColHide">{expectedExpenseTotal}</td>
+            <td className="mobileColHide">{dueExpenseTotal}</td>
             <td>{paidExpenseTotal}</td>
             <td><span>---</span></td>
           </tr>
@@ -117,19 +110,19 @@ const OverviewTable = ({
             deposits.map((deposit, index) => {
               return (
                 <tr key={`depositRowHeader-${index}`}>
-                  <th scope="row">{deposit.expenseType}</th>
+                  <th scope="row">{deposit.name}</th>
                   <td className="mobileColHide">
                     <span>${deposit['lastMonthPaid']}</span>
                   </td>
                   <td className="mobileColHide">
                     {
                       deposit.hasOwnTable ?
-                        <span>${deposit['expected']}</span>
+                        <span>${deposit['due']}</span>
                       :
                         <input 
                           type="number"
-                          value={deposit['expected'] || ''} 
-                          onChange={(e) => updateItem(expenses.length + index, e.target.value, 'expected')}
+                          value={deposit['due'] || ''} 
+                          onChange={(e) => updateRowItem(expenses.length + index, e.target.value, 'due')}
                         />
                     }
                   </td>
@@ -141,7 +134,7 @@ const OverviewTable = ({
                         <input 
                           type="number"
                           value={deposit['paid'] || ''} 
-                          onChange={(e) => updateItem(expenses.length + index, e.target.value, 'paid')}
+                          onChange={(e) => updateRowItem(expenses.length + index, e.target.value, 'paid')}
                         />
                     }
                   </td>
@@ -153,7 +146,7 @@ const OverviewTable = ({
           <tr className='total-row'>
             <th scope="row">Total Savings</th>
             <td className="mobileColHide">${lastMonthDepositTotal - lastMonthExpenseTotal}</td>
-            <td className="mobileColHide">${expectedDepositTotal - expectedExpenseTotal}</td>
+            <td className="mobileColHide">${dueDepositTotal - dueExpenseTotal}</td>
             <td>${paidDepositTotal - paidExpenseTotal}</td>
             <td><span>---</span></td>
           </tr>

@@ -88,6 +88,40 @@ export const updateCollectionsFailure = (errorMessage) => ({
   payload: errorMessage,
 });
 
+export const fetchMetaStart = () => ({
+  type: ExpenseActionTypes.FETCH_META_START,
+});
+
+export const fetchMonthsSuccess = ({months}) => ({
+  type: ExpenseActionTypes.FETCH_MONTHS_SUCCESS,
+  payload: months,
+});
+
+export const fetchMonthsFailure = ({errorMessage}) => ({
+  type: ExpenseActionTypes.FETCH_MONTHS_FAILURE,
+  payload: errorMessage,
+});
+
+export const fetchYearsSuccess = ({years}) => ({
+  type: ExpenseActionTypes.FETCH_YEARS_SUCCESS,
+  payload: years,
+});
+
+export const fetchYearsFailure = ({errorMessage}) => ({
+  type: ExpenseActionTypes.FETCH_YEARS_FAILURE,
+  payload: errorMessage,
+});
+
+export const fetchTablesSuccess = ({tables}) => ({
+  type: ExpenseActionTypes.FETCH_TABLES_SUCCESS,
+  payload: tables,
+});
+
+export const fetchTablesFailure = ({errorMessage}) => ({
+  type: ExpenseActionTypes.FETCH_TABLES_FAILURE,
+  payload: errorMessage,
+});
+
 export const fetchCollectionsStart = () => ({
   type: ExpenseActionTypes.FETCH_COLLECTIONS_START,
 });

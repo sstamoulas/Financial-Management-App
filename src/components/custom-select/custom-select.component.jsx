@@ -41,36 +41,41 @@ class CustomSelect extends Component {
     let { isOpen } = this.state;
 
     return (
-      <div className="container">
-        <div className={`cool-select ${isOpen ? 'open' : ''}`}>
-          <div className={`input-wrap ${size} d-flex justify-content-center`}>
-            <input 
-              type="text"
-              id={`${identifier}`}
-              className={`input-control ${identifier} ${size}`} 
-              onChange={() => console.log('changed')}
-              value={selectedItem.label}
-            />
-            <label className="visuallyhidden" htmlFor={`${identifier}`}>Choose {identifier}</label>
-          </div>
-          <div className={`dropdown-wrap ${size}`}>
-            <div className="close"></div>
-            <div className={`dropdown-body ${size}`}>
-              <nav className="select-nav">
-                {
-                  options.map((option) => (
-                    <CustomSelectItem 
-                      key={option.value} 
-                      option={option} 
-                      handler={handler}
-                    />
-                  ))
-                }
-              </nav>
+      selectedItem ?
+        <div className="text-left">
+          <div className="container">
+            <div className={`cool-select ${isOpen ? 'open' : ''}`}>
+              <div className={`input-wrap ${size} d-flex justify-content-center`}>
+                <input 
+                  type="text"
+                  id={`${identifier}`}
+                  className={`input-control ${identifier} ${size}`} 
+                  onChange={() => console.log('changed')}
+                  value={selectedItem.label}
+                />
+                <label className="visuallyhidden" htmlFor={`${identifier}`}>Choose {identifier}</label>
+              </div>
+              <div className={`dropdown-wrap ${size}`}>
+                <div className="close"></div>
+                <div className={`dropdown-body ${size}`}>
+                  <nav className="select-nav">
+                    {
+                      options.map((option) => (
+                        <CustomSelectItem 
+                          key={option.value} 
+                          option={option} 
+                          handler={handler}
+                        />
+                      ))
+                    }
+                  </nav>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      :
+        null
     );
   }
 }

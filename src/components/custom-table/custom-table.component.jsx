@@ -36,8 +36,8 @@ const CustomTable = ({
       <table className="table table-striped table-hover table-sm mb-0">
         <thead>
           <tr>
-            <th scope="col">Remove Row</th>
-            <th scope="col">Expense</th>
+            <th scope="col">Remove</th>
+            <th scope="col">Name</th>
             <th scope="col">Paid</th>
             <th scope="col">Date</th>
           </tr>

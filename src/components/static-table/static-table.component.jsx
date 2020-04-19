@@ -7,7 +7,7 @@ const StaticTable = () => (
     <table className="table table-striped table-hover table-sm mb-0">
       <thead>
         <tr>
-          <th scope="col">Expense</th>
+          <th scope="col">Name</th>
           <th scope="col">Due</th>
         </tr>
       </thead>

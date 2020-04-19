@@ -1,14 +1,13 @@
 import ExpenseActionTypes from './expense.types';
-import { months, years, tables } from './expense.utils';
 
 const INITIAL_STATE = {
   data: [],
-  tableOptions: tables,
-  selectedTable: tables[0],
-  monthOptions: months,
-  selectedMonth: months[(new Date()).getMonth()],
-  yearOptions: years,
-  selectedYear: years[0],
+  tableOptions: undefined,
+  selectedTable: undefined,
+  monthOptions: undefined,
+  selectedMonth: undefined,
+  yearOptions: undefined,
+  selectedYear: undefined,
   isFetching: false,
   isUpdating: false,
   errorMessage: undefined,
@@ -64,6 +63,29 @@ const expenseReducer = (state = INITIAL_STATE, action) => {
         isFetching: false,
         data: action.payload,
       };
+    case ExpenseActionTypes.FETCH_MONTHS_SUCCESS:
+      return {
+        ...state,
+        isFetching: false,
+        monthOptions: action.payload,
+        selectedMonth: action.payload[(new Date()).getMonth()],
+      };
+    case ExpenseActionTypes.FETCH_YEARS_SUCCESS:
+      return {
+        ...state,
+        isFetching: false,
+        yearOptions: action.payload,
+        selectedYear: action.payload.filter((year) => {
+          return year.label === (new Date()).getFullYear();
+        })[0],
+      };
+    case ExpenseActionTypes.FETCH_TABLES_SUCCESS:
+      return {
+        ...state,
+        isFetching: false,
+        tableOptions: action.payload,
+        selectedTable: action.payload[0],
+      };
     case ExpenseActionTypes.UPDATE_MONTH_SUCCESS:
       return {
         ...state,
@@ -92,6 +114,9 @@ const expenseReducer = (state = INITIAL_STATE, action) => {
         isUpdating: false,
         errorMessage: action.payload,
       };
+    case ExpenseActionTypes.FETCH_YEARS_FAILURE:
+    case ExpenseActionTypes.FETCH_MONTHS_FAILURE:
+    case ExpenseActionTypes.FETCH_TABLES_FAILURE:
     case ExpenseActionTypes.FETCH_COLLECTIONS_FAILURE:
       return {
         ...state,

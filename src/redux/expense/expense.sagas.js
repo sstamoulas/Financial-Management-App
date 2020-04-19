@@ -14,6 +14,12 @@ import {
   updateTableFailure,
   fetchCollectionsSuccess, 
   fetchCollectionsFailure,
+  fetchTablesSuccess,
+  fetchTablesFailure,
+  fetchMonthsSuccess,
+  fetchMonthsFailure,
+  fetchYearsSuccess,
+  fetchYearsFailure,
   updateCollectionsSuccess,
   updateCollectionsFailure,
   removeCollectionRowSuccess,
@@ -46,6 +52,49 @@ export function* fetchCollectionsAsync(option) {
     }
   }
 }
+
+export function* fetchTables() {
+  try {
+    const docRef = firestore.collection('meta').doc('tables');
+    const snapshot = yield docRef.get();
+
+    yield put(fetchTablesSuccess(snapshot.data()));
+  } catch(error) {
+    yield put(fetchTablesFailure(error.message));
+  }
+}
+
+export function* fetchMonths() {
+  try {
+    const docRef = firestore.collection('meta').doc('months');
+    const snapshot = yield docRef.get();
+
+    yield put(fetchMonthsSuccess(snapshot.data()));
+  } catch(error) {
+    yield put(fetchMonthsFailure(error.message));
+  }
+}
+
+export function* fetchYears() {
+  try {
+    const docRef = firestore.collection('meta').doc('years');
+    const snapshot = yield docRef.get();
+    
+    yield put(fetchYearsSuccess(snapshot.data()));
+  } catch(error) {
+    yield put(fetchYearsFailure(error.message));
+  }
+}
+
+export function* fetchMetaAsync() {
+  const task1 = yield fork(fetchTables);
+  const task2 = yield fork(fetchMonths);
+  const task3 = yield fork(fetchYears);
+  yield join([task1, task2, task3]);
+
+  yield call(fetchCollectionsAsync);
+}
+
 export function* updateOverviewCollectionsAsync({payload: {expenses, column}}) {
   const {root: {selectedMonth, selectedYear}} = yield select();
 
@@ -55,15 +104,13 @@ export function* updateOverviewCollectionsAsync({payload: {expenses, column}}) {
     const docRef = firestore.collection(`${selectedMonth.label}-${selectedYear.label}`).doc('Overview');
     const snapshot = yield docRef.get();
     let items = snapshot.data();
-    let index = items.expenses.findIndex(item => item.expenseType === column)
+    let index = items.expenses.findIndex(item => item.name === column)
 
     updateArray(items.expenses, index, total, 'paid')
 
     yield call(updateFiscalMonthlyDocument, `${selectedMonth.label}-${selectedYear.label}`, 'Overview', items);
-
-    // yield put(updateOverviewCollectionsSuccess());
   } catch(error) {
-    // yield put(updateOverviewCollectionsFailure(error.message));
+    console.log(error.message)
   }
 }
 
@@ -115,13 +162,13 @@ export function* updateYearAsync({payload: {option}}) {
   }
 }
 
-export function* updateTable(option) {
-  try {
-    yield put(updateTableSuccess(option));
-  } catch(error) {
-    yield put(updateTableFailure(error.message));
-  }
-}
+// export function* updateTable(option) {
+//   try {
+//     yield put(updateTableSuccess(option));
+//   } catch(error) {
+//     yield put(updateTableFailure(error.message));
+//   }
+// }
 
 export function* updateTableAsync({payload: {option}}) {
   try {
@@ -138,6 +185,13 @@ export function* fetchCollectionsStart() {
   yield takeLatest(
     ExpenseActionTypes.FETCH_COLLECTIONS_START, 
     fetchCollectionsAsync
+  );
+}
+
+export function* fetchMetaStart() {
+  yield takeLatest(
+    ExpenseActionTypes.FETCH_META_START,
+    fetchMetaAsync
   );
 }
 
@@ -186,6 +240,7 @@ export function* updateTableStart() {
 export function* expenseSagas() {
   yield all([
     call(fetchCollectionsStart),
+    call(fetchMetaStart),
     call(updateCollectionsStart),
     call(updateOverviewCollectionsStart),
     call(removeCollectionRowStart),
