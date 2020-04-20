@@ -23,9 +23,6 @@ class Modal extends Component {
     if(e.target.className === 'modal fade show') {
       this.toggleModal(false);
     }
-    else {
-      // this.toggleModal(!this.state.isVisible);
-    }
   }
 
   toggleModal = (isVisible) => {

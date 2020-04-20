@@ -4,18 +4,18 @@ export const addExpenseStart = () => ({
   type: ExpenseActionTypes.ADD_EXPENSE,
 });
 
-export const removeCollectionRowStart = (index) => ({
-  type: ExpenseActionTypes.REMOVE_COLLECTION_ROW_START,
+export const removeCollectionsStart = (index) => ({
+  type: ExpenseActionTypes.REMOVE_COLLECTIONS_START,
   payload: {index},
 });
 
-export const removeCollectionRowSuccess = ({expenses, deposits}) => ({
-  type: ExpenseActionTypes.REMOVE_COLLECTION_ROW_SUCCESS,
-  payload: {expenses, deposits},
+export const removeCollectionsSuccess = ({expenses}) => ({
+  type: ExpenseActionTypes.REMOVE_COLLECTIONS_SUCCESS,
+  payload: expenses,
 });
 
-export const removeCollectionRowFailure = (errorMessage) => ({
-  type: ExpenseActionTypes.REMOVE_COLLECTION_ROW_FAILURE,
+export const removeCollectionsFailure = (errorMessage) => ({
+  type: ExpenseActionTypes.REMOVE_COLLECTIONS_FAILURE,
   payload: errorMessage,
 });
 
@@ -69,9 +69,14 @@ export const updateOverviewCollectionsStart = (expenses, column) => ({
   payload: {expenses, column},
 });
 
-export const updateLocalState = (index, value, label) => ({
-  type: ExpenseActionTypes.UPDATE_LOCAL_STATE,
-  payload: {index, value, label},
+export const removeCollectionsLocalState = (index) => ({
+  type: ExpenseActionTypes.REMOVE_COLLECTIONS_LOCAL_STATE,
+  payload: {index},
+});
+
+export const updateCollectionsLocalState = (index, paid, label) => ({
+  type: ExpenseActionTypes.UPDATE_COLLECTIONS_LOCAL_STATE,
+  payload: {index, paid, label},
 });
 
 export const updateCollectionsStart = ({index, value, label, items}) => ({

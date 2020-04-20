@@ -18,9 +18,14 @@ const expenseReducer = (state = INITIAL_STATE, action) => {
     case ExpenseActionTypes.ADD_EXPENSE: 
       return {
         ...state,
-        data: [...state.data, {name: '', value: 0, date: ''}],
+        data: [{label: '', paid: 0, date: ''}, ...state.data],
       };
-    case ExpenseActionTypes.UPDATE_LOCAL_STATE:
+    case ExpenseActionTypes.REMOVE_COLLECTIONS_LOCAL_STATE:
+      return {
+        ...state,
+        data: state.data.filter((item, index) => index !== action.payload.index),
+      };
+    case ExpenseActionTypes.UPDATE_COLLECTIONS_LOCAL_STATE:
       return {
         ...state,
         data: state.data.map((item, index) => {
@@ -29,7 +34,7 @@ const expenseReducer = (state = INITIAL_STATE, action) => {
             // Return a new object
             return {
               ...item,  // copy the existing item
-              [action.payload.label]: action.payload.value  // replace the email addr
+              [action.payload.label]: action.payload.paid  // replace the email addr
             }
           }
 
@@ -37,7 +42,7 @@ const expenseReducer = (state = INITIAL_STATE, action) => {
           return item;
         }),
       };
-    case ExpenseActionTypes.REMOVE_COLLECTION_ROW_START:
+    case ExpenseActionTypes.REMOVE_COLLECTIONS_START:
     case ExpenseActionTypes.UPDATE_MONTH_START:
     case ExpenseActionTypes.UPDATE_YEAR_START:
     case ExpenseActionTypes.UPDATE_TABLE_START:
@@ -51,7 +56,7 @@ const expenseReducer = (state = INITIAL_STATE, action) => {
         ...state,
         isFetching: true,
       };
-    case ExpenseActionTypes.REMOVE_COLLECTION_ROW_SUCCESS:
+    case ExpenseActionTypes.REMOVE_COLLECTIONS_SUCCESS:
     case ExpenseActionTypes.UPDATE_COLLECTIONS_SUCCESS:
       return {
         ...state,
@@ -104,7 +109,7 @@ const expenseReducer = (state = INITIAL_STATE, action) => {
         isFetching: false,
         selectedTable: action.payload.option,
       };
-    case ExpenseActionTypes.REMOVE_COLLECTION_ROW_FAILURE:
+    case ExpenseActionTypes.REMOVE_COLLECTIONS_FAILURE:
     case ExpenseActionTypes.UPDATE_MONTH_FAILURE:
     case ExpenseActionTypes.UPDATE_YEAR_FAILURE:
     case ExpenseActionTypes.UPDATE_TABLE_FAILURE:

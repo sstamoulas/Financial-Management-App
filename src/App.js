@@ -16,9 +16,7 @@ import {
 class App extends Component {
   componentDidMount() {
     const { fetchMetaStart } = this.props;
-
     fetchMetaStart();
-    console.log('mounted')
   }
 
   handleMonthSelectChange = (option) => {
@@ -37,7 +35,15 @@ class App extends Component {
   }
 
   render() {
-    const { monthOptions, yearOptions, tableOptions, selectedMonth, selectedYear, selectedTable, } = this.props;
+    const { 
+      monthOptions, 
+      yearOptions, 
+      tableOptions, 
+      selectedMonth, 
+      selectedYear, 
+      selectedTable, 
+    } = this.props;
+    
     return (
       <div className="App">
         <div className="container">

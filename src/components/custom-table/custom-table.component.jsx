@@ -3,10 +3,13 @@ import { connect } from 'react-redux';
 
 import CustomButton from '../custom-button/custom-button.component';
 import CustomTableRow from '../custom-table-row/custom-table-row.component';
+import MobileTableView from '../mobile-table-view/mobile-table-view.component';
 
 import { 
   addExpenseStart, 
-  updateLocalState,
+  removeCollectionsLocalState,
+  removeCollectionsStart,
+  updateCollectionsLocalState,
   updateCollectionsStart, 
   updateOverviewCollectionsStart 
 } from '../../redux/expense/expense.actions';
@@ -18,50 +21,71 @@ const CustomTable = ({
   expenses, 
   addExpense, 
   selectedTable, 
-  updateLocalState, 
+  removeCollectionsLocalState,
+  removeCollectionsStart,
+  updateCollectionsLocalState, 
   updateCollectionsStart, 
   updateOverviewCollectionsStart 
 }) => {
   const updateRowItem = (index, value, label) => {
-    updateLocalState(index, value, label);
+    updateCollectionsLocalState(index, value, label);
     updateCollectionsStart({index, value, label, items: expenses});
     let tableName = selectedTable.label.substring(0, selectedTable.label.indexOf(' Expense'));
     updateOverviewCollectionsStart(expenses, tableName);
   }
 
-  const total = generateTotal(expenses, 'value');
+  const removeRowItem = (index) => {
+    removeCollectionsLocalState(index);
+    removeCollectionsStart(index);
+    let tableName = selectedTable.label.substring(0, selectedTable.label.indexOf(' Expense'));
+    updateOverviewCollectionsStart(expenses, tableName);
+  }
+
+  const total = generateTotal(expenses, 'paid');
 
   return (
-    <div className="table-responsive text-center">
-      <table className="table table-striped table-hover table-sm mb-0">
-        <thead>
-          <tr>
-            <th scope="col">Remove</th>
-            <th scope="col">Name</th>
-            <th scope="col">Paid</th>
-            <th scope="col">Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          {
-            expenses.map((expense, index) => 
-              <CustomTableRow 
-                key={`expense-${index}`} 
-                index={index} 
-                updateRowItem={updateRowItem} 
-                {...expense} 
-              />
-            )
-          }
-          <tr className="total-row">
-            <th scope="row">Total</th>
-            <td></td>
-            <td>{thousandsSeparator(total.toFixed(2))}</td>
-            <td></td>
-          </tr>
-        </tbody>
-      </table>
-      <CustomButton text="Add New Expense" handler={() => addExpense()} />
+    <div>
+      <div className="table-responsive text-center">
+        <table className="table table-striped table-hover table-sm mb-0">
+          <thead>
+            <tr>
+              <th scope="col">Remove</th>
+              <th scope="col">Name</th>
+              <th scope="col">Paid</th>
+              <th scope="col">Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              expenses.map((expense, index) => 
+                <CustomTableRow 
+                  key={`expense-${index}`} 
+                  index={index} 
+                  updateRowItem={updateRowItem} 
+                  removeRowItem={removeRowItem}
+                  {...expense} 
+                />
+              )
+            }
+            <tr className="total-row">
+              <th scope="row">Total</th>
+              <td></td>
+              <td>{thousandsSeparator(total.toFixed(2))}</td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+        <CustomButton text="Add New Expense" mobileHide="non-mobile-hide" handler={() => addExpense()} />
+      </div>
+      {
+        expenses !== undefined ?
+          !!expenses.length ?
+            <MobileTableView options={expenses} updateRowItem={updateRowItem} addExpense={() => addExpense()} />
+          :
+            null
+        :
+          <label className="mobile-hide">Loading</label>
+      }
     </div>
   );
 }
@@ -73,8 +97,12 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   addExpense: () => dispatch(addExpenseStart()),
-  updateLocalState:
-    (index, value, label) => dispatch(updateLocalState(index, value, label)),
+  removeCollectionsLocalState: 
+    (index) => dispatch(removeCollectionsLocalState(index)),
+  removeCollectionsStart: 
+    (index) => dispatch(removeCollectionsStart(index)),
+  updateCollectionsLocalState:
+    (index, value, label) => dispatch(updateCollectionsLocalState(index, value, label)),
   updateCollectionsStart: 
     (index, value, label, items) => dispatch(updateCollectionsStart(index, value, label, items)),
   updateOverviewCollectionsStart: 

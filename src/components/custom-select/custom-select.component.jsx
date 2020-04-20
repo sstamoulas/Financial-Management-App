@@ -60,9 +60,9 @@ class CustomSelect extends Component {
                 <div className={`dropdown-body ${size}`}>
                   <nav className="select-nav">
                     {
-                      options.map((option) => (
+                      options.map((option, index) => (
                         <CustomSelectItem 
-                          key={option.value} 
+                          key={`${identifier}-${index}`} 
                           option={option} 
                           handler={handler}
                         />

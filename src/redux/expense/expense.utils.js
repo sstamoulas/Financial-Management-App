@@ -26,12 +26,12 @@ export const thousandsSeparator = (number) => {
 }
 
 export const updateArray = (arrayItems, index, value, label) => {
-  if(label !== "name" && label !== "date") {
+  if(label !== "label" && label !== "date") {
     if(isNaN(value)) {
       arrayItems[index][label] = 0;
     }
     else {
-      arrayItems[index][label] = value;
+      arrayItems[index][label] = parseFloat(value);
     }
   }
   else {
@@ -42,8 +42,7 @@ export const updateArray = (arrayItems, index, value, label) => {
 export const defaultData = {
   expenses: [
   {
-    'name': 'Rent',
-    'lastMonthPaid': 0,
+    'label': 'Rent',
     'due': 0,
     'paid': 0,
     'date': `${(new Date()).getFullYear()}-${("0" + ((new Date()).getMonth() + 1)).slice(-2)}-${("0" + (new Date()).getDate()).slice(-2)}`,
@@ -51,8 +50,7 @@ export const defaultData = {
     'isExpense': true,
   },
   {
-    'name': 'Ameneties + Heat',
-    'lastMonthPaid': 0,
+    'label': 'Ameneties + Heat',
     'due': 0,
     'paid': 0,
     'date': `${(new Date()).getFullYear()}-${("0" + ((new Date()).getMonth() + 1)).slice(-2)}-${("0" + (new Date()).getDate()).slice(-2)}`,
@@ -60,8 +58,7 @@ export const defaultData = {
     'isExpense': true,
   },
   {
-    'name': 'Electricity',
-    'lastMonthPaid': 0,
+    'label': 'Electricity',
     'due': 0,
     'paid': 0,
     'date': `${(new Date()).getFullYear()}-${("0" + ((new Date()).getMonth() + 1)).slice(-2)}-${("0" + (new Date()).getDate()).slice(-2)}`,
@@ -69,8 +66,7 @@ export const defaultData = {
     'isExpense': true,
   },
   {
-    'name': 'Water',
-    'lastMonthPaid': 0,
+    'label': 'Water',
     'due': 0,
     'paid': 0,
     'date': `${(new Date()).getFullYear()}-${("0" + ((new Date()).getMonth() + 1)).slice(-2)}-${("0" + (new Date()).getDate()).slice(-2)}`,
@@ -78,8 +74,7 @@ export const defaultData = {
     'isExpense': true,
   },
   {
-    'name': 'Gas',
-    'lastMonthPaid': 0,
+    'label': 'Gas',
     'due': 0,
     'paid': 0,
     'date': `${(new Date()).getFullYear()}-${("0" + ((new Date()).getMonth() + 1)).slice(-2)}-${("0" + (new Date()).getDate()).slice(-2)}`,
@@ -87,8 +82,7 @@ export const defaultData = {
     'isExpense': true,
   },
   {
-    'name': 'Car Gas',
-    'lastMonthPaid': 0,
+    'label': 'Car Gas',
     'due': 0,
     'paid': 0,
     'date': `${(new Date()).getFullYear()}-${("0" + ((new Date()).getMonth() + 1)).slice(-2)}-${("0" + (new Date()).getDate()).slice(-2)}`,
@@ -96,8 +90,7 @@ export const defaultData = {
     'isExpense': true,
   },
   {
-    'name': 'Car Maintenance',
-    'lastMonthPaid': 0,
+    'label': 'Car Maintenance',
     'due': 0,
     'paid': 0,
     'date': `${(new Date()).getFullYear()}-${("0" + ((new Date()).getMonth() + 1)).slice(-2)}-${("0" + (new Date()).getDate()).slice(-2)}`,
@@ -105,8 +98,7 @@ export const defaultData = {
     'isExpense': true,
   },
   {
-    'name': 'Car Insurance',
-    'lastMonthPaid': 0,
+    'label': 'Car Insurance',
     'due': 0,
     'paid': 0,
     'date': `${(new Date()).getFullYear()}-${("0" + ((new Date()).getMonth() + 1)).slice(-2)}-${("0" + (new Date()).getDate()).slice(-2)}`,
@@ -114,8 +106,7 @@ export const defaultData = {
     'isExpense': true,
   },
   {
-    'name': 'Car Taxes',
-    'lastMonthPaid': 0,
+    'label': 'Car Taxes',
     'due': 0,
     'paid': 0,
     'date': `${(new Date()).getFullYear()}-${("0" + ((new Date()).getMonth() + 1)).slice(-2)}-${("0" + (new Date()).getDate()).slice(-2)}`,
@@ -123,8 +114,7 @@ export const defaultData = {
     'isExpense': true,
   },
   {
-    'name': 'Internet',
-    'lastMonthPaid': 0,
+    'label': 'Internet',
     'due': 0,
     'paid': 0,
     'date': `${(new Date()).getFullYear()}-${("0" + ((new Date()).getMonth() + 1)).slice(-2)}-${("0" + (new Date()).getDate()).slice(-2)}`,
@@ -132,8 +122,7 @@ export const defaultData = {
     'isExpense': true,
   },
   {
-    'name': 'Phone Bill #1',
-    'lastMonthPaid': 0,
+    'label': 'Phone Bill #1',
     'due': 0,
     'paid': 0,
     'date': `${(new Date()).getFullYear()}-${("0" + ((new Date()).getMonth() + 1)).slice(-2)}-${("0" + (new Date()).getDate()).slice(-2)}`,
@@ -141,8 +130,7 @@ export const defaultData = {
     'isExpense': true,
   },
   {
-    'name': 'Phone Bill #2',
-    'lastMonthPaid': 0,
+    'label': 'Phone Bill #2',
     'due': 0,
     'paid': 0,
     'date': `${(new Date()).getFullYear()}-${("0" + ((new Date()).getMonth() + 1)).slice(-2)}-${("0" + (new Date()).getDate()).slice(-2)}`,
@@ -150,8 +138,7 @@ export const defaultData = {
     'isExpense': true,
   },
   {
-    'name': 'Phone Bill #3',
-    'lastMonthPaid': 0,
+    'label': 'Phone Bill #3',
     'due': 0,
     'paid': 0,
     'date': `${(new Date()).getFullYear()}-${("0" + ((new Date()).getMonth() + 1)).slice(-2)}-${("0" + (new Date()).getDate()).slice(-2)}`,
@@ -159,8 +146,7 @@ export const defaultData = {
     'isExpense': true,
   },
   {
-    'name': 'Monthly Shopping',
-    'lastMonthPaid': 0,
+    'label': 'Monthly Shopping',
     'due': 0,
     'paid': 0,
     'date': `${(new Date()).getFullYear()}-${("0" + ((new Date()).getMonth() + 1)).slice(-2)}-${("0" + (new Date()).getDate()).slice(-2)}`,
@@ -168,8 +154,7 @@ export const defaultData = {
     'isExpense': true,
   },
   {
-    'name': 'Food Week 1',
-    'lastMonthPaid': 0,
+    'label': 'Food Week #1',
     'due': 0,
     'paid': 0,
     'date': `${(new Date()).getFullYear()}-${("0" + ((new Date()).getMonth() + 1)).slice(-2)}-${("0" + (new Date()).getDate()).slice(-2)}`,
@@ -177,8 +162,7 @@ export const defaultData = {
     'isExpense': true,
   },
   {
-    'name': 'Food Week 2',
-    'lastMonthPaid': 0,
+    'label': 'Food Week #2',
     'due': 0,
     'paid': 0,
     'date': `${(new Date()).getFullYear()}-${("0" + ((new Date()).getMonth() + 1)).slice(-2)}-${("0" + (new Date()).getDate()).slice(-2)}`,
@@ -186,8 +170,7 @@ export const defaultData = {
     'isExpense': true,
   },
   {
-    'name': 'Food Week 3',
-    'lastMonthPaid': 0,
+    'label': 'Food Week #3',
     'due': 0,
     'paid': 0,
     'date': `${(new Date()).getFullYear()}-${("0" + ((new Date()).getMonth() + 1)).slice(-2)}-${("0" + (new Date()).getDate()).slice(-2)}`,
@@ -195,8 +178,7 @@ export const defaultData = {
     'isExpense': true,
   },
   {
-    'name': 'Food Week 4',
-    'lastMonthPaid': 0,
+    'label': 'Food Week #4',
     'due': 0,
     'paid': 0,
     'date': `${(new Date()).getFullYear()}-${("0" + ((new Date()).getMonth() + 1)).slice(-2)}-${("0" + (new Date()).getDate()).slice(-2)}`,
@@ -204,8 +186,7 @@ export const defaultData = {
     'isExpense': true,
   },
   {
-    'name': 'Eating Out',
-    'lastMonthPaid': 0,
+    'label': 'Eating Out',
     'due': 0,
     'paid': 0,
     'date': `${(new Date()).getFullYear()}-${("0" + ((new Date()).getMonth() + 1)).slice(-2)}-${("0" + (new Date()).getDate()).slice(-2)}`,
@@ -213,8 +194,7 @@ export const defaultData = {
     'isExpense': true,
   },
   {
-    'name': 'Yatim',
-    'lastMonthPaid': 0,
+    'label': 'Yatim',
     'due': 0,
     'paid': 0,
     'date': `${(new Date()).getFullYear()}-${("0" + ((new Date()).getMonth() + 1)).slice(-2)}-${("0" + (new Date()).getDate()).slice(-2)}`,
@@ -222,8 +202,7 @@ export const defaultData = {
     'isExpense': true,
   },
   {
-    'name': 'Baby #1',
-    'lastMonthPaid': 0,
+    'label': 'Baby #1',
     'due': 0,
     'paid': 0,
     'date': `${(new Date()).getFullYear()}-${("0" + ((new Date()).getMonth() + 1)).slice(-2)}-${("0" + (new Date()).getDate()).slice(-2)}`,
@@ -231,8 +210,7 @@ export const defaultData = {
     'isExpense': true,
   },
   {
-    'name': 'Baby #2',
-    'lastMonthPaid': 0,
+    'label': 'Baby #2',
     'due': 0,
     'paid': 0,
     'date': `${(new Date()).getFullYear()}-${("0" + ((new Date()).getMonth() + 1)).slice(-2)}-${("0" + (new Date()).getDate()).slice(-2)}`,
@@ -240,8 +218,7 @@ export const defaultData = {
     'isExpense': true,
   },
   {
-    'name': 'Extra',
-    'lastMonthPaid': 0,
+    'label': 'Extra',
     'due': 0,
     'paid': 0,
     'date': `${(new Date()).getFullYear()}-${("0" + ((new Date()).getMonth() + 1)).slice(-2)}-${("0" + (new Date()).getDate()).slice(-2)}`,
@@ -249,8 +226,7 @@ export const defaultData = {
     'isExpense': true,
   },
   {
-    'name': 'Hair Cut',
-    'lastMonthPaid': 0,
+    'label': 'Hair Cut',
     'due': 0,
     'paid': 0,
     'date': `${(new Date()).getFullYear()}-${("0" + ((new Date()).getMonth() + 1)).slice(-2)}-${("0" + (new Date()).getDate()).slice(-2)}`,
@@ -258,8 +234,7 @@ export const defaultData = {
     'isExpense': true,
   },
   {
-    'name': 'Qurban Savings',
-    'lastMonthPaid': 0,
+    'label': 'Qurban Savings',
     'due': 0,
     'paid': 0,
     'date': `${(new Date()).getFullYear()}-${("0" + ((new Date()).getMonth() + 1)).slice(-2)}-${("0" + (new Date()).getDate()).slice(-2)}`,
@@ -267,8 +242,7 @@ export const defaultData = {
     'isExpense': true,
   },
   {
-    'name': 'Cleaning',
-    'lastMonthPaid': 0,
+    'label': 'Cleaning',
     'due': 0,
     'paid': 0,
     'date': `${(new Date()).getFullYear()}-${("0" + ((new Date()).getMonth() + 1)).slice(-2)}-${("0" + (new Date()).getDate()).slice(-2)}`,
@@ -276,8 +250,7 @@ export const defaultData = {
     'isExpense': true,
   },
   {
-    'name': 'Monthly Withdrawal',
-    'lastMonthPaid': 0,
+    'label': 'Monthly Withdrawal',
     'due': 0,
     'paid': 0,
     'date': `${(new Date()).getFullYear()}-${("0" + ((new Date()).getMonth() + 1)).slice(-2)}-${("0" + (new Date()).getDate()).slice(-2)}`,
@@ -285,8 +258,7 @@ export const defaultData = {
     'isExpense': true,
   },
   {
-    'name': 'Unknown',
-    'lastMonthPaid': 0,
+    'label': 'Unknown',
     'due': 0,
     'paid': 0,
     'date': `${(new Date()).getFullYear()}-${("0" + ((new Date()).getMonth() + 1)).slice(-2)}-${("0" + (new Date()).getDate()).slice(-2)}`,
@@ -294,8 +266,7 @@ export const defaultData = {
     'isExpense': true,
   },
   {
-    'name': 'Left Over Last Month',
-    'lastMonthPaid': 0,
+    'label': 'Left Over Last Month',
     'due': 0,
     'paid': 0,
     'date': `${(new Date()).getFullYear()}-${("0" + ((new Date()).getMonth() + 1)).slice(-2)}-${("0" + (new Date()).getDate()).slice(-2)}`,
@@ -303,8 +274,7 @@ export const defaultData = {
     'isExpense': false,
   },
   {
-    'name': 'Payment #1',
-    'lastMonthPaid': 0,
+    'label': 'Payment #1',
     'due': 0,
     'paid': 0,
     'date': `${(new Date()).getFullYear()}-${("0" + ((new Date()).getMonth() + 1)).slice(-2)}-${("0" + (new Date()).getDate()).slice(-2)}`,
@@ -312,8 +282,7 @@ export const defaultData = {
     'isExpense': false,
   },
   {
-    'name': 'Payment #2',
-    'lastMonthPaid': 0,
+    'label': 'Payment #2',
     'due': 0,
     'paid': 0,
     'date': `${(new Date()).getFullYear()}-${("0" + ((new Date()).getMonth() + 1)).slice(-2)}-${("0" + (new Date()).getDate()).slice(-2)}`,
@@ -321,8 +290,7 @@ export const defaultData = {
     'isExpense': false,
   },
   {
-    'name': 'Extra Payment',
-    'lastMonthPaid': 0,
+    'label': 'Extra Payment',
     'due': 0,
     'paid': 0,
     'date': `${(new Date()).getFullYear()}-${("0" + ((new Date()).getMonth() + 1)).slice(-2)}-${("0" + (new Date()).getDate()).slice(-2)}`,
@@ -330,8 +298,7 @@ export const defaultData = {
     'isExpense': false,
   },
   {
-    'name': 'Deposits',
-    'lastMonthPaid': 0,
+    'label': 'Deposits',
     'due': 0,
     'paid': 0,
     'date': `${(new Date()).getFullYear()}-${("0" + ((new Date()).getMonth() + 1)).slice(-2)}-${("0" + (new Date()).getDate()).slice(-2)}`,

@@ -22,8 +22,8 @@ import {
   fetchYearsFailure,
   updateCollectionsSuccess,
   updateCollectionsFailure,
-  removeCollectionRowSuccess,
-  removeCollectionRowFailure,
+  removeCollectionsSuccess,
+  removeCollectionsFailure,
 } from './expense.actions';
 import { defaultTable, updateArray } from './expense.utils';
 
@@ -98,13 +98,13 @@ export function* fetchMetaAsync() {
 export function* updateOverviewCollectionsAsync({payload: {expenses, column}}) {
   const {root: {selectedMonth, selectedYear}} = yield select();
 
-  const total = !!expenses.length ? expenses.reduce((accumulator, currentExpense) => accumulator + parseFloat(currentExpense.value), 0) : 0;
+  const total = !!expenses.length ? expenses.reduce((accumulator, currentExpense) => accumulator + parseFloat(currentExpense.paid), 0) : 0;
 
   try {
     const docRef = firestore.collection(`${selectedMonth.label}-${selectedYear.label}`).doc('Overview');
     const snapshot = yield docRef.get();
     let items = snapshot.data();
-    let index = items.expenses.findIndex(item => item.name === column)
+    let index = items.expenses.findIndex(item => item.label === column)
 
     updateArray(items.expenses, index, total, 'paid')
 
@@ -127,20 +127,21 @@ export function* updateCollectionsAsync({payload: {index, value, label, items}})
   }
 }
 
-export function* removeCollectionRowAsync({payload: {index}}) {
-  let {root: {expenses, selectedTable, selectedMonth, selectedYear}} = yield select();
+export function* removeCollectionsAsync({payload: {index}}) {
+  let {root: {data, selectedTable, selectedMonth, selectedYear}} = yield select();
 
+  console.log(index, data)
   try {
-    expenses = expenses.filter((expense, expenseIndex) => index !== expenseIndex);
+    data = data.filter((expense, expenseIndex) => index !== expenseIndex);
 
-    yield call(updateFiscalMonthlyDocument, `${selectedMonth.label}-${selectedYear.label}`, selectedTable.label, {expenses});
+    yield call(updateFiscalMonthlyDocument, `${selectedMonth.label}-${selectedYear.label}`, selectedTable.label, {expenses: data});
 
     const docRef = firestore.collection(`${selectedMonth.label}-${selectedYear.label}`).doc(selectedTable.label);
     const snapshot = yield docRef.get();
 
-    yield put(removeCollectionRowSuccess(snapshot.data()));
+    yield put(removeCollectionsSuccess(snapshot.data()));
   } catch(error) {
-    yield put(removeCollectionRowFailure(error.message));
+    yield put(removeCollectionsFailure(error.message));
   }
 }
 
@@ -209,10 +210,10 @@ export function* updateOverviewCollectionsStart() {
   );
 }
 
-export function* removeCollectionRowStart() {
+export function* removeCollectionsStart() {
   yield takeLatest(
-    ExpenseActionTypes.REMOVE_COLLECTION_ROW_START,
-    removeCollectionRowAsync
+    ExpenseActionTypes.REMOVE_COLLECTIONS_START,
+    removeCollectionsAsync
   );
 }
 
@@ -243,7 +244,7 @@ export function* expenseSagas() {
     call(fetchMetaStart),
     call(updateCollectionsStart),
     call(updateOverviewCollectionsStart),
-    call(removeCollectionRowStart),
+    call(removeCollectionsStart),
     call(updateMonthStart),
     call(updateYearStart),
     call(updateTableStart),
