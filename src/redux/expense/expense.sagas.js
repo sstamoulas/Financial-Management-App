@@ -25,7 +25,7 @@ import {
   removeCollectionsSuccess,
   removeCollectionsFailure,
 } from './expense.actions';
-import { defaultTable, updateArray } from './expense.utils';
+import { updateArray } from './expense.utils';
 
 export function* fetchCollectionsAsync(option) {
   let {root: {selectedTable, selectedMonth, selectedYear}} = yield select();
@@ -41,7 +41,14 @@ export function* fetchCollectionsAsync(option) {
     yield put(fetchCollectionsSuccess(snapshot.data()));
   } catch(error) {
     try {
-      yield call(createFiscalMonthlyDocument, `${selectedMonth.label}-${selectedYear.label}`, selectedTable.label, defaultTable(selectedTable));
+      let expenses = {expenses: []};
+      if(!selectedTable.value) {
+        const docRef = firestore.collection('meta').doc('defaultTable');
+        const snapshot = yield docRef.get();
+        expenses = snapshot.data();
+      }
+
+      yield call(createFiscalMonthlyDocument, `${selectedMonth.label}-${selectedYear.label}`, selectedTable.label, expenses);
       
       const docRef = firestore.collection(`${selectedMonth.label}-${selectedYear.label}`).doc(selectedTable.label);
       const snapshot = yield docRef.get();

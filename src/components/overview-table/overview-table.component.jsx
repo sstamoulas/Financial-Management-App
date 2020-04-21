@@ -102,9 +102,6 @@ const OverviewTable = ({
                             onChange={(date) => updateRowItem(index, date, 'date')}
                           />
                       }
-                      {
-                        <label>{Date.parse(expense.date)}</label>
-                      }
                     </td>
                   </tr>
                 )
