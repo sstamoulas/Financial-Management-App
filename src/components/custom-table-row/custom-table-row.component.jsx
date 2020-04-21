@@ -1,11 +1,17 @@
 import React from 'react';
 
+import DatePicker from 'react-datepicker';
+
+import { formatDate } from '../../redux/expense/expense.utils';
+
+import 'react-datepicker/dist/react-datepicker.css';
 import './custom-table-row.styles.scss';
 
-const CustomTableRow = ({ index, label, paid, date, removeRowItem, updateRowItem}) => (
+const CustomTableRow = ({ index, label, paid, date, removeRowItem, updateRowItem}) => {
+  return (
   <tr>
     <th scope="row">
-      <a href="/#" onClick={() => removeRowItem(index)}>[-]</a>
+      <a href="/#" onClick={(e) => removeRowItem(e, index)}>[-]</a>
     </th>
     <td>
       <input 
@@ -26,15 +32,15 @@ const CustomTableRow = ({ index, label, paid, date, removeRowItem, updateRowItem
       <label className="mobile-hide">{paid}</label>
     </td>
     <td>
-      <input 
-        type="date" 
-        value={date || ''} 
+      <DatePicker
         className="non-mobile-hide"
-        onChange={(e) => updateRowItem(index, e.target.value, 'date')} 
+        dateFormat="MM/dd/yyyy"
+        selected={Date.parse(date)}
+        onChange={(date) => updateRowItem(index, date, 'date')}
       />
-      <label className="mobile-hide">{date}</label>
+      <label className="mobile-hide">{formatDate(date)}</label>
     </td>
   </tr> 
-);
+)};
 
 export default CustomTableRow;

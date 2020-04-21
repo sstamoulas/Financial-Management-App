@@ -13,7 +13,11 @@ import {
   updateCollectionsStart, 
   updateOverviewCollectionsStart 
 } from '../../redux/expense/expense.actions';
-import { generateTotal, thousandsSeparator } from '../../redux/expense/expense.utils';
+import { 
+  generateTotal, 
+  thousandsSeparator, 
+  formatDate 
+} from '../../redux/expense/expense.utils';
 
 import './custom-table.styles.scss';
 
@@ -28,13 +32,17 @@ const CustomTable = ({
   updateOverviewCollectionsStart 
 }) => {
   const updateRowItem = (index, value, label) => {
+    if(label === 'date') {
+      value = formatDate(value)
+    }
     updateCollectionsLocalState(index, value, label);
     updateCollectionsStart({index, value, label, items: expenses});
     let tableName = selectedTable.label.substring(0, selectedTable.label.indexOf(' Expense'));
     updateOverviewCollectionsStart(expenses, tableName);
   }
 
-  const removeRowItem = (index) => {
+  const removeRowItem = (event, index) => {
+    event.preventDefault();
     removeCollectionsLocalState(index);
     removeCollectionsStart(index);
     let tableName = selectedTable.label.substring(0, selectedTable.label.indexOf(' Expense'));
@@ -79,10 +87,11 @@ const CustomTable = ({
       </div>
       {
         expenses !== undefined ?
-          !!expenses.length ?
-            <MobileTableView options={expenses} updateRowItem={updateRowItem} addExpense={() => addExpense()} />
-          :
-            null
+          <MobileTableView 
+            options={expenses} 
+            updateRowItem={updateRowItem} 
+            addExpense={() => addExpense()} 
+          />
         :
           <label className="mobile-hide">Loading</label>
       }

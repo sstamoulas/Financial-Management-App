@@ -1,7 +1,7 @@
-@import "~bootstrap/scss/bootstrap";
-@import "~bootstrap/scss/_functions";
-@import "~bootstrap/scss/_variables";
-@import "~bootstrap/scss/mixins/_breakpoints";
+@import '~bootstrap/scss/bootstrap';
+@import '~bootstrap/scss/_functions';
+@import '~bootstrap/scss/_variables';
+@import '~bootstrap/scss/mixins/_breakpoints';
 .total-row {
   background-color: darkgray !important;
 }
@@ -21,7 +21,7 @@
 td,
 th,
 input:not(.form-control) {
-  max-width: 70px;
+  max-width: 100px;
 }
 
 @include media-breakpoint-only(xs) {

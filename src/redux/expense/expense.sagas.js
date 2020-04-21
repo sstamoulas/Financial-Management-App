@@ -130,7 +130,6 @@ export function* updateCollectionsAsync({payload: {index, value, label, items}})
 export function* removeCollectionsAsync({payload: {index}}) {
   let {root: {data, selectedTable, selectedMonth, selectedYear}} = yield select();
 
-  console.log(index, data)
   try {
     data = data.filter((expense, expenseIndex) => index !== expenseIndex);
 
@@ -162,14 +161,6 @@ export function* updateYearAsync({payload: {option}}) {
     yield put(updateYearFailure(error.message));
   }
 }
-
-// export function* updateTable(option) {
-//   try {
-//     yield put(updateTableSuccess(option));
-//   } catch(error) {
-//     yield put(updateTableFailure(error.message));
-//   }
-// }
 
 export function* updateTableAsync({payload: {option}}) {
   try {

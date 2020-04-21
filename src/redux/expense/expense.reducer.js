@@ -18,7 +18,7 @@ const expenseReducer = (state = INITIAL_STATE, action) => {
     case ExpenseActionTypes.ADD_EXPENSE: 
       return {
         ...state,
-        data: [{label: '', paid: 0, date: ''}, ...state.data],
+        data: [...state.data, {label: '', paid: 0, date: ''}],
       };
     case ExpenseActionTypes.REMOVE_COLLECTIONS_LOCAL_STATE:
       return {

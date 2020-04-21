@@ -2,10 +2,16 @@ import React  from 'react';
 import { connect } from 'react-redux';
 
 import MobileTableView from '../mobile-table-view/mobile-table-view.component';
+import DatePicker from 'react-datepicker';
 
 import { updateCollectionsStart, updateCollectionsLocalState } from '../../redux/expense/expense.actions';
-import { generateTotal, thousandsSeparator } from '../../redux/expense/expense.utils';
+import { 
+  generateTotal, 
+  thousandsSeparator, 
+  formatDate 
+} from '../../redux/expense/expense.utils';
 
+import 'react-datepicker/dist/react-datepicker.css';
 import './overview-table.styles.scss';
 
 const OverviewTable = ({
@@ -20,6 +26,10 @@ const OverviewTable = ({
   }) => {
 
   const updateRowItem = (index, value, label) => {
+    if(label === 'date') {
+      value = formatDate(value)
+    }
+
     updateCollectionsLocalState({index, value, label});
     updateCollectionsStart({index, value, label, items: data});
   }
@@ -40,7 +50,7 @@ const OverviewTable = ({
           <thead>
             <tr>
               <th scope="col">Name</th>
-              <th scope="col" className="non-mobile-hide">Due</th>
+              <th scope="col">Due</th>
               <th scope="col">Paid</th>
               <th scope="col">Date</th>
             </tr>
@@ -51,7 +61,7 @@ const OverviewTable = ({
                 return (
                   <tr key={`expenseRowHeader-${index}`}>
                     <th scope="row">{expense.label}</th>
-                    <td className="non-mobile-hide">
+                    <td>
                       {
                         expense.hasOwnTable ?
                           <span>${expense.due.toFixed(2)}</span>
@@ -86,11 +96,14 @@ const OverviewTable = ({
                               See Column
                           </a>
                         :
-                          <input 
-                            type="date" 
-                            value={expense.date || ''} 
-                            onChange={(e) => updateRowItem(index, e.target.value, 'date')}
+                          <DatePicker
+                            dateFormat="MM/dd/yyyy"
+                            selected={Date.parse(expense.date)}
+                            onChange={(date) => updateRowItem(index, date, 'date')}
                           />
+                      }
+                      {
+                        <label>{Date.parse(expense.date)}</label>
                       }
                     </td>
                   </tr>
@@ -99,7 +112,7 @@ const OverviewTable = ({
             }
             <tr className='total-row'>
               <th scope="row">Total Bills</th>
-              <td className="mobile-hide">{thousandsSeparator(dueExpenseTotal)}</td>
+              <td>{thousandsSeparator(dueExpenseTotal)}</td>
               <td>{thousandsSeparator(paidExpenseTotal)}</td>
               <td><span>---</span></td>
             </tr>
@@ -108,7 +121,7 @@ const OverviewTable = ({
                 return (
                   <tr key={`depositRowHeader-${index}`}>
                     <th scope="row">{deposit.label}</th>
-                    <td className="non-mobile-hide">
+                    <td>
                       {
                         deposit.hasOwnTable ?
                           <span>${deposit.due.toFixed(2)}</span>
@@ -139,7 +152,7 @@ const OverviewTable = ({
             }
             <tr className='total-row'>
               <th scope="row">Total Savings</th>
-              <td className="non-mobile-hide">${thousandsSeparator((dueDepositTotal - dueExpenseTotal).toFixed(2))}</td>
+              <td>${thousandsSeparator((dueDepositTotal - dueExpenseTotal).toFixed(2))}</td>
               <td>${thousandsSeparator((paidDepositTotal - paidExpenseTotal).toFixed(2))}</td>
               <td><span>---</span></td>
             </tr>
