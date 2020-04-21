@@ -10,8 +10,6 @@ export const defaultTable = (tableName) => {
 }
 
 export const formatDate = (date) => {
-  console.log(((new Date(date)).getMonth() + 1))
-  console.log(("0" + ((new Date(date)).getMonth() + 1)).slice(-2))
   const month = ("0" + ((new Date(date)).getMonth() + 1)).slice(-2);
   const day = ("0" + ((new Date(date)).getDate())).slice(-2);
   const year = ("0" + ((new Date(date)).getFullYear())).slice(-2);
