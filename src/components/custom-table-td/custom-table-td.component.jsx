@@ -19,7 +19,7 @@ const CustomTableTD = ({ index, label, value, handler, isDate, hasOwnTable, isTo
     <td><a href='/#' onClick={() => handler(value)}>See Column</a></td>
   :
     hasOwnTable || isTotal ?
-    <td className={isNegative(value)}>${invertNegative(thousandsSeparator((value).toFixed(2)))}</td>
+    <td className={isNegative(value)}>${thousandsSeparator(invertNegative((value).toFixed(2)))}</td>
   :
     isDate ?
     <td>
