@@ -1,17 +1,16 @@
 import React  from 'react';
 import { connect } from 'react-redux';
 
-import MobileTableView from '../mobile-table-view/mobile-table-view.component';
-import DatePicker from 'react-datepicker';
+import MobileView from '../mobile-view/mobile-view.component';
+import CustomTableTH from '../custom-table-th/custom-table-th.component';
+import CustomTableTD from '../custom-table-td/custom-table-td.component';
 
 import { updateCollectionsStart, updateCollectionsLocalState } from '../../redux/expense/expense.actions';
 import { 
   generateTotal, 
-  thousandsSeparator, 
   formatDate 
 } from '../../redux/expense/expense.utils';
 
-import 'react-datepicker/dist/react-datepicker.css';
 import './overview-table.styles.scss';
 
 const OverviewTable = ({
@@ -25,7 +24,7 @@ const OverviewTable = ({
     updateCollectionsLocalState
   }) => {
 
-  const updateRowItem = (index, value, label) => {
+  const updateRowItem = (value, label, index) => {
     if(label === 'date') {
       value = formatDate(value)
     }
@@ -43,124 +42,70 @@ const OverviewTable = ({
   let dueDepositTotal = generateTotal(deposits, 'due');
   let paidDepositTotal = generateTotal(deposits, 'paid');
 
+  let dueTotal = dueDepositTotal - dueExpenseTotal;
+  let paidTotal = paidDepositTotal - paidExpenseTotal;
+
   return (
     <div>
-      <div className="table-responsive text-center">
-        <table className="table table-striped table-hover table-sm mb-0 non-mobile-hide">
+      <div className='table-responsive text-center'>
+        <table className='table table-striped table-hover table-sm mb-0 non-mobile-hide'>
           <thead>
             <tr>
-              <th scope="col">Name</th>
-              <th scope="col">Due</th>
-              <th scope="col">Paid</th>
-              <th scope="col">Date</th>
+              <CustomTableTH label='Name' isHead={true} />
+              <CustomTableTH label='Due' isHead={true} />
+              <CustomTableTH label='Paid' isHead={true} />
+              <CustomTableTH label='Date' isHead={true} />
             </tr>
           </thead>
           <tbody>
             {
               expenses.map((expense, index) => {
+                let optionLabel = options.find(option => option.label === `${expense.label} Expense`);
+                let dateValue = expense.hasOwnTable ? optionLabel : expense.date;
+                let handler = expense.hasOwnTable ? tabHandler : updateRowItem;
+
                 return (
                   <tr key={`expenseRowHeader-${index}`}>
-                    <th scope="row">{expense.label}</th>
-                    <td>
-                      {
-                        expense.hasOwnTable ?
-                          <span>${expense.due.toFixed(2)}</span>
-                        :
-                          <input 
-                            type="number"
-                            value={expense.due || ''} 
-                            onChange={(e) => updateRowItem(index, e.target.value, 'due')}
-                          />
-                      }
-                    </td>
-                    <td>
-                      {
-                        expense.hasOwnTable ? 
-                          <span>${expense.paid.toFixed(2)}</span>
-                        :
-                          <input 
-                            type="number"
-                            value={expense.paid || ''} 
-                            onChange={(e) => updateRowItem(index, e.target.value, 'paid')}
-                          />
-                      }
-                    </td>
-                    <td>
-                      {
-                        expense.hasOwnTable ? 
-                          <a 
-                            href="/#" onClick={() => 
-                              tabHandler(options.find(option => option.label === `${expense.label} Expense`))
-                            }
-                          >
-                              See Column
-                          </a>
-                        :
-                          <DatePicker
-                            dateFormat="MM/dd/yyyy"
-                            selected={Date.parse(expense.date)}
-                            onChange={(date) => updateRowItem(index, date, 'date')}
-                          />
-                      }
-                    </td>
+                    <CustomTableTH index={index} label={expense.label} isOverview={true} />
+                    <CustomTableTD index={index} label='due' value={expense.due} handler={updateRowItem} hasOwnTable={expense.hasOwnTable} />
+                    <CustomTableTD index={index} label='paid' value={expense.paid} handler={updateRowItem} hasOwnTable={expense.hasOwnTable} />
+                    <CustomTableTD index={index} label='date' value={dateValue} handler={handler} isDate={true}  hasOwnTable={expense.hasOwnTable} />
                   </tr>
                 )
               })
             }
             <tr className='total-row'>
-              <th scope="row">Total Bills</th>
-              <td>{thousandsSeparator(dueExpenseTotal)}</td>
-              <td>{thousandsSeparator(paidExpenseTotal)}</td>
-              <td><span>---</span></td>
+              <CustomTableTH label='Total Bills' isOverview={true} />
+              <CustomTableTD value={dueExpenseTotal} isTotal={true} />
+              <CustomTableTD value={paidExpenseTotal} isTotal={true} />
+              <CustomTableTD isBlank={true} />
             </tr>
             {
               deposits.map((deposit, index) => {
                 return (
                   <tr key={`depositRowHeader-${index}`}>
-                    <th scope="row">{deposit.label}</th>
-                    <td>
-                      {
-                        deposit.hasOwnTable ?
-                          <span>${deposit.due.toFixed(2)}</span>
-                        :
-                          <input 
-                            type="number"
-                            value={deposit.due || ''} 
-                            onChange={(e) => updateRowItem(expenses.length + index, e.target.value, 'due')}
-                          />
-                      }
-                    </td>
-                    <td>
-                      {
-                        deposit.hasOwnTable ? 
-                          <span>${deposit.paid.toFixed(2)}</span>
-                        :
-                          <input 
-                            type="number"
-                            value={deposit.paid || ''} 
-                            onChange={(e) => updateRowItem(expenses.length + index, e.target.value, 'paid')}
-                          />
-                      }
-                    </td>
-                    <td><span>---</span></td>
+                    <CustomTableTH index={expenses.length + index} label={deposit.label} isOverview={true} />
+                    <CustomTableTD index={expenses.length + index} label='due' value={deposit.due} handler={updateRowItem} hasOwnTable={deposit.hasOwnTable} />
+                    <CustomTableTD index={expenses.length + index} label='paid' value={deposit.paid} handler={updateRowItem} hasOwnTable={deposit.hasOwnTable} />
+                    <CustomTableTD isBlank={true} />
                   </tr>
                 )
               })
             }
             <tr className='total-row'>
-              <th scope="row">Total Savings</th>
-              <td>${thousandsSeparator((dueDepositTotal - dueExpenseTotal).toFixed(2))}</td>
-              <td>${thousandsSeparator((paidDepositTotal - paidExpenseTotal).toFixed(2))}</td>
-              <td><span>---</span></td>
+              <CustomTableTH label='Total Savings' isOverview={true} />
+              <CustomTableTD value={dueTotal} isTotal={true} />
+              <CustomTableTD value={paidTotal} isTotal={true} />
+              <CustomTableTD isBlank={true} />
             </tr>
           </tbody>
         </table>
       </div>
       {
         data.length > 0 ?
-          <MobileTableView options={data} updateRowItem={updateRowItem} />
+          <MobileView options={data} updateRowItem={updateRowItem} />
         :
-          <label className="mobile-hide">Loading</label>
+          <label className='mobile-hide'>Loading</label>
       }
     </div>
   );

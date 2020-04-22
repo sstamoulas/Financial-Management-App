@@ -1,44 +1,47 @@
 import React from 'react';
 
+import CustomTableTH from '../custom-table-th/custom-table-th.component';
+import CustomTableTD from '../custom-table-td/custom-table-td.component';
+
 import './static-table.styles.scss';
 
 const StaticTable = () => (
-  <div className="table-responsive text-center">
-    <table className="table table-striped table-hover table-sm mb-0">
+  <div className='table-responsive text-center'>
+    <table className='table table-striped table-hover table-sm mb-0'>
       <thead>
         <tr>
-          <th scope="col">Name</th>
-          <th scope="col">Due</th>
+          <CustomTableTH label='Name' isHead={true} />
+          <CustomTableTH label='Due' isHead={true} />
         </tr>
       </thead>
       <tbody>
         <tr>
-          <th scope="row">Car Maintenance</th>
-          <td>${(60).toFixed(2)}</td>
+          <CustomTableTH label='Car Maintenance' isHead={true} />
+          <CustomTableTD value={60} isTotal={true} />
         </tr>
         <tr>
-          <th scope="row">Car Insurance</th>
-          <td>${(72.08).toFixed(2)}</td>
+          <CustomTableTH label='Car Insurance' isHead={true} />
+          <CustomTableTD value={72.08} isTotal={true} />
         </tr>
         <tr>
-          <th scope="row">Car Taxes</th>
-          <td>${(104.85).toFixed(2)}</td>
+          <CustomTableTH label='Car Taxes' isHead={true} />
+          <CustomTableTD value={104.85} isTotal={true} />
         </tr>
         <tr>
-          <th scope="row">Qurban Savings</th>
-          <td>${(125).toFixed(2)}</td>
+          <CustomTableTH label='Qurban Savings' isHead={true} />
+          <CustomTableTD value={125} isTotal={true} />
         </tr>
         <tr>
-          <th scope="row">Yetim</th>
-          <td>${(100).toFixed(2)}</td>
+          <CustomTableTH label='Yetim' isHead={true} />
+          <CustomTableTD value={100} isTotal={true} />
         </tr>
         <tr>
-          <th scope="row">Monthly Savings</th>
-          <td>${(1000).toFixed(2)}</td>
+          <CustomTableTH label='Monthly Savings' isHead={true} />
+          <CustomTableTD value={1000} isTotal={true} />
         </tr>
-        <tr className="total-row">
-          <th scope="row">Total</th>
-          <td>${(1461.93).toFixed(2)}</td>
+        <tr className='total-row'>
+          <CustomTableTH label='Total' isHead={true} />
+          <CustomTableTD value={1461.93} isTotal={true} />
         </tr>
       </tbody>
     </table>

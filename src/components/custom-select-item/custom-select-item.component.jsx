@@ -4,7 +4,7 @@ import './custom-select-item.styles.scss';
 
 const CustomSelectItem = ({handler, option}) => (
   <span 
-    className="select-link" 
+    className='select-link' 
     onClick={() => handler(option)}
   >
     {option.label}

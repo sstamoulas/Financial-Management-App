@@ -31,6 +31,13 @@ export const createFiscalMonthlyDocument = async (path, tableName, data) => {
   return docRef;
 }
 
+export const readFiscalMonthlyDocument = async (path, tableName) => {
+  const docRef = firestore.collection(path).doc(tableName);
+  const snapshot = await docRef.get();
+
+  return snapshot.data();
+}
+
 export const updateFiscalMonthlyDocument = async (path, tableName, items) => {
   const docRef = firestore.collection(path).doc(tableName);
 

@@ -18,6 +18,18 @@ export const generateTotal = (items, label) => {
     }, 0) : 0;
 }
 
+export const isNegative = (number) => {
+  return number < 0 ? 'negative' : ''
+}
+
+export const invertNegative = (number) => {
+  if(number < 0) {
+    number *= -1;
+  }
+
+  return number;
+}
+
 export const thousandsSeparator = (number) => {
   return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
@@ -28,7 +40,7 @@ export const updateArray = (arrayItems, index, value, label) => {
       arrayItems[index][label] = 0;
     }
     else {
-      arrayItems[index][label] = parseFloat(value);
+      arrayItems[index][label] = value;
     }
   }
   else {
@@ -37,5 +49,5 @@ export const updateArray = (arrayItems, index, value, label) => {
 }
 
 export const removeArrayItem = (arrayItems, index) => {
-  
+  return arrayItems.filter((expense, expenseIndex) => index !== expenseIndex);
 }

@@ -38,12 +38,7 @@
     width: 270px;
   }
 
-  // .input-wrap {
-  //   width: 270px;
-  // }
-
   .dropdown-wrap {
-    // width: 270px;
     z-index: 100;
     position: absolute;
   }
@@ -67,7 +62,6 @@
     padding-right: 15px;
     background: #F2F2F2;
     box-sizing: border-box;
-    // min-width: 270px;
     color: transparent;
     text-shadow: 0 0 0 #212112;
 
@@ -95,10 +89,6 @@
 
 @include media-breakpoint-only(xs) {
   .cool-select {
-    // .input-control {
-    //   min-width: 270px;
-    // }
-
     &.open {
       .dropdown-wrap {
         opacity: 1;
@@ -135,7 +125,6 @@
 
     .dropdown-body {
       left: 50%;
-      //width: 50%;
       z-index: 10;
       transition: .3s;
       position: relative;
