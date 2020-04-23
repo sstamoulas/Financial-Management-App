@@ -13,6 +13,8 @@ import {
   fetchMetaStart
 } from './redux/expense/expense.actions';
 
+import './App.styles.scss';
+
 class App extends Component {
   componentDidMount() {
     const { fetchMetaStart } = this.props;

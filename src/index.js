@@ -8,7 +8,6 @@ import { store, persistor } from './redux/store';
 import App from './App';
 
 import './index.css';
-import './App.styles.scss';
 
 ReactDOM.render(
   <Provider store={store}>
