@@ -24,24 +24,25 @@ const CustomTableTD = ({ index, label, value, handler, isDate, hasOwnTable, isTo
     isDate ?
     <td>
       <ReactDatePicker
-        id={index}
+        id={`date-${index}`}
         index={index} 
         className='non-mobile-hide'
         date={value}
         handler={handler}
       />
-      <label className='mobile-hide'>{value}</label>
+      <label htmlFor={`date-${index}`} className='mobile-hide'>{value}</label>
     </td>
   :
     <td>
       <CustomInput 
+        id={`${label}-${index}`}
         index={index}
         label={label}
         value={value || ''} 
         className='non-mobile-hide'
         handler={handler}
       />
-      <label className='mobile-hide'>{value}</label>
+      <label htmlFor={`${label}-${index}`} className='mobile-hide'>{value}</label>
     </td>
 );
 

@@ -45,7 +45,7 @@ const MobileView = ({options, updateRowItem, addExpense}) => {
           !options[selectedIndex].hasOwnProperty('due') ? 
             <MobileViewItem 
               option={options[selectedIndex]} 
-              label='label' 
+              label='Label'
               handler={updateItem} 
               addRow={addRow} 
               usesButton={true} 

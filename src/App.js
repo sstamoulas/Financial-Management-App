@@ -48,7 +48,7 @@ class App extends Component {
       <div className="App">
         <div className="container">
           <div className="text-center py-3">
-            <header className="h1">Monthly Expense Report</header>
+            <h1 className="h1">Monthly Expense Report</h1>
             <div className="mt-5 d-flex justify-content-center">
               <CustomSelect 
                 size="small-size"
