@@ -1,8 +1,10 @@
-import React  from 'react';
+import React, { Suspense, lazy }  from 'react';
 
 import CustomInput from '../custom-input/custom-input.component';
 import CustomButton from '../custom-button/custom-button.component';
-import ReactDatePicker from '../react-date-picker/react-date-picker.component';
+// import ReactDatePicker from '../react-date-picker/react-date-picker.component';
+
+const ReactDatePicker = lazy(() => import(/* webpackPreload: true */ '../react-date-picker/react-date-picker.component'));
 
 const MobileViewItem = ({option, label, handler, addRow, isDate, usesButton}) => {
   return (
@@ -21,12 +23,14 @@ const MobileViewItem = ({option, label, handler, addRow, isDate, usesButton}) =>
           <div className='w-100'>
           {
             isDate ?
-              <ReactDatePicker
-                id={`${label}`}
-                className='form-control'
-                date={option[label.toLowerCase()] || ''} 
-                handler={handler}
-              />
+              <Suspense fallback={<input />}>
+                <ReactDatePicker
+                  id={`${label}`}
+                  className='form-control'
+                  date={option[label.toLowerCase()] || ''} 
+                  handler={handler}
+                />
+              </Suspense>
             :
             <CustomInput 
               label={`${label}`}

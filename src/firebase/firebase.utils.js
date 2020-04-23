@@ -1,5 +1,5 @@
 import firebase from 'firebase/app';
-import 'firebase/firestore';
+require(/* webpackPreconnect: true */ 'firebase/firestore');
 
 // Your web app's Firebase configuration
 var firebaseConfig = {

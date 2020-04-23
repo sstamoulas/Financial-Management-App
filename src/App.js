@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense, lazy } from 'react';
 import { connect } from 'react-redux';
 
 import CustomSelect from './components/custom-select/custom-select.component';
 import OverviewTable from './components/overview-table/overview-table.component';
-import CustomTable from './components/custom-table/custom-table.component';
-import StaticTable from './components/static-table/static-table.component';
+// import CustomTable from './components/custom-table/custom-table.component';
+// import StaticTable from './components/static-table/static-table.component';
 
 import { 
   updateMonthStart, 
@@ -14,6 +14,9 @@ import {
 } from './redux/expense/expense.actions';
 
 import './App.styles.scss';
+
+const CustomTable = lazy(() => import(/* webpackPreload: true */ './components/custom-table/custom-table.component'));
+const StaticTable = lazy(() => import(/* webpackPreload: true */ './components/static-table/static-table.component'));
 
 class App extends Component {
   componentDidMount() {
@@ -88,9 +91,13 @@ class App extends Component {
               />
             :
             selectedTable && selectedTable.value === 13 ?
-              <StaticTable />
+              <Suspense fallback={<div>Loading...</div>}>
+                <StaticTable />
+              </Suspense>
             : 
-              <CustomTable />
+              <Suspense fallback={<div>Loading...</div>}>
+                <CustomTable />
+              </Suspense>
           }
         </div>
       </div>

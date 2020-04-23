@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 
-import ReactDatePicker from '../react-date-picker/react-date-picker.component';
+// import ReactDatePicker from '../react-date-picker/react-date-picker.component';
 import CustomInput from '../custom-input/custom-input.component';
 
 import { 
@@ -10,6 +10,8 @@ import {
 } from '../../redux/expense/expense.utils';
 
 import './custom-table-td.styles.scss';
+
+const ReactDatePicker = lazy(() => import(/* webpackPreload: true */ '../react-date-picker/react-date-picker.component'));
 
 const CustomTableTD = ({ index, label, value, handler, isDate, hasOwnTable, isTotal, isBlank}) => (
   isBlank ?
@@ -23,13 +25,15 @@ const CustomTableTD = ({ index, label, value, handler, isDate, hasOwnTable, isTo
   :
     isDate ?
     <td>
-      <ReactDatePicker
-        id={`date-${index}`}
-        index={index} 
-        className='non-mobile-hide'
-        date={value}
-        handler={handler}
-      />
+      <Suspense fallback={<input />}>
+        <ReactDatePicker
+          id={`date-${index}`}
+          index={index} 
+          className='non-mobile-hide'
+          date={value}
+          handler={handler}
+        />
+      </Suspense>
       <label htmlFor={`date-${index}`} className='mobile-hide'>{value}</label>
     </td>
   :
