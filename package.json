@@ -32,7 +32,6 @@
     "build": "GENERATE_SOURCEMAP=false craco build",
     "test": "craco test",
     "postinstall": "if test \"$NODE_ENV\" = \"production\" ; then craco build ; fi ",
-    "postbuild": "purgecss --css build/static/css/*.css --content build/static/index.html build/static/js/*.js --output build/static/css",
     "eject": "craco eject"
   },
   "eslintConfig": {

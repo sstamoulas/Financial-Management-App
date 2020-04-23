@@ -2,6 +2,7 @@ import React from 'react';
 
 import DatePicker from 'react-datepicker';
 
+import 'react-datepicker/dist/react-datepicker.css';
 import './react-date-picker.styles.scss';
 
 const ReactDatePicker = ({ index, date, handler, id, className}) => (

@@ -14,7 +14,8 @@ module.exports = {
         paths: [
           resolveApp("public/index.html"),
           ...glob.sync(`${resolveApp("src")}/**/**/*`, { nodir: true })
-        ]
+        ],
+        whitelistPatterns: [/^react-datepicker/]
       })
     ]
   }
