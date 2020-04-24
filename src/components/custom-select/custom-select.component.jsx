@@ -56,7 +56,6 @@ class CustomSelect extends Component {
                 <label className='visuallyhidden' htmlFor={`${identifier}`}>Choose {identifier}</label>
               </div>
               <div className={`dropdown-wrap ${size}`}>
-                <div className='close'></div>
                 <div className={`dropdown-body ${size}`}>
                   <nav className='select-nav'>
                     {

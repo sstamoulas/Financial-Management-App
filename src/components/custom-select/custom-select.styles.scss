@@ -1,3 +1,4 @@
+/* purgecss ignore */
 @import '~bootstrap/scss/_functions';
 @import '~bootstrap/scss/_variables';
 @import '~bootstrap/scss/mixins/_breakpoints';
@@ -14,9 +15,6 @@
 }
 
 .cool-select {
-  display: block;
-  position: relative;
-
   &.open {
     .input-control {
       border-radius: 4px 4px 0 0;
@@ -43,11 +41,6 @@
     position: absolute;
   }
 
-  .close {
-    display: none;
-    visibility: hidden;
-  }
-
   .input-control {
     height: 40px;
     border: none;
@@ -72,7 +65,6 @@
   }
 
   .dropdown-body {
-    height: auto;
     max-height: 0;
     transition: .3s;
     overflow: hidden;
@@ -81,7 +73,6 @@
   }
 
   .select-nav {
-    display: block;
     overflow-y: auto;
     max-height: calc(40px * 5);
   }
@@ -95,18 +86,6 @@
         visibility: visible;
         background: fade_out(#000, .5);
       }
-
-      .close {
-        top: 0;
-        left: 0;
-        z-index: 1;
-        width: 100%;
-        height: 100%;
-        display: block;
-        cursor: pointer;
-        position: absolute;
-        visibility: visible;
-      }
     }
 
     .dropdown-wrap {
@@ -114,7 +93,6 @@
       left: 0;
       opacity: 0;
       width: 100%;
-      z-index: 100;
       height: 100vh;
       position: fixed;
       padding-top: 64px;
