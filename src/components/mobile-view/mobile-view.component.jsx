@@ -4,6 +4,8 @@ import CustomButton from '../custom-button/custom-button.component';
 import CustomSelect from '../custom-select/custom-select.component';
 import MobileViewItem from '../mobile-view-item/mobile-view-item.component';
 
+import './mobile-view.styles.scss';
+
 const MobileView = ({options, updateRowItem, addExpense}) => {
   const [selectedIndex, setSelectedIndex] = useState(options.length - 1);
   const updateItem = (value, label) => {

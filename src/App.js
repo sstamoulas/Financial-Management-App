@@ -3,8 +3,6 @@ import { connect } from 'react-redux';
 
 import CustomSelect from './components/custom-select/custom-select.component';
 import OverviewTable from './components/overview-table/overview-table.component';
-// import CustomTable from './components/custom-table/custom-table.component';
-// import StaticTable from './components/static-table/static-table.component';
 
 import { 
   updateMonthStart, 
@@ -50,31 +48,31 @@ class App extends Component {
     } = this.props;
     
     return (
-      <div className="App">
-        <div className="container">
-          <div className="text-center py-3">
+      <div className='App'>
+        <div className='container'>
+          <div className='text-center py-3'>
             <h1>Monthly Expense Report</h1>
-            <div className="mt-5 d-flex justify-content-center">
+            <div className='mt-5 d-flex justify-content-center'>
               <CustomSelect 
-                size="small-size"
-                identifier="months"
+                size='small-size'
+                identifier='months'
                 handler={this.handleMonthSelectChange}
                 options={monthOptions}
                 selectedItem={selectedMonth}
               />
               <CustomSelect 
-                size="small-size"
-                identifier="years"
+                size='small-size'
+                identifier='years'
                 handler={this.handleYearSelectChange}
                 options={yearOptions}
                 selectedItem={selectedYear}
               />
             </div>
           </div>
-          <div className="my-5 d-flex justify-content-center">
+          <div className='my-5 d-flex justify-content-center'>
             <CustomSelect 
-              size="medium-size"
-              identifier="tabs"
+              size='medium-size'
+              identifier='tabs'
               handler={this.handleTableSelectChange}
               options={tableOptions}
               selectedItem={selectedTable}

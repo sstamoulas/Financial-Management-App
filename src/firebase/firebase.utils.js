@@ -3,13 +3,13 @@ require(/* webpackPreconnect: true */ 'firebase/firestore');
 
 // Your web app's Firebase configuration
 var firebaseConfig = {
-  apiKey: "AIzaSyDvvv5xqHf7cBjka8c4bvzl0tu_OLNy6Qg",
-  authDomain: "financial-management-app.firebaseapp.com",
-  databaseURL: "https://financial-management-app.firebaseio.com",
-  projectId: "financial-management-app",
-  storageBucket: "financial-management-app.appspot.com",
-  messagingSenderId: "1002166492797",
-  appId: "1:1002166492797:web:45270f15ee77a256f31b14"
+  apiKey: 'AIzaSyDvvv5xqHf7cBjka8c4bvzl0tu_OLNy6Qg',
+  authDomain: 'financial-management-app.firebaseapp.com',
+  databaseURL: 'https://financial-management-app.firebaseio.com',
+  projectId: 'financial-management-app',
+  storageBucket: 'financial-management-app.appspot.com',
+  messagingSenderId: '1002166492797',
+  appId: '1:1002166492797:web:45270f15ee77a256f31b14'
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);

@@ -1,7 +1,7 @@
 export const formatDate = (date) => {
-  const month = ("0" + ((new Date(date)).getMonth() + 1)).slice(-2);
-  const day = ("0" + ((new Date(date)).getDate())).slice(-2);
-  const year = ("0" + ((new Date(date)).getFullYear())).slice(-2);
+  const month = ('0' + ((new Date(date)).getMonth() + 1)).slice(-2);
+  const day = ('0' + ((new Date(date)).getDate())).slice(-2);
+  const year = ('0' + ((new Date(date)).getFullYear())).slice(-2);
 
   return `${month}/${day}/${year}`;
 }
@@ -31,11 +31,11 @@ export const invertNegative = (number) => {
 }
 
 export const thousandsSeparator = (number) => {
-  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
 export const updateArray = (arrayItems, index, value, label) => {
-  if(label !== "label" && label !== "date") {
+  if(label !== 'label' && label !== 'date') {
     if(isNaN(value)) {
       arrayItems[index][label] = 0;
     }

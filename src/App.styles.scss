@@ -1,20 +1,8 @@
-/* purgecss ignore */
-@import '~bootstrap/scss/bootstrap';
-@import '~bootstrap/scss/_functions';
-@import '~bootstrap/scss/_variables';
-@import '~bootstrap/scss/mixins/_breakpoints';
-
 .total-row {
   background-color: darkgray !important;
 }
 
-td,
-th,
-input:not(.form-control) {
-  max-width: 100px;
-}
-
-@include media-breakpoint-only(xs) {
+@media (max-width: 576px) {
   .non-mobile-hide {
     border: 0;
     clip: rect(0 0 0 0);
@@ -27,7 +15,7 @@ input:not(.form-control) {
   }
 }
 
-@include media-breakpoint-up(sm) {
+@media (min-width: 576px) {
   .mobile-hide {
     border: 0;
     clip: rect(0 0 0 0);
@@ -39,3 +27,82 @@ input:not(.form-control) {
     width: 1px;
   }
 }
+
+h1 {
+  margin-bottom: .5rem;
+  font-weight: 500;
+  line-height: 1.2;
+  font-size: 2.5rem;
+  margin-top: 0;
+}
+
+.text-center {
+  text-align: center!important;
+}
+
+.py-3 {
+  padding-top: 1rem!important;
+  padding-bottom: 1rem!important;
+}
+
+.my-5 {
+  margin-bottom: 3rem!important;
+}
+
+.mt-5, .my-5 {
+  margin-top: 3rem!important;
+}
+
+.mb-0 {
+  margin-bottom: 0!important;
+}
+
+
+.table-responsive {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+
+  .table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 1rem;
+    color: #212529;
+
+    & tbody tr:hover {
+      color: #212529;
+      background-color: rgba(0,0,0,.075);
+    }
+
+    & thead th {
+      vertical-align: bottom;
+      border-bottom: 2px solid #dee2e6;
+    }
+
+    & tbody tr:nth-of-type(odd) {
+      background-color: rgba(0,0,0,.05);
+    }
+
+    & td,
+    & th {
+      border-top: 1px solid #dee2e6;
+      padding: .3rem;
+      vertical-align: top;
+    }
+  }
+}
+
+input {
+  margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+label {
+  display: inline-block;
+  margin-bottom: .5rem;
+}
+
+

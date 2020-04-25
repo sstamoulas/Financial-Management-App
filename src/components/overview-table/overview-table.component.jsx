@@ -1,4 +1,4 @@
-import React  from 'react';
+import React, { Fragment }  from 'react';
 import { connect } from 'react-redux';
 
 import MobileView from '../mobile-view/mobile-view.component';
@@ -46,7 +46,7 @@ const OverviewTable = ({
   let paidTotal = paidDepositTotal - paidExpenseTotal;
 
   return (
-    <div>
+    <Fragment>
       <div className='table-responsive text-center'>
         <table className='table table-striped table-hover table-sm mb-0 non-mobile-hide'>
           <thead>
@@ -107,7 +107,7 @@ const OverviewTable = ({
         :
           <label className='mobile-hide'>Loading</label>
       }
-    </div>
+    </Fragment>
   );
 }
 

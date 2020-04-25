@@ -4,6 +4,8 @@ import CustomInput from '../custom-input/custom-input.component';
 import CustomButton from '../custom-button/custom-button.component';
 // import ReactDatePicker from '../react-date-picker/react-date-picker.component';
 
+import './mobile-view-item.styles.scss';
+
 const ReactDatePicker = lazy(() => import(/* webpackPreload: true */ '../react-date-picker/react-date-picker.component'));
 
 const MobileViewItem = ({option, label, handler, addRow, isDate, usesButton}) => {

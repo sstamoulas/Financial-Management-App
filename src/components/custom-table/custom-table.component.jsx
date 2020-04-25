@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 
 import CustomButton from '../custom-button/custom-button.component';
@@ -48,7 +48,7 @@ const CustomTable = ({
   const total = generateTotal(expenses, 'paid');
 
   return (
-    <div>
+    <Fragment>
       <div className='table-responsive text-center'>
         <table className='table table-striped table-hover table-sm mb-0'>
           <thead>
@@ -90,7 +90,7 @@ const CustomTable = ({
         :
           <label className='mobile-hide'>Loading</label>
       }
-    </div>
+    </Fragment>
   );
 }
 
