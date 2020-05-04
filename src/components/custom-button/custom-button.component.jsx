@@ -2,10 +2,10 @@ import React from 'react';
 
 import './custom-button.styles.scss';
 
-const CustomButton = ({ text, mobileHide, handler }) => (
+const CustomButton = ({ text, handler, className }) => (
   <button 
     type='button' 
-    className={`${mobileHide} btn btn-primary btn-lg btn-block`}
+    className={`btn btn-primary btn-lg btn-block ${className}`}
     onClick={() => handler()}
   >
     {text}

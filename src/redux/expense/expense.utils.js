@@ -36,7 +36,7 @@ export const thousandsSeparator = (number) => {
 
 export const updateArray = (arrayItems, index, value, label) => {
   if(label !== 'label' && label !== 'date') {
-    if(isNaN(value)) {
+    if(isNaN(value) || !value) {
       arrayItems[index][label] = 0;
     }
     else {

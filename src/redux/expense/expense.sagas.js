@@ -12,22 +12,22 @@ import {
   updateYearFailure,
   updateTableSuccess,
   updateTableFailure,
-  fetchCollectionsSuccess, 
-  fetchCollectionsFailure,
+  fetchItemsSuccess, 
+  fetchItemsFailure,
   fetchTablesSuccess,
   fetchTablesFailure,
   fetchMonthsSuccess,
   fetchMonthsFailure,
   fetchYearsSuccess,
   fetchYearsFailure,
-  updateCollectionsSuccess,
-  updateCollectionsFailure,
-  removeCollectionsSuccess,
-  removeCollectionsFailure,
+  updateItemSuccess,
+  updateItemFailure,
+  removeItemSuccess,
+  removeItemFailure,
 } from './expense.actions';
 import { updateArray, generateTotal } from './expense.utils';
 
-export function* fetchCollectionsAsync(option) {
+export function* fetchItemsAsync(option) {
   let {root: {selectedTable, selectedMonth, selectedYear}} = yield select();
 
   if(option !== undefined && option.label) {
@@ -41,7 +41,7 @@ export function* fetchCollectionsAsync(option) {
       selectedTable.label
     );
 
-    yield put(fetchCollectionsSuccess(data));
+    yield put(fetchItemsSuccess(data));
   } catch(error) {
     try {
       let expenses = {expenses: []};
@@ -65,9 +65,9 @@ export function* fetchCollectionsAsync(option) {
         selectedTable.label
       );
 
-      yield put(fetchCollectionsSuccess(data));
+      yield put(fetchItemsSuccess(data));
     } catch(error) {
-      yield put(fetchCollectionsFailure(error.message));
+      yield put(fetchItemsFailure(error.message));
     }
   }
 }
@@ -120,10 +120,10 @@ export function* fetchMetaAsync() {
   const task3 = yield fork(fetchYears);
   yield join([task1, task2, task3]);
 
-  yield call(fetchCollectionsAsync);
+  yield call(fetchItemsAsync);
 }
 
-export function* updateOverviewCollectionsAsync({payload: {expenses, column}}) {
+export function* updateOverviewItemsAsync({payload: {expenses, column}}) {
   const {root: {selectedMonth, selectedYear}} = yield select();
 
   const total = generateTotal(expenses, 'paid');
@@ -150,7 +150,7 @@ export function* updateOverviewCollectionsAsync({payload: {expenses, column}}) {
   }
 }
 
-export function* updateCollections(index, value, label, items) {
+export function* updateItem(index, value, label, items) {
   const {root: {selectedTable, selectedMonth, selectedYear}} = yield select();
 
   try {
@@ -162,26 +162,26 @@ export function* updateCollections(index, value, label, items) {
       {expenses: items}
     );
 
-    yield put(updateCollectionsSuccess());
+    yield put(updateItemSuccess());
   } catch(error) {
-    yield put(updateCollectionsFailure(error.message));
+    yield put(updateItemFailure(error.message));
   }
 }
 
-export function* updateCollectionsAsync({payload: {index, value, label, items}}) {
+export function* updateItemAsync({payload: {index, value, label}}) {
   let {root: {data, selectedTable}} = yield select();
 
-  const task = yield fork(updateCollections, index, value, label, items);
+  const task = yield fork(updateItem, index, value, label, data);
   yield join(task);
 
   // If this is the Overview Table then do not update it
   if(selectedTable.value) {
     let tableName = selectedTable.label.substring(0, selectedTable.label.indexOf(' Expense'));
-    yield updateOverviewCollectionsAsync({payload: {expenses: data, column: tableName}});
+    yield updateOverviewItemsAsync({payload: {expenses: data, column: tableName}});
   }
 }
 
-export function* removeCollections(index) {
+export function* removeItems(index) {
   let {root: {data, selectedTable, selectedMonth, selectedYear}} = yield select();
 
   try {
@@ -198,43 +198,50 @@ export function* removeCollections(index) {
       selectedTable.label
     );
 
-    yield put(removeCollectionsSuccess(items));
+    yield put(removeItemSuccess(items));
   } catch(error) {
-    yield put(removeCollectionsFailure(error.message));
+    yield put(removeItemFailure(error.message));
   }
 }
 
-export function* removeCollectionsAsync({payload: {index}}) {
+export function* removeItemAsync({payload: {index}}) {
   let {root: {data, selectedTable}} = yield select();
 
-  const task = yield fork(removeCollections, index);
+  const task = yield fork(removeItems, index);
   yield join(task);
 
   let tableName = selectedTable.label.substring(0, selectedTable.label.indexOf(' Expense'));
-  yield updateOverviewCollectionsAsync({payload: {expenses: data, column: tableName}});
+  yield updateOverviewItemsAsync({payload: {expenses: data, column: tableName}});
 }
 
-export function* updateMonthAsync({payload: {option}}) {
+export function* updateMonthAsync({payload: {selectedIndex}}) {
+  const {root: {monthOptions}} = yield select();
+
   try {
+    const option = monthOptions.find((option, index) => index === selectedIndex);
     yield put(updateMonthSuccess(option));
-    yield fetchCollectionsAsync();
+    yield fetchItemsAsync();
   } catch(error) {
     yield put(updateMonthFailure(error.message));
   }
 }
 
-export function* updateYearAsync({payload: {option}}) {
+export function* updateYearAsync({payload: {selectedIndex}}) {
+  const {root: {yearOptions}} = yield select();
   try {
+    const option = yearOptions.find((option, index) => index === selectedIndex);
     yield put(updateYearSuccess(option));
-    yield fetchCollectionsAsync();
+    yield fetchItemsAsync();
   } catch(error) {
     yield put(updateYearFailure(error.message));
   }
 }
 
-export function* updateTableAsync({payload: {option}}) {
+export function* updateTableAsync({payload: {selectedIndex}}) {
+  const {root: {tableOptions}} = yield select();
   try {
-    const task = yield fork(fetchCollectionsAsync, option);
+    const option = tableOptions.find((option, index) => index === selectedIndex);
+    const task = yield fork(fetchItemsAsync, option);
     yield join(task);
 
     yield put(updateTableSuccess(option));
@@ -243,10 +250,10 @@ export function* updateTableAsync({payload: {option}}) {
   }
 }
 
-export function* fetchCollectionsStart() {
+export function* fetchItemsStart() {
   yield takeLatest(
-    ExpenseActionTypes.FETCH_COLLECTIONS_START, 
-    fetchCollectionsAsync
+    ExpenseActionTypes.FETCH_ITEMS_START, 
+    fetchItemsAsync
   );
 }
 
@@ -257,24 +264,24 @@ export function* fetchMetaStart() {
   );
 }
 
-export function* updateCollectionsStart() {
+export function* updateItemStart() {
   yield takeLatest(
-    ExpenseActionTypes.UPDATE_COLLECTIONS_START, 
-    updateCollectionsAsync
+    ExpenseActionTypes.UPDATE_ITEM_START, 
+    updateItemAsync
   );
 }
 
-export function* updateOverviewCollectionsStart() {
+export function* updateOverviewItemsStart() {
   yield takeLatest(
-    ExpenseActionTypes.UPDATE_OVERVIEW_COLLECTIONS_START, 
-    updateOverviewCollectionsAsync
+    ExpenseActionTypes.UPDATE_OVERVIEW_ITEM_START, 
+    updateOverviewItemsAsync
   );
 }
 
-export function* removeCollectionsStart() {
+export function* removeItemStart() {
   yield takeLatest(
-    ExpenseActionTypes.REMOVE_COLLECTIONS_START,
-    removeCollectionsAsync
+    ExpenseActionTypes.REMOVE_ITEM_START,
+    removeItemAsync
   );
 }
 
@@ -301,11 +308,11 @@ export function* updateTableStart() {
 
 export function* expenseSagas() {
   yield all([
-    call(fetchCollectionsStart),
+    call(fetchItemsStart),
     call(fetchMetaStart),
-    call(updateCollectionsStart),
-    call(updateOverviewCollectionsStart),
-    call(removeCollectionsStart),
+    call(updateItemStart),
+    call(updateOverviewItemsStart),
+    call(removeItemStart),
     call(updateMonthStart),
     call(updateYearStart),
     call(updateTableStart),

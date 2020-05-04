@@ -15,17 +15,17 @@ const INITIAL_STATE = {
 
 const expenseReducer = (state = INITIAL_STATE, action) => {
   switch(action.type) {
-    case ExpenseActionTypes.ADD_EXPENSE: 
+    case ExpenseActionTypes.ADD_ITEM: 
       return {
         ...state,
         data: [...state.data, {label: '', paid: 0, date: ''}],
       };
-    case ExpenseActionTypes.REMOVE_COLLECTIONS_LOCAL_STATE:
+    case ExpenseActionTypes.REMOVE_ITEM:
       return {
         ...state,
         data: state.data.filter((item, index) => index !== action.payload.index),
       };
-    case ExpenseActionTypes.UPDATE_COLLECTIONS_LOCAL_STATE:
+    case ExpenseActionTypes.UPDATE_ITEM:
       return {
         ...state,
         data: state.data.map((item, index) => {
@@ -42,27 +42,27 @@ const expenseReducer = (state = INITIAL_STATE, action) => {
           return item;
         }),
       };
-    case ExpenseActionTypes.REMOVE_COLLECTIONS_START:
+    case ExpenseActionTypes.REMOVE_ITEM_START:
     case ExpenseActionTypes.UPDATE_MONTH_START:
     case ExpenseActionTypes.UPDATE_YEAR_START:
     case ExpenseActionTypes.UPDATE_TABLE_START:
-    case ExpenseActionTypes.UPDATE_COLLECTIONS_START:
+    case ExpenseActionTypes.UPDATE_ITEM_START:
       return {
         ...state,
         isUpdating: true,
       };
-    case ExpenseActionTypes.FETCH_COLLECTIONS_START:
+    case ExpenseActionTypes.FETCH_ITEMS_START:
       return {
         ...state,
         isFetching: true,
       };
-    case ExpenseActionTypes.REMOVE_COLLECTIONS_SUCCESS:
-    case ExpenseActionTypes.UPDATE_COLLECTIONS_SUCCESS:
+    case ExpenseActionTypes.REMOVE_ITEM_SUCCESS:
+    case ExpenseActionTypes.UPDATE_ITEM_SUCCESS:
       return {
         ...state,
         isUpdating: false,
       };
-    case ExpenseActionTypes.FETCH_COLLECTIONS_SUCCESS:
+    case ExpenseActionTypes.FETCH_ITEMS_SUCCESS:
       return {
         ...state,
         isFetching: false,
@@ -109,11 +109,11 @@ const expenseReducer = (state = INITIAL_STATE, action) => {
         isFetching: false,
         selectedTable: action.payload.option,
       };
-    case ExpenseActionTypes.REMOVE_COLLECTIONS_FAILURE:
+    case ExpenseActionTypes.REMOVE_ITEM_FAILURE:
     case ExpenseActionTypes.UPDATE_MONTH_FAILURE:
     case ExpenseActionTypes.UPDATE_YEAR_FAILURE:
     case ExpenseActionTypes.UPDATE_TABLE_FAILURE:
-    case ExpenseActionTypes.UPDATE_COLLECTIONS_FAILURE:
+    case ExpenseActionTypes.UPDATE_ITEM_FAILURE:
       return {
         ...state,
         isUpdating: false,
@@ -122,7 +122,7 @@ const expenseReducer = (state = INITIAL_STATE, action) => {
     case ExpenseActionTypes.FETCH_YEARS_FAILURE:
     case ExpenseActionTypes.FETCH_MONTHS_FAILURE:
     case ExpenseActionTypes.FETCH_TABLES_FAILURE:
-    case ExpenseActionTypes.FETCH_COLLECTIONS_FAILURE:
+    case ExpenseActionTypes.FETCH_ITEMS_FAILURE:
       return {
         ...state,
         isFetching: false,

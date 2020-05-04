@@ -2,8 +2,27 @@
   background-color: darkgray !important;
 }
 
+.justify-content-center {
+  justify-content: center !important;
+}
+
+.d-flex {
+  display: flex !important;
+}
+
+.hide {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
 @media (max-width: 576px) {
-  .non-mobile-hide {
+  .hide-for-mobile {
     border: 0;
     clip: rect(0 0 0 0);
     height: 1px;
@@ -16,7 +35,7 @@
 }
 
 @media (min-width: 576px) {
-  .mobile-hide {
+  .hide-for-desktop {
     border: 0;
     clip: rect(0 0 0 0);
     height: 1px;
@@ -37,7 +56,7 @@ h1 {
 }
 
 .text-center {
-  text-align: center!important;
+  text-align: center !important;
 }
 
 .py-3 {
@@ -51,6 +70,10 @@ h1 {
 
 .mt-5, .my-5 {
   margin-top: 3rem!important;
+}
+
+.ml-5 {
+  margin-left: 3rem;
 }
 
 .mb-0 {

@@ -2,10 +2,10 @@ import React from 'react';
 
 import './custom-select-item.styles.scss';
 
-const CustomSelectItem = ({handler, option}) => (
+const CustomSelectItem = ({index, option, handler}) => (
   <span 
     className='select-link' 
-    onClick={() => handler(option)}
+    onClick={() => handler(index)}
   >
     {option.label}
   </span>
