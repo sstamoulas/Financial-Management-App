@@ -33,7 +33,7 @@ const MobileView = ({ options, tableOptions, credits, debits,
   const removeRow = () => {
     removeItems(selectedIndex);
     removeItemsStart(selectedIndex);
-    setSelectedIndex(options.length - 1)
+    setSelectedIndex(selectedIndex > 0 ? (selectedIndex - 1) : 0);
   }
 
   const setIndex = (index) => {
