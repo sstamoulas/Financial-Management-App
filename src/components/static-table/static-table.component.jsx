@@ -10,38 +10,38 @@ const StaticTable = () => (
     <table className='table table-striped table-hover table-sm mb-0'>
       <thead>
         <tr>
-          <CustomTH usesLink={false}>Name</CustomTH>
-          <CustomTH usesLink={false}>Due</CustomTH>
+          <CustomTH>Name</CustomTH>
+          <CustomTH>Due</CustomTH>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <CustomTH usesLink={false}>Car Maintenance</CustomTH>
-          <CustomTD value={60} isTotal={true} />
+          <CustomTH>Car Maintenance</CustomTH>
+          <CustomTD value={60} isTotal />
         </tr>
         <tr>
-          <CustomTH usesLink={false}>Car Insurance</CustomTH>
-          <CustomTD value={72.08} isTotal={true} />
+          <CustomTH>Car Insurance</CustomTH>
+          <CustomTD value={72.08} isTotal />
         </tr>
         <tr>
-          <CustomTH usesLink={false}>Car Taxes</CustomTH>
-          <CustomTD value={104.85} isTotal={true} />
+          <CustomTH>Car Taxes</CustomTH>
+          <CustomTD value={104.85} isTotal />
         </tr>
         <tr>
-          <CustomTH usesLink={false}>Qurban Savings</CustomTH>
-          <CustomTD value={125} isTotal={true} />
+          <CustomTH>Qurban Savings</CustomTH>
+          <CustomTD value={125} isTotal />
         </tr>
         <tr>
-          <CustomTH usesLink={false}>Yetim</CustomTH>
-          <CustomTD value={100} isTotal={true} />
+          <CustomTH>Yetim</CustomTH>
+          <CustomTD value={100} isTotal />
         </tr>
         <tr>
-          <CustomTH usesLink={false}>Monthly Savings</CustomTH>
-          <CustomTD value={1000} isTotal={true} />
+          <CustomTH>Monthly Savings</CustomTH>
+          <CustomTD value={1000} isTotal />
         </tr>
         <tr className='total-row'>
-          <CustomTH usesLink={false}>Total</CustomTH>
-          <CustomTD value={1461.93} isTotal={true} />
+          <CustomTH>Total</CustomTH>
+          <CustomTD value={1461.93} isTotal />
         </tr>
       </tbody>
     </table>

@@ -45,9 +45,9 @@ const WithTable = (WrappedComponent) => (props) => {
               return (
                 <tr key={`credit-${index}`}>
                   <CustomTH index={index} handler={removeRowItem} usesLink={usesLink}>{usesLink ? '[-]' : label}</CustomTH>
-                  <CustomTD index={index} handler={updateRowItem} value={customValue} hasOwnTable={false} isDate={false} label={customLabel} />
-                  <CustomTD index={index} handler={updateRowItem} value={paid} hasOwnTable={hasOwnTable} isDate={false} label='paid' />
-                  <CustomTD index={index} handler={handler} value={dateValue} hasOwnTable={hasOwnTable} isDate={true} />
+                  <CustomTD index={index} handler={updateRowItem} value={customValue} label={customLabel} />
+                  <CustomTD index={index} handler={updateRowItem} value={paid} hasOwnTable={hasOwnTable} label='paid' />
+                  <CustomTD index={index} handler={handler} value={dateValue} hasOwnTable={hasOwnTable} isDate />
                 </tr>
               )
             })

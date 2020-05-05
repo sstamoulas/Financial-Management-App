@@ -9,7 +9,7 @@ const CustomTHead = ({ headers }) => (
     <tr>
       {
         headers.map((header, index) => 
-          <CustomTH key={`thead-${index}`} isLabel={true}>{header}</CustomTH>
+          <CustomTH key={`thead-${index}`} isLabel>{header}</CustomTH>
         )
       }
     </tr>

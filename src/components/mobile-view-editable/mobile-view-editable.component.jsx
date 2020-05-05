@@ -22,7 +22,7 @@ const MobileViewSection = ({ index, options, updateHandler, addHandler, removeHa
             label='Label'
             updateHandler={updateHandler} 
             addHandler={addHandler} 
-            usesButton={true} 
+            usesButton 
           />
       }
       <MobileViewItem 
@@ -35,7 +35,7 @@ const MobileViewSection = ({ index, options, updateHandler, addHandler, removeHa
         label='Date' 
         updateHandler={updateHandler} 
         removeHandler={removeHandler}
-        isDate={true} 
+        isDate 
       />
     </>
   )

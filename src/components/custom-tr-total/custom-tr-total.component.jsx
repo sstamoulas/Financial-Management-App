@@ -21,15 +21,15 @@ const CustomTRTotal = ({ title, credits, debits, hasDueItems }) => {
 
   return (
     <tr className='total-row'>
-      <CustomTH isLabel={true}>{title}</CustomTH>
+      <CustomTH isLabel>{title}</CustomTH>
       {
         hasDueItems ?
-          <CustomTD isTotal={true} value={dueTotal} />
+          <CustomTD isTotal value={dueTotal} />
         :
-          <CustomTD isBlank={true} />
+          <CustomTD isBlank />
       }
-      <CustomTD isTotal={true} value={paidTotal} />
-      <CustomTD isBlank={true} />
+      <CustomTD isTotal value={paidTotal} />
+      <CustomTD isBlank />
     </tr>
   )
 };

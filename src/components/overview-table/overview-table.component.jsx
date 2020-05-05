@@ -26,15 +26,15 @@ const OverviewTable = ({ credits, debits, updateItems, updateItemsStart }) => {
         debits.map((debit, index) => {
           return (
             <tr key={`debit-${credits.length + index}`}>
-              <CustomTH isLabel={true}>{debit.label}</CustomTH>
-              <CustomTD index={credits.length + index} handler={updateRowItem} label='due' value={debit.due} hasOwnTable={false} isDate={false} />
-              <CustomTD index={credits.length + index} handler={updateRowItem} label='paid' value={debit.paid} hasOwnTable={debit.hasOwnTable} isDate={false} />
-              <CustomTD isBlank={true} />
+              <CustomTH isLabel>{debit.label}</CustomTH>
+              <CustomTD index={credits.length + index} handler={updateRowItem} label='due' value={debit.due} />
+              <CustomTD index={credits.length + index} handler={updateRowItem} label='paid' value={debit.paid} hasOwnTable={debit.hasOwnTable} />
+              <CustomTD isBlank />
             </tr>
           )
         })
       }
-      <CustomTRTotal title='Total Savings' credits={credits} debits={debits} hasDueItems={true} />
+      <CustomTRTotal title='Total Savings' credits={credits} debits={debits} hasDueItems />
     </>
   )
 };
