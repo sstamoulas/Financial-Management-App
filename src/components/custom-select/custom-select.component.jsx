@@ -41,7 +41,7 @@ class CustomSelect extends Component {
     let { isOpen } = this.state;
 
     return (
-      selectedItem ?
+      selectedItem && 
         <div className='text-left'>
           <div className='container'>
             <div className={`cool-select ${isOpen ? 'open' : ''}`}>
@@ -74,8 +74,6 @@ class CustomSelect extends Component {
             </div>
           </div>
         </div>
-      :
-        null
     );
   }
 }

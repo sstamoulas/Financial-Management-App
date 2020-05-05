@@ -12,8 +12,8 @@ import { formatDate, generateTotal, invertNegative, isNegative, thousandsSeparat
 import './mobile-view.styles.scss';
 
 const MobileView = ({ options, tableOptions, credits, debits, 
-  tabHandler, updateItem, updateItemStart, 
-  removeItem, removeItemStart, addItem }) => {
+  tabHandler, updateItems, updateItemsStart, 
+  removeItems, removeItemsStart, addItem }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const update = (value, label) => {
@@ -70,10 +70,8 @@ const MobileView = ({ options, tableOptions, credits, debits,
         </div>
         <div className={`mt-5 d-flex justify-content-center ${isNegative(total)}`} style={{fontSize: '25px'}}>Total: ${thousandsSeparator(invertNegative((total).toFixed(2)))}</div>
         {     
-          !options[selectedIndex].hasOwnProperty('due') ?
+          !options[selectedIndex].hasOwnProperty('due') &&
             <CustomButton text='Add New Expense' handler={addRow} className="mt-5" />
-          :
-            null
         }
         {        
           options[selectedIndex].hasOwnTable ?

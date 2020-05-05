@@ -21,10 +21,8 @@ const MobileViewItem = ({ label, option, isDate, updateHandler, addHandler, remo
                 handler={updateHandler}
               />
               {
-                !option.hasOwnProperty('due') ?
+                !option.hasOwnProperty('due') &&
                   <CustomButton text='Remove Expense' handler={removeHandler} className="ml-5" />
-                :
-                  null
               }
             </>
           :
