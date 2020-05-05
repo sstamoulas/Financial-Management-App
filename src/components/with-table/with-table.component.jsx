@@ -11,21 +11,21 @@ import './with-table.styles.scss';
 
 const WithTable = (WrappedComponent) => (props) => {
   const { tableOptions, headers, credits, hasDueItems, usesLink, children } = props;
-  const { updateItem, removeItem, updateItemStart, removeItemStart, tabHandler } = props;
+  const { updateItems, removeItems, updateItemsStart, removeItemsStart, tabHandler } = props;
 
   const updateRowItem = (value, label, index) => {
     if(label === 'date') {
       value = formatDate(value)
     }
 
-    updateItem(index, value, label);
-    updateItemStart(index, value, label);
+    updateItems(index, value, label);
+    updateItemsStart(index, value, label);
   } 
 
   const removeRowItem = (event, index) => {
     event.preventDefault();
-    removeItem(index);
-    removeItemStart(index);
+    removeItems(index);
+    removeItemsStart(index);
   }
 
   return (

@@ -34,20 +34,34 @@ export const thousandsSeparator = (number) => {
   return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
-export const updateArray = (arrayItems, index, value, label) => {
-  if(label !== 'label' && label !== 'date') {
-    if(isNaN(value) || !value) {
-      arrayItems[index][label] = 0;
-    }
-    else {
-      arrayItems[index][label] = value;
-    }
-  }
-  else {
-    arrayItems[index][label] = value;
-  }
+export function addItem(items) {
+  return [...items, {label: '', paid: 0, date: ''}];
 }
 
-export const removeArrayItem = (arrayItems, index) => {
-  return arrayItems.filter((expense, expenseIndex) => index !== expenseIndex);
+export function updateItem(items, {index, value, label}) {
+  if(label !== 'label' && label !== 'date') {
+    if(isNaN(value) || !value) {
+      value = 0;
+    }
+  }
+
+  const updatedItems = items.map((item, currentIndex) => {
+    // Find the item with the matching id
+    if(currentIndex === index) {
+      // Return a new object
+      return {
+        ...item,  // copy the existing item
+        [label]: value  // replace the value 
+      }
+    }
+
+    // Leave every other item unchanged
+    return item;
+  });
+
+  return updatedItems;
+}
+
+export const removeItem = (items, index) => {
+  return items.filter((expense, expenseIndex) => index !== expenseIndex);
 }

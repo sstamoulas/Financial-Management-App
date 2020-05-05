@@ -5,21 +5,19 @@ import CustomTH from '../custom-th/custom-th.component';
 import CustomTD from '../custom-td/custom-td.component';
 import CustomTRTotal from '../custom-tr-total/custom-tr-total.component';
 
-import { updateItem, updateItemStart } from '../../redux/expense/expense.actions';
+import { updateItems, updateItemsStart } from '../../redux/expense/expense.actions';
 import { formatDate } from '../../redux/expense/expense.utils';
 
 import './overview-table.styles.scss';
 
-const OverviewTable = ({ credits, debits, updateItem, updateItemStart }) => {
+const OverviewTable = ({ credits, debits, updateItems, updateItemsStart }) => {
   const updateRowItem = (value, label, index) => {
     if(label === 'date') {
       value = formatDate(value)
     }
 
-    console.log(value, label, index)
-
-    updateItem(index, value, label);
-    updateItemStart(index, value, label);
+    updateItems(index, value, label);
+    updateItemsStart(index, value, label);
   }
 
   return (
@@ -47,8 +45,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  updateItem: (index, value, label) => dispatch(updateItem(index, value, label)),
-  updateItemStart: (index, value, label) => dispatch(updateItemStart(index, value, label)),
+  updateItems: (index, value, label) => dispatch(updateItems(index, value, label)),
+  updateItemsStart: (index, value, label) => dispatch(updateItemsStart(index, value, label)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(OverviewTable);

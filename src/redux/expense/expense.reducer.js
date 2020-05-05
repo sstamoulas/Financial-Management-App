@@ -1,4 +1,5 @@
 import ExpenseActionTypes from './expense.types';
+import { addItem, updateItem, removeItem } from './expense.utils';
 
 const INITIAL_STATE = {
   data: [],
@@ -18,35 +19,23 @@ const expenseReducer = (state = INITIAL_STATE, action) => {
     case ExpenseActionTypes.ADD_ITEM: 
       return {
         ...state,
-        data: [...state.data, {label: '', paid: 0, date: ''}],
+        data: addItem(state.data),
       };
-    case ExpenseActionTypes.REMOVE_ITEM:
+    case ExpenseActionTypes.REMOVE_ITEMS:
       return {
         ...state,
-        data: state.data.filter((item, index) => index !== action.payload.index),
+        data: removeItem(state.data, action.payload.index),
       };
-    case ExpenseActionTypes.UPDATE_ITEM:
+    case ExpenseActionTypes.UPDATE_ITEMS:
       return {
         ...state,
-        data: state.data.map((item, index) => {
-          // Find the item with the matching id
-          if(index === action.payload.index) {
-            // Return a new object
-            return {
-              ...item,  // copy the existing item
-              [action.payload.label]: action.payload.paid  // replace the email addr
-            }
-          }
-
-          // Leave every other item unchanged
-          return item;
-        }),
+        data: updateItem(state.data, {...action.payload}),
       };
-    case ExpenseActionTypes.REMOVE_ITEM_START:
+    case ExpenseActionTypes.REMOVE_ITEMS_START:
+    case ExpenseActionTypes.UPDATE_ITEMS_START:
     case ExpenseActionTypes.UPDATE_MONTH_START:
     case ExpenseActionTypes.UPDATE_YEAR_START:
     case ExpenseActionTypes.UPDATE_TABLE_START:
-    case ExpenseActionTypes.UPDATE_ITEM_START:
       return {
         ...state,
         isUpdating: true,
@@ -56,8 +45,8 @@ const expenseReducer = (state = INITIAL_STATE, action) => {
         ...state,
         isFetching: true,
       };
-    case ExpenseActionTypes.REMOVE_ITEM_SUCCESS:
-    case ExpenseActionTypes.UPDATE_ITEM_SUCCESS:
+    case ExpenseActionTypes.REMOVE_ITEMS_SUCCESS:
+    case ExpenseActionTypes.UPDATE_ITEMS_SUCCESS:
       return {
         ...state,
         isUpdating: false,
@@ -109,18 +98,18 @@ const expenseReducer = (state = INITIAL_STATE, action) => {
         isFetching: false,
         selectedTable: action.payload.option,
       };
-    case ExpenseActionTypes.REMOVE_ITEM_FAILURE:
+    case ExpenseActionTypes.REMOVE_ITEMS_FAILURE:
+    case ExpenseActionTypes.UPDATE_ITEMS_FAILURE:
     case ExpenseActionTypes.UPDATE_MONTH_FAILURE:
     case ExpenseActionTypes.UPDATE_YEAR_FAILURE:
     case ExpenseActionTypes.UPDATE_TABLE_FAILURE:
-    case ExpenseActionTypes.UPDATE_ITEM_FAILURE:
       return {
         ...state,
         isUpdating: false,
         errorMessage: action.payload,
       };
-    case ExpenseActionTypes.FETCH_YEARS_FAILURE:
     case ExpenseActionTypes.FETCH_MONTHS_FAILURE:
+    case ExpenseActionTypes.FETCH_YEARS_FAILURE:
     case ExpenseActionTypes.FETCH_TABLES_FAILURE:
     case ExpenseActionTypes.FETCH_ITEMS_FAILURE:
       return {

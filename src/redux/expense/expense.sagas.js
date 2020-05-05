@@ -20,12 +20,12 @@ import {
   fetchMonthsFailure,
   fetchYearsSuccess,
   fetchYearsFailure,
-  updateItemSuccess,
-  updateItemFailure,
-  removeItemSuccess,
-  removeItemFailure,
+  updateItemsSuccess,
+  updateItemsFailure,
+  removeItemsSuccess,
+  removeItemsFailure,
 } from './expense.actions';
-import { updateArray, generateTotal } from './expense.utils';
+import { updateItem, generateTotal } from './expense.utils';
 
 export function* fetchItemsAsync(option) {
   let {root: {selectedTable, selectedMonth, selectedYear}} = yield select();
@@ -137,24 +137,24 @@ export function* updateOverviewItemsAsync({payload: {expenses, column}}) {
 
     let index = data.expenses.findIndex(item => item.label === column)
 
-    updateArray(data.expenses, index, total, 'paid')
+    let arr = yield updateItem(data.expenses, {index, value: total, label: 'paid'})
 
     yield call(
       updateFiscalMonthlyDocument, 
       `${selectedMonth.label}-${selectedYear.label}`, 
       'Overview', 
-      data
+      {'expenses': arr},
     );
   } catch(error) {
     console.log(error.message)
   }
 }
 
-export function* updateItem(index, value, label, items) {
+export function* updateItems(index, value, label, items) {
   const {root: {selectedTable, selectedMonth, selectedYear}} = yield select();
 
   try {
-    yield updateArray(items, index, value, label);
+    yield updateItem(items, {index, value, label});
     yield call(
       updateFiscalMonthlyDocument, 
       `${selectedMonth.label}-${selectedYear.label}`, 
@@ -162,16 +162,16 @@ export function* updateItem(index, value, label, items) {
       {expenses: items}
     );
 
-    yield put(updateItemSuccess());
+    yield put(updateItemsSuccess());
   } catch(error) {
-    yield put(updateItemFailure(error.message));
+    yield put(updateItemsFailure(error.message));
   }
 }
 
-export function* updateItemAsync({payload: {index, value, label}}) {
+export function* updateItemsAsync({payload: {index, value, label}}) {
   let {root: {data, selectedTable}} = yield select();
 
-  const task = yield fork(updateItem, index, value, label, data);
+  const task = yield fork(updateItems, index, value, label, data);
   yield join(task);
 
   // If this is the Overview Table then do not update it
@@ -198,13 +198,13 @@ export function* removeItems(index) {
       selectedTable.label
     );
 
-    yield put(removeItemSuccess(items));
+    yield put(removeItemsSuccess(items));
   } catch(error) {
-    yield put(removeItemFailure(error.message));
+    yield put(removeItemsFailure(error.message));
   }
 }
 
-export function* removeItemAsync({payload: {index}}) {
+export function* removeItemsAsync({payload: {index}}) {
   let {root: {data, selectedTable}} = yield select();
 
   const task = yield fork(removeItems, index);
@@ -264,24 +264,24 @@ export function* fetchMetaStart() {
   );
 }
 
-export function* updateItemStart() {
+export function* updateItemsStart() {
   yield takeLatest(
-    ExpenseActionTypes.UPDATE_ITEM_START, 
-    updateItemAsync
+    ExpenseActionTypes.UPDATE_ITEMS_START, 
+    updateItemsAsync
   );
 }
 
 export function* updateOverviewItemsStart() {
   yield takeLatest(
-    ExpenseActionTypes.UPDATE_OVERVIEW_ITEM_START, 
+    ExpenseActionTypes.UPDATE_OVERVIEW_ITEMS_START, 
     updateOverviewItemsAsync
   );
 }
 
-export function* removeItemStart() {
+export function* removeItemsStart() {
   yield takeLatest(
-    ExpenseActionTypes.REMOVE_ITEM_START,
-    removeItemAsync
+    ExpenseActionTypes.REMOVE_ITEMS_START,
+    removeItemsAsync
   );
 }
 
@@ -310,9 +310,9 @@ export function* expenseSagas() {
   yield all([
     call(fetchItemsStart),
     call(fetchMetaStart),
-    call(updateItemStart),
+    call(updateItemsStart),
     call(updateOverviewItemsStart),
-    call(removeItemStart),
+    call(removeItemsStart),
     call(updateMonthStart),
     call(updateYearStart),
     call(updateTableStart),

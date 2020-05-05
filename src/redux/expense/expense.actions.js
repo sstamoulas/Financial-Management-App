@@ -4,43 +4,48 @@ export const addItem = () => ({
   type: ExpenseActionTypes.ADD_ITEM,
 });
 
-export const removeItem = (index) => ({
-  type: ExpenseActionTypes.REMOVE_ITEM,
+export const removeItems = (index) => ({
+  type: ExpenseActionTypes.REMOVE_ITEMS,
   payload: {index},
 });
 
-export const updateItem = (index, paid, label) => ({
-  type: ExpenseActionTypes.UPDATE_ITEM,
-  payload: {index, paid, label},
-});
-
-export const removeItemStart = (index) => ({
-  type: ExpenseActionTypes.REMOVE_ITEM_START,
-  payload: {index},
-});
-
-export const removeItemSuccess = ({expenses}) => ({
-  type: ExpenseActionTypes.REMOVE_ITEM_SUCCESS,
-  payload: expenses,
-});
-
-export const removeItemFailure = (errorMessage) => ({
-  type: ExpenseActionTypes.REMOVE_ITEM_FAILURE,
-  payload: errorMessage,
-});
-
-export const updateItemStart = (index, value, label) => ({
-  type: ExpenseActionTypes.UPDATE_ITEM_START,
+export const updateItems = (index, value, label) => ({
+  type: ExpenseActionTypes.UPDATE_ITEMS,
   payload: {index, value, label},
 });
 
-export const updateItemSuccess = () => ({
-  type: ExpenseActionTypes.UPDATE_ITEM_SUCCESS,
+export const removeItemsStart = (index) => ({
+  type: ExpenseActionTypes.REMOVE_ITEMS_START,
+  payload: {index},
 });
 
-export const updateItemFailure = (errorMessage) => ({
-  type: ExpenseActionTypes.UPDATE_ITEM_FAILURE,
+export const removeItemsSuccess = ({expenses}) => ({
+  type: ExpenseActionTypes.REMOVE_ITEMS_SUCCESS,
+  payload: expenses,
+});
+
+export const removeItemsFailure = (errorMessage) => ({
+  type: ExpenseActionTypes.REMOVE_ITEMS_FAILURE,
   payload: errorMessage,
+});
+
+export const updateItemsStart = (index, value, label) => ({
+  type: ExpenseActionTypes.UPDATE_ITEMS_START,
+  payload: {index, value, label},
+});
+
+export const updateItemsSuccess = () => ({
+  type: ExpenseActionTypes.UPDATE_ITEMS_SUCCESS,
+});
+
+export const updateItemsFailure = (errorMessage) => ({
+  type: ExpenseActionTypes.UPDATE_ITEMS_FAILURE,
+  payload: errorMessage,
+});
+
+export const updateOverviewItemsStart = (expenses, column) => ({
+  type: ExpenseActionTypes.UPDATE_OVERVIEW_ITEMS_START,
+  payload: {expenses, column},
 });
 
 export const updateMonthStart = (selectedIndex) => ({
@@ -86,11 +91,6 @@ export const updateTableSuccess = (option) => ({
 export const updateTableFailure  = (errorMessage) => ({
   type: ExpenseActionTypes.UPDATE_TABLE_FAILURE,
   payload: errorMessage,
-});
-
-export const updateOverviewItemsStart = (expenses, column) => ({
-  type: ExpenseActionTypes.UPDATE_OVERVIEW_ITEM_START,
-  payload: {expenses, column},
 });
 
 export const fetchMetaStart = () => ({

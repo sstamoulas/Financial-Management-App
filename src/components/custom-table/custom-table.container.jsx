@@ -4,7 +4,7 @@ import { compose } from 'redux';
 
 import WithTable from '../with-table/with-table.component';
 
-import { removeItem, removeItemStart, updateItem, updateItemStart } from '../../redux/expense/expense.actions';
+import { removeItems, removeItemsStart, updateItems, updateItemsStart } from '../../redux/expense/expense.actions';
 
 const EmptyComponent = () => <></>;
 
@@ -17,10 +17,10 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  removeItem: (index) => dispatch(removeItem(index)),
-  removeItemStart: (index) => dispatch(removeItemStart(index)),
-  updateItem: (index, value, label) => dispatch(updateItem(index, value, label)),
-  updateItemStart:  (index, value, label) => dispatch(updateItemStart(index, value, label)),
+  removeItems: (index) => dispatch(removeItems(index)),
+  removeItemsStart: (index) => dispatch(removeItemsStart(index)),
+  updateItems: (index, value, label) => dispatch(updateItems(index, value, label)),
+  updateItemsStart:  (index, value, label) => dispatch(updateItemsStart(index, value, label)),
 });
 
 const CustomTableContainer = compose(

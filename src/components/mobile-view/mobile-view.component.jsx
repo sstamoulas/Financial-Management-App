@@ -6,7 +6,7 @@ import CustomSelect from '../custom-select/custom-select.component';
 import MobileViewEditable from '../mobile-view-editable/mobile-view-editable.component';
 import MobileViewUneditable from '../mobile-view-uneditable/mobile-view-uneditable.component';
 
-import { addItem, updateItem, removeItem, updateItemStart, removeItemStart } from '../../redux/expense/expense.actions';
+import { addItem, updateItems, removeItems, updateItemsStart, removeItemsStart } from '../../redux/expense/expense.actions';
 import { formatDate, generateTotal, invertNegative, isNegative, thousandsSeparator } from '../../redux/expense/expense.utils';
 
 import './mobile-view.styles.scss';
@@ -21,8 +21,8 @@ const MobileView = ({ options, tableOptions, credits, debits,
       value = formatDate(value)
     }
 
-    updateItem(selectedIndex, value, label);
-    updateItemStart(selectedIndex, value, label);
+    updateItems(selectedIndex, value, label);
+    updateItemsStart(selectedIndex, value, label);
   }
 
   const addRow = () => {
@@ -31,8 +31,8 @@ const MobileView = ({ options, tableOptions, credits, debits,
   }
 
   const removeRow = () => {
-    removeItem(selectedIndex);
-    removeItemStart(selectedIndex);
+    removeItems(selectedIndex);
+    removeItemsStart(selectedIndex);
     setSelectedIndex(options.length - 1)
   }
 
@@ -71,9 +71,7 @@ const MobileView = ({ options, tableOptions, credits, debits,
         <div className={`mt-5 d-flex justify-content-center ${isNegative(total)}`} style={{fontSize: '25px'}}>Total: ${thousandsSeparator(invertNegative((total).toFixed(2)))}</div>
         {     
           !options[selectedIndex].hasOwnProperty('due') ?
-            <>
-              <CustomButton text='Add New Expense' handler={addRow} className="mt-5" />
-            </>
+            <CustomButton text='Add New Expense' handler={addRow} className="mt-5" />
           :
             null
         }
@@ -108,10 +106,10 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   addItem: () => dispatch(addItem()),
-  removeItem: (index) => dispatch(removeItem(index)),
-  removeItemStart: (index) => dispatch(removeItemStart(index)),
-  updateItem: (index, value, label) => dispatch(updateItem(index, value, label)),
-  updateItemStart:  (index, value, label) => dispatch(updateItemStart(index, value, label)),
+  removeItems: (index) => dispatch(removeItems(index)),
+  removeItemsStart: (index) => dispatch(removeItemsStart(index)),
+  updateItems: (index, value, label) => dispatch(updateItems(index, value, label)),
+  updateItemsStart:  (index, value, label) => dispatch(updateItemsStart(index, value, label)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MobileView);

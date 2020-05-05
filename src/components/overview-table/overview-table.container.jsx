@@ -4,7 +4,7 @@ import { compose } from 'redux';
 import WithTable from '../with-table/with-table.component';
 import OverviewTable from './overview-table.component';
 
-import { updateItem, updateItemStart } from '../../redux/expense/expense.actions';
+import { updateItems, updateItemsStart } from '../../redux/expense/expense.actions';
 
 const mapStateToProps = (state) => ({
   tableOptions: state.root.tableOptions,
@@ -15,8 +15,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  updateItem: (index, value, label) => dispatch(updateItem(index, value, label)),
-  updateItemStart: (index, value, label) => dispatch(updateItemStart(index, value, label)),
+  updateItems: (index, value, label) => dispatch(updateItems(index, value, label)),
+  updateItemsStart: (index, value, label) => dispatch(updateItemsStart(index, value, label)),
 });
 
 const OverviewTableContainer = compose(
