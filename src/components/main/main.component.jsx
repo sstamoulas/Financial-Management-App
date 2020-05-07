@@ -31,7 +31,7 @@ const Main = ({ monthOptions, yearOptions, tableOptions,
   }
 
   const { width } = useWindowDimensions();
-  
+
   return (
     <div className='container'>
       <div className='text-center py-3'>
@@ -84,7 +84,7 @@ const Main = ({ monthOptions, yearOptions, tableOptions,
           </Suspense>
       }
     </div>
-  );
+  )
 }
 
 const mapStateToProps = (state) => ({

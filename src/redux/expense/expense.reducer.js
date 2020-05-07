@@ -10,7 +10,6 @@ const INITIAL_STATE = {
   yearOptions: undefined,
   selectedYear: undefined,
   isFetching: false,
-  isUpdating: false,
   errorMessage: undefined,
 };
 
@@ -36,20 +35,15 @@ const expenseReducer = (state = INITIAL_STATE, action) => {
     case ExpenseActionTypes.UPDATE_MONTH_START:
     case ExpenseActionTypes.UPDATE_YEAR_START:
     case ExpenseActionTypes.UPDATE_TABLE_START:
+    case ExpenseActionTypes.REMOVE_ITEMS_SUCCESS:
+    case ExpenseActionTypes.UPDATE_ITEMS_SUCCESS:
       return {
         ...state,
-        isUpdating: true,
       };
     case ExpenseActionTypes.FETCH_ITEMS_START:
       return {
         ...state,
         isFetching: true,
-      };
-    case ExpenseActionTypes.REMOVE_ITEMS_SUCCESS:
-    case ExpenseActionTypes.UPDATE_ITEMS_SUCCESS:
-      return {
-        ...state,
-        isUpdating: false,
       };
     case ExpenseActionTypes.FETCH_ITEMS_SUCCESS:
       return {
@@ -60,14 +54,12 @@ const expenseReducer = (state = INITIAL_STATE, action) => {
     case ExpenseActionTypes.FETCH_MONTHS_SUCCESS:
       return {
         ...state,
-        isFetching: false,
         monthOptions: action.payload,
         selectedMonth: action.payload[(new Date()).getMonth()],
       };
     case ExpenseActionTypes.FETCH_YEARS_SUCCESS:
       return {
         ...state,
-        isFetching: false,
         yearOptions: action.payload,
         selectedYear: action.payload.filter((year) => {
           return year.label === (new Date()).getFullYear();
@@ -76,26 +68,22 @@ const expenseReducer = (state = INITIAL_STATE, action) => {
     case ExpenseActionTypes.FETCH_TABLES_SUCCESS:
       return {
         ...state,
-        isFetching: false,
         tableOptions: action.payload,
         selectedTable: action.payload[0],
       };
     case ExpenseActionTypes.UPDATE_MONTH_SUCCESS:
       return {
         ...state,
-        isFetching: false,
         selectedMonth: action.payload.option,
       };
     case ExpenseActionTypes.UPDATE_YEAR_SUCCESS:
       return {
         ...state,
-        isFetching: false,
         selectedYear: action.payload.option,
       };
     case ExpenseActionTypes.UPDATE_TABLE_SUCCESS:
       return {
         ...state,
-        isFetching: false,
         selectedTable: action.payload.option,
       };
     case ExpenseActionTypes.REMOVE_ITEMS_FAILURE:
@@ -105,7 +93,6 @@ const expenseReducer = (state = INITIAL_STATE, action) => {
     case ExpenseActionTypes.UPDATE_TABLE_FAILURE:
       return {
         ...state,
-        isUpdating: false,
         errorMessage: action.payload,
       };
     case ExpenseActionTypes.FETCH_MONTHS_FAILURE:
