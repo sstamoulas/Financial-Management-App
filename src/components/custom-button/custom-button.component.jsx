@@ -1,6 +1,10 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 import './custom-button.styles.scss';
+
+const areEqual = (prevProps, nextProps) => {
+  return prevProps.text === nextProps.text;
+}
 
 const CustomButton = ({ text, handler, className }) => (
   <button 
@@ -12,4 +16,4 @@ const CustomButton = ({ text, handler, className }) => (
   </button>
 );
 
-export default CustomButton;
+export default memo(CustomButton, areEqual);

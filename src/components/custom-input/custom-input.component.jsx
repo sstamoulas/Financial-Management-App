@@ -1,6 +1,11 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 import './custom-input.styles.scss';
+
+const areEqual = (prevProps, nextProps) => {
+  return prevProps.value === nextProps.value &&
+  prevProps.label === nextProps.label;
+}
 
 const CustomInput = ({ index, label, value, handler, className }) => (
   <>
@@ -15,4 +20,4 @@ const CustomInput = ({ index, label, value, handler, className }) => (
   </>
 );
 
-export default CustomInput;
+export default memo(CustomInput, areEqual);

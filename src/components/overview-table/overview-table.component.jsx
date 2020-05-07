@@ -1,4 +1,4 @@
-import React  from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 
 import CustomTH from '../custom-th/custom-th.component';
@@ -36,7 +36,7 @@ const OverviewTable = ({ credits, debits, updateItems, updateItemsStart }) => {
       <CustomTRTotal title='Total Savings' credits={credits} debits={debits} hasDueItems />
     </>
   )
-};
+}
 
 const mapStateToProps = (state) => ({
   debits: state.root.data.filter(data => !data.isExpense),

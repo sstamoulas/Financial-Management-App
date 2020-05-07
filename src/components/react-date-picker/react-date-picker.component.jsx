@@ -1,10 +1,14 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, memo } from 'react';
 
 import './react-date-picker.styles.scss';
 
 const DatePicker = lazy(() => import(/* webpackPreload: true */ 'react-datepicker'));
 
-require(/* webpackPreload: true */ 'react-datepicker/dist/react-datepicker.css')
+require(/* webpackPreload: true */ 'react-datepicker/dist/react-datepicker.css');
+
+const areEqual = (prevProps, nextProps) => {
+  return prevProps.date === nextProps.date;
+}
 
 const ReactDatePicker = ({ index, date, handler, className }) => (
   <Suspense fallback={<input />}>
@@ -19,4 +23,4 @@ const ReactDatePicker = ({ index, date, handler, className }) => (
   </Suspense>
 );
 
-export default ReactDatePicker;
+export default memo(ReactDatePicker, areEqual);

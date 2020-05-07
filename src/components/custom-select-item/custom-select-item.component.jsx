@@ -1,6 +1,10 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 import './custom-select-item.styles.scss';
+
+const areEqual = (prevProps, nextProps) => {
+  return prevProps.option === nextProps.option;
+}
 
 const CustomSelectItem = ({index, option, handler}) => (
   <span 
@@ -11,4 +15,4 @@ const CustomSelectItem = ({index, option, handler}) => (
   </span>
 );
 
-export default CustomSelectItem;
+export default memo(CustomSelectItem, areEqual);

@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useCallback } from 'react';
 import { connect } from 'react-redux';
 
 import MobileView from '../mobile-view/mobile-view.component';
@@ -18,17 +18,17 @@ const Main = ({ monthOptions, yearOptions, tableOptions,
   selectedMonth, selectedYear, selectedTable,
   updateMonthStart, updateYearStart, updateTableStart }) => {
 
-  const handleMonthSelectChange = (selectedIndex) => {
+  const handleMonthSelectChange = useCallback((selectedIndex) => {
     updateMonthStart(selectedIndex);
-  }
+  }, [updateMonthStart])
 
-  const handleYearSelectChange = (selectedIndex) => {
+  const handleYearSelectChange = useCallback((selectedIndex) => {
     updateYearStart(selectedIndex);
-  }
+  }, [updateYearStart])
 
-  const handleTableSelectChange = (selectedIndex) => {
+  const handleTableSelectChange = useCallback((selectedIndex) => {
     updateTableStart(selectedIndex);
-  }
+  }, [updateTableStart])
 
   const { width } = useWindowDimensions();
 
