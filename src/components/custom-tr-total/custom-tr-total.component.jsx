@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 
 import CustomTH from '../custom-th/custom-th.component';
 import CustomTD from '../custom-td/custom-td.component';
@@ -7,7 +7,7 @@ import { generateTotal } from '../../redux/expense/expense.utils';
 
 import './custom-tr-total.styles.scss';
 
-const CustomTRTotal = ({ title, credits, debits, hasDueItems }) => {
+const CustomTRTotal = ({ title, credits, debits, hasDueItems, isOverviewTable }) => {
   let dueCreditTotal = generateTotal(credits, 'due'), dueTotal = dueCreditTotal;
   let paidCreditTotal = generateTotal(credits, 'paid'), paidTotal = paidCreditTotal;
 
@@ -21,7 +21,16 @@ const CustomTRTotal = ({ title, credits, debits, hasDueItems }) => {
 
   return (
     <tr className='total-row'>
-      <CustomTH isLabel>{title}</CustomTH>
+      {
+        isOverviewTable ? (
+          <Fragment>
+            <CustomTH isLabel>---</CustomTH>
+            <CustomTD label={title} className={'bold'} isBlank />
+          </Fragment>
+        ) : (
+          <CustomTH isLabel>{title}</CustomTH>
+        )
+      }
       {
         hasDueItems ?
           <CustomTD isTotal value={dueTotal} />
@@ -29,7 +38,7 @@ const CustomTRTotal = ({ title, credits, debits, hasDueItems }) => {
           <CustomTD isBlank />
       }
       <CustomTD isTotal value={paidTotal} />
-      <CustomTD isBlank />
+      <CustomTD label={'---'} isBlank />
     </tr>
   )
 };

@@ -10,6 +10,7 @@ const EmptyComponent = () => <></>;
 
 const mapStateToProps = (state) => ({
   tableOptions: state.root.tableOptions,
+  selectedTable: state.root.selectedTable,
   headers: ['Remove', 'Name', 'Paid', 'Date'],
   credits: state.root.data,
   hasDueItems: false,

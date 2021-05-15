@@ -1,15 +1,15 @@
 import firebase from 'firebase/app';
-require(/* webpackPreconnect: true */ 'firebase/firestore');
+import 'firebase/firestore';
 
 // Your web app's Firebase configuration
 var firebaseConfig = {
-  apiKey: 'AIzaSyDvvv5xqHf7cBjka8c4bvzl0tu_OLNy6Qg',
-  authDomain: 'financial-management-app.firebaseapp.com',
-  databaseURL: 'https://financial-management-app.firebaseio.com',
-  projectId: 'financial-management-app',
-  storageBucket: 'financial-management-app.appspot.com',
-  messagingSenderId: '1002166492797',
-  appId: '1:1002166492797:web:45270f15ee77a256f31b14'
+  apiKey: "AIzaSyDvY_kpNHghmgENrcxU_N88qUN5W4ng1Wc",
+  authDomain: "yiayia-s-budgeting-app.firebaseapp.com",
+  projectId: "yiayia-s-budgeting-app",
+  storageBucket: "yiayia-s-budgeting-app.appspot.com",
+  messagingSenderId: "922245754332",
+  appId: "1:922245754332:web:a8aaf3b95415bdf4e47319",
+  measurementId: "G-QC31VKKFBR"
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
@@ -50,6 +50,38 @@ export const updateFiscalMonthlyDocument = async (path, tableName, items) => {
   }
 
   return docRef;
+}
+
+export const addTableToOverview = async (path, tableInfo) => {
+  const docRef = firestore.collection(path).doc('Overview');
+  const snapShot = await docRef.get();
+  const data = snapShot.data();
+
+  try {
+    await docRef.set({
+      tables: [...data.tables, tableInfo],
+    }, {
+      merge: true,
+    });
+  } catch(error) {
+    console.log(`error updating collection ${path}/Overview`, error.message);
+  }
+
+  return docRef.get();
+}
+
+export const updateMetaTable = async (tables) => {
+  const docRef = firestore.collection('meta').doc('tables');
+
+  try {
+    await docRef.update({
+      tables,
+    });
+  } catch(error) {
+    console.log(`error updating collection meta/tables`, error.message);
+  }
+
+  return docRef.get();
 }
 
 export const convertCollectionsSnapshotToMap = (collections) => {

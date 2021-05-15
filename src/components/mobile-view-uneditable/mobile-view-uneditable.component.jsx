@@ -1,25 +1,25 @@
 import React  from 'react';
-import { connect } from 'react-redux';
+
+import MobileViewItem from '../mobile-view-item/mobile-view-item.component';
 
 import './mobile-view-uneditable.styles.scss';
 
-const MobileViewUneditable = ({ label, due, paid, tableOptions, tabHandler }) => (
+const MobileViewUneditable = ({ option, tabHandler, updateHandler }) => (
   <>
     <div className="mt-5">
-      <div className="w-100">
-        <label>Due:&nbsp;</label>
-        <label>{due}</label>
-      </div>
+      <MobileViewItem 
+        option={option} 
+        label='Due' 
+        updateHandler={updateHandler} 
+      />
       <div className="w-100">
         <label>Paid:&nbsp;</label>
-        <label>{paid}</label>
+        <label>{option.paid}</label>
       </div>
       <div className="w-100">
         <label>Date:&nbsp;</label>
         <a href='/#' 
-          onClick={() => 
-            tabHandler((tableOptions.find(option => option.label === `${label} Expense`)).value)
-          }
+          onClick={() => tabHandler(option.label)}
         >
           See Columns
         </a>
@@ -28,8 +28,4 @@ const MobileViewUneditable = ({ label, due, paid, tableOptions, tabHandler }) =>
   </>
 );
 
-const mapStateToProps = (state) => ({
-  tableOptions: state.root.tableOptions,
-});
-
-export default connect(mapStateToProps)(MobileViewUneditable);
+export default MobileViewUneditable;

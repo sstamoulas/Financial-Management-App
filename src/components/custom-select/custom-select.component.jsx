@@ -42,7 +42,6 @@ const CustomSelect = ({size, identifier, options, handler, selectedItem}) => {
                   options.map((option, index) => (
                     <CustomSelectItem
                       key={`${identifier}-${index}`}
-                      index={index}
                       option={option}
                       handler={handler}
                     />

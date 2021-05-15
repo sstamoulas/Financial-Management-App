@@ -6,10 +6,10 @@ const areEqual = (prevProps, nextProps) => {
   return prevProps.option === nextProps.option;
 }
 
-const CustomSelectItem = ({index, option, handler}) => (
+const CustomSelectItem = ({option, handler}) => (
   <span 
     className='select-link' 
-    onClick={() => handler(index)}
+    onClick={() => handler(option.value)}
   >
     {option.label}
   </span>

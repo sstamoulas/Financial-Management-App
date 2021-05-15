@@ -9,13 +9,11 @@ import { fetchMetaStart } from './redux/expense/expense.actions';
 import './App.styles.scss';
 
 const App = ({ isFetching, fetchMetaStart }) => {
-  const isMounted = useRef(!!localStorage.getItem('persist:root'));
+  const isMounted = useRef(false);
 
   useEffect(() => {
     if (!isMounted.current) {
-      if(!localStorage.getItem('persist:root')) {
-        fetchMetaStart();
-      }
+      fetchMetaStart();
       isMounted.current = true;
     }
   }, [isFetching, fetchMetaStart]);

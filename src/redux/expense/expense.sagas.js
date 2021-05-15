@@ -4,9 +4,15 @@ import {
   createFiscalMonthlyDocument,
   readFiscalMonthlyDocument,
   updateFiscalMonthlyDocument,
+  updateMetaTable,
+  addTableToOverview,
 } from '../../firebase/firebase.utils';
 import {
   fetchItemsStart,
+  addMetaTableSuccess,
+  addMetaTableFailure,
+  removeMetaTableSuccess,
+  removeMetaTableFailure,
   updateMonthSuccess,
   updateMonthFailure,
   updateYearSuccess,
@@ -26,7 +32,7 @@ import {
   removeItemsSuccess,
   removeItemsFailure,
 } from './expense.actions';
-import { updateItem, generateTotal } from './expense.utils';
+import { updateItem, generateTotal, months, years, tables } from './expense.utils';
 
 export function* fetchItemsAsync() {
   let {root: {selectedTable, selectedMonth, selectedYear}} = yield select();
@@ -41,19 +47,27 @@ export function* fetchItemsAsync() {
     yield put(fetchItemsSuccess(data));
   } catch(error) {
     try {
-      let expenses = {expenses: []};
+      let metaTables = {tables: []};
       if(!selectedTable.value) {
-        expenses = yield call(
+        metaTables = yield call(
           readFiscalMonthlyDocument,
           'meta',
-          'defaultTable'
+          'tables'
         );
       }
+
+      if(metaTables === undefined) {
+        metaTables = { tables: tables };
+      }
+
+      metaTables = {tables: metaTables.tables.filter((table) => table.value !== 0).map((table) => {
+        return {...table, due: 0};
+      })};
 
       yield call(
         createFiscalMonthlyDocument,
         `${selectedMonth.label}-${selectedYear.label}`,
-        selectedTable.label, expenses
+        selectedTable.label, metaTables
       );
 
       const data = yield call(
@@ -69,62 +83,52 @@ export function* fetchItemsAsync() {
   }
 }
 
+export function* addMetaTableAsync({ payload: { tableInfo }}) {
+  let {root: { selectedMonth, selectedYear, tableOptions }} = yield select();
+
+  try {
+    yield put(fetchItemsStart());
+    const tables = [...tableOptions, tableInfo]
+
+    console.log(tableOptions, tableInfo, tables);
+    yield call(updateMetaTable, tables);
+    yield call(addTableToOverview, `${selectedMonth.label}-${selectedYear.label}`, tableInfo);
+    const task = yield fork(fetchTables);
+    yield join([task]);
+    yield call(fetchItemsAsync);
+    yield put(addMetaTableSuccess());
+  } catch(error) {
+    yield put(addMetaTableFailure(error));
+  }
+}
+
+export function* removeMetaTableAsync({ payload: { selectedValue }}) {
+  let {root: { tableOptions }} = yield select();
+
+  try {
+    yield put(fetchItemsStart());
+    const tables = tableOptions
+      .filter((table) => table.value !== selectedValue)
+      .map((table) => {
+        return {
+          label: table.label, 
+          value: table.value, 
+          hasOwnTable: table.hasOwnTable, 
+          isExpense: table.isExpense
+        };
+      });
+    yield call(updateMetaTable, tables);
+    const task = yield fork(fetchTables);
+    yield join([task]);
+    yield call(fetchItemsAsync);
+    yield put(removeMetaTableSuccess());
+  } catch(error) {
+    yield put(removeMetaTableFailure(error));
+  }
+}
+
 export function* fetchTables() {
-  try {
-    const data = yield call(
-      readFiscalMonthlyDocument,
-      'meta',
-      'tables'
-    );
-
-    yield put(fetchTablesSuccess(data));
-  } catch(error) {
-    yield put(fetchTablesFailure(error.message));
-  }
-}
-
-export function* fetchMonths() {
-  try {
-    const data = yield call(
-      readFiscalMonthlyDocument,
-      'meta',
-      'months'
-    );
-
-    yield put(fetchMonthsSuccess(data));
-  } catch(error) {
-    yield put(fetchMonthsFailure(error.message));
-  }
-}
-
-export function* fetchYears() {
-  try {
-    const data = yield call(
-      readFiscalMonthlyDocument,
-      'meta',
-      'years'
-    );
-
-    yield put(fetchYearsSuccess(data));
-  } catch(error) {
-    yield put(fetchYearsFailure(error.message));
-  }
-}
-
-export function* fetchMetaAsync() {
-  yield put(fetchItemsStart());
-  const task1 = yield fork(fetchTables);
-  const task2 = yield fork(fetchMonths);
-  const task3 = yield fork(fetchYears);
-  yield join([task1, task2, task3]);
-
-  yield call(fetchItemsAsync);
-}
-
-export function* updateOverviewItemsAsync({payload: {expenses, column}}) {
-  const {root: {selectedMonth, selectedYear}} = yield select();
-
-  const total = generateTotal(expenses, 'paid');
+  let {root: {selectedMonth, selectedYear}} = yield select();
 
   try {
     let data = yield call(
@@ -133,15 +137,105 @@ export function* updateOverviewItemsAsync({payload: {expenses, column}}) {
       'Overview'
     );
 
-    let index = data.expenses.findIndex(item => item.label === column)
+    const dataTables = data.tables.map((table) => {
+      return {
+        label: table.label, 
+        value: table.value, 
+        hasOwnTable: table.hasOwnTable, 
+        isExpense: table.isExpense
+      };
+    });
 
-    let arr = yield updateItem(data.expenses, {index, value: total, label: 'paid'})
+    yield put(fetchTablesSuccess({tables: [...tables, ...dataTables]}));
+  } catch(error) {
+    try {
+      let metaTables = yield call(
+        readFiscalMonthlyDocument,
+        'meta',
+        'tables'
+      );
+
+      if(metaTables === undefined) {
+        yield call(
+          createFiscalMonthlyDocument,
+          'meta',
+          'tables', { tables: tables }
+        );
+
+        metaTables = yield call(
+          readFiscalMonthlyDocument,
+          'meta',
+          'tables'
+        );
+      }
+
+      yield put(fetchTablesSuccess(metaTables));
+    } catch(error) {
+      yield put(fetchTablesFailure(error.message));
+    }
+  }
+}
+
+export function* fetchMonths() {
+  try {
+    // const data = yield call(
+    //   readFiscalMonthlyDocument,
+    //   'meta',
+    //   'months'
+    // );
+
+    yield put(fetchMonthsSuccess(months));
+  } catch(error) {
+    yield put(fetchMonthsFailure(error.message));
+  }
+}
+
+export function* fetchYears() {
+  try {
+    // const data = yield call(
+    //   readFiscalMonthlyDocument,
+    //   'meta',
+    //   'years'
+    // );
+
+    yield put(fetchYearsSuccess(years));
+  } catch(error) {
+    yield put(fetchYearsFailure(error.message));
+  }
+}
+
+export function* fetchMetaAsync() {
+  yield put(fetchItemsStart());
+  const task1 = yield fork(fetchMonths);
+  const task2 = yield fork(fetchYears);
+  yield join([task1, task2]);
+  const task3 = yield fork(fetchTables);
+  yield join(task3);
+
+  yield call(fetchItemsAsync);
+}
+
+export function* updateOverviewItemsAsync({payload: {tables, column}}) {
+  const {root: {selectedMonth, selectedYear}} = yield select();
+
+  const total = generateTotal(tables, 'paid');
+
+  try {
+    let data = yield call(
+      readFiscalMonthlyDocument,
+      `${selectedMonth.label}-${selectedYear.label}`,
+      'Overview'
+    );
+
+    let table = data.tables.filter(item => item.label === column)[0];
+
+    let arr = yield updateItem(data.tables, {index: table.value, value: total, label: 'paid'})
 
     yield call(
       updateFiscalMonthlyDocument,
       `${selectedMonth.label}-${selectedYear.label}`,
       'Overview',
-      {'expenses': arr},
+      {'tables': arr},
     );
   } catch(error) {
     console.log(error.message)
@@ -157,7 +251,7 @@ export function* updateItems(index, value, label, items) {
       updateFiscalMonthlyDocument,
       `${selectedMonth.label}-${selectedYear.label}`,
       selectedTable.label,
-      {expenses: items}
+      {tables: items}
     );
 
     yield put(updateItemsSuccess());
@@ -174,8 +268,7 @@ export function* updateItemsAsync({payload: {index, value, label}}) {
 
   // If this is the Overview Table then do not update it
   if(selectedTable.value) {
-    let tableName = selectedTable.label.substring(0, selectedTable.label.indexOf(' Expense'));
-    yield updateOverviewItemsAsync({payload: {expenses: data, column: tableName}});
+    yield updateOverviewItemsAsync({payload: {tables: data, column: selectedTable.label}});
   }
 }
 
@@ -187,7 +280,7 @@ export function* removeItems(index) {
       updateFiscalMonthlyDocument,
       `${selectedMonth.label}-${selectedYear.label}`,
       selectedTable.label,
-      {expenses: data}
+      {tables: data}
     );
 
     let items = yield call(
@@ -208,44 +301,45 @@ export function* removeItemsAsync({payload: {index}}) {
   const task = yield fork(removeItems, index);
   yield join(task);
 
-  let tableName = selectedTable.label.substring(0, selectedTable.label.indexOf(' Expense'));
-  yield updateOverviewItemsAsync({payload: {expenses: data, column: tableName}});
+  yield updateOverviewItemsAsync({payload: {tables: data, column: selectedTable.label}});
 }
 
-export function* updateMonthAsync({payload: {selectedIndex}}) {
+export function* updateMonthAsync({payload: {selectedValue}}) {
   const {root: {monthOptions}} = yield select();
 
   try {
     yield put(fetchItemsStart());
-    const option = monthOptions.find((option, index) => index === selectedIndex);
+    const option = monthOptions.find((option) => option.value === selectedValue);
     yield put(updateMonthSuccess(option));
 
+    yield call(fetchTables);
     yield call(fetchItemsAsync);
   } catch(error) {
     yield put(updateMonthFailure(error.message));
   }
 }
 
-export function* updateYearAsync({payload: {selectedIndex}}) {
+export function* updateYearAsync({payload: {selectedValue}}) {
   const {root: {yearOptions}} = yield select();
 
   try {
     yield put(fetchItemsStart());
-    const option = yearOptions.find((option, index) => index === selectedIndex);
+    const option = yearOptions.find((option) => option.value === selectedValue);
     yield put(updateYearSuccess(option));
-
+    
+    yield call(fetchTables);
     yield call(fetchItemsAsync);
   } catch(error) {
     yield put(updateYearFailure(error.message));
   }
 }
 
-export function* updateTableAsync({payload: {selectedIndex}}) {
+export function* updateTableAsync({payload: {selectedValue}}) {
   const {root: {tableOptions}} = yield select();
 
   try {
     yield put(fetchItemsStart());
-    const option = tableOptions.find((option, index) => index === selectedIndex);
+    const option = tableOptions.find((option) => option.value === selectedValue);
     yield put(updateTableSuccess(option));
 
     yield call(fetchItemsAsync);
@@ -258,6 +352,20 @@ export function* fetchMetaStart() {
   yield takeLatest(
     ExpenseActionTypes.FETCH_META_START,
     fetchMetaAsync
+  );
+}
+
+export function* addMetaTableStart() {
+  yield takeLatest(
+    ExpenseActionTypes.ADD_META_TABLE_START,
+    addMetaTableAsync
+  );
+}
+
+export function* removeMetaTableStart() {
+  yield takeLatest(
+    ExpenseActionTypes.REMOVE_META_TABLE_START,
+    removeMetaTableAsync
   );
 }
 
@@ -306,6 +414,8 @@ export function* updateTableStart() {
 export function* expenseSagas() {
   yield all([
     call(fetchMetaStart),
+    call(addMetaTableStart),
+    call(removeMetaTableStart),
     call(updateItemsStart),
     call(updateOverviewItemsStart),
     call(removeItemsStart),

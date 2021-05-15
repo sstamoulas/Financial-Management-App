@@ -1,34 +1,73 @@
-import React, { Suspense, lazy, useCallback } from 'react';
-import { connect } from 'react-redux';
+import React, { Fragment, Suspense, lazy, useCallback, useState } from 'react';
+import { connect, batch } from 'react-redux';
 
 import MobileView from '../mobile-view/mobile-view.component';
 import CustomSelect from '../custom-select/custom-select.component';
 import OverviewTableContainer from '../overview-table/overview-table.container';
 
-import { updateMonthStart, updateYearStart, updateTableStart } from '../../redux/expense/expense.actions';
+import { 
+  addMetaTableStart, 
+  updateMonthStart, 
+  updateYearStart, 
+  updateTableStart 
+} from '../../redux/expense/expense.actions';
 
 import useWindowDimensions from '../../hooks/useWindowDimensions.js';
 
 import './main.styles.scss';
 
 const CustomTable = lazy(() => import(/* webpackPreload: true */ '../custom-table/custom-table.component'));
-const StaticTable = lazy(() => import(/* webpackPreload: true */ '../static-table/static-table.component'));
+
+const INITIAL_STATE = {
+  label: '',
+  value: '',
+  hasOwnTable: false,
+  isExpense: false,
+}
 
 const Main = ({ monthOptions, yearOptions, tableOptions, 
   selectedMonth, selectedYear, selectedTable,
-  updateMonthStart, updateYearStart, updateTableStart }) => {
+  updateMonthStart, updateYearStart, updateTableStart, addMetaTableStart }) => {
+  const [table, setTable] = useState({ ...INITIAL_STATE })
 
-  const handleMonthSelectChange = useCallback((selectedIndex) => {
-    updateMonthStart(selectedIndex);
+  const handleAddMetaTableText = (event) => {
+    const {value} = event.target;
+
+    setTable(prevState => ({ ...prevState, 'label': value, 'value': tableOptions[tableOptions.length - 1].value + 1 }));
+  }
+
+  const handleAddMetaTableCheckbox = (event) => {
+    const {name, checked} = event.target;
+
+    setTable(prevState => ({ ...prevState, [name]: checked }));
+  }
+
+  const onSubmit = (event) => {
+    batch(() => {
+      addMetaTableStart(table);
+      setTable({ ...INITIAL_STATE });
+    });
+
+    event.preventDefault();
+  }
+
+  const handleMonthSelectChange = useCallback((selectedValue) => {
+    updateMonthStart(selectedValue);
   }, [updateMonthStart])
 
-  const handleYearSelectChange = useCallback((selectedIndex) => {
-    updateYearStart(selectedIndex);
+  const handleYearSelectChange = useCallback((selectedValue) => {
+    updateYearStart(selectedValue);
   }, [updateYearStart])
 
-  const handleTableSelectChange = useCallback((selectedIndex) => {
-    updateTableStart(selectedIndex);
+  const handleTableSelectChange = useCallback((selectedValue) => {
+    updateTableStart(selectedValue);
   }, [updateTableStart])
+
+  const findTable = (value) => {
+    const option = tableOptions.find(option => option.value === value);
+
+    return option.value;
+  }
 
   const { width } = useWindowDimensions();
 
@@ -58,30 +97,37 @@ const Main = ({ monthOptions, yearOptions, tableOptions,
           size='medium-size'
           identifier='tabs'
           handler={handleTableSelectChange}
-          options={tableOptions}
+          options={tableOptions.filter((table) => table.hasOwnTable)}
           selectedItem={selectedTable}
         />
       </div>
       {
         width <= 576 ?
-          selectedTable && selectedTable.value === 13 ?
-            <Suspense fallback={<div>Loading...</div>}>
-              <StaticTable />
-            </Suspense>
+          <MobileView tabHandler={(value) => handleTableSelectChange(findTable(value))} />
+        :
+          selectedTable && selectedTable.value === 0 ?
+              <Fragment>
+                <div className='text-center new-table-container'>
+                  <div>Add A Table</div>
+                  <div className='d-flex justify-content-center'>
+                    <input type='text' id='tableName' className='input-control medium-size' placeholder='Table Name' value={table.label} onChange={handleAddMetaTableText} />
+                  </div>
+                  <div className='d-flex justify-content-space-evenly checkbox-top-margin'>
+                    <label htmlFor='hasOwnTable'>Has Own Table:&nbsp;</label>
+                    <input type='checkbox' className='checkbox-margin checkbox-top-margin' id='hasOwnTable' name='hasOwnTable' checked={table.hasOwnTable} onChange={handleAddMetaTableCheckbox} />
+                    <label htmlFor='isExpense'>Is Expense:&nbsp;</label>
+                    <input type='checkbox' className='checkbox-margin checkbox-top-margin' id='isExpense' name='isExpense' checked={table.isExpense} onChange={handleAddMetaTableCheckbox} />
+                  </div>
+                  <div className='d-flex justify-content-center'>
+                    <input type='button' value='Submit' onClick={onSubmit} />
+                  </div>
+                </div>
+                <OverviewTableContainer tabHandler={(value) => handleTableSelectChange(findTable(value))} />
+              </Fragment>
           :
-            <MobileView tabHandler={handleTableSelectChange} />
-        :
-        selectedTable && selectedTable.value === 0 ?
-          <OverviewTableContainer tabHandler={handleTableSelectChange} />
-        :
-        selectedTable && selectedTable.value === 13 ?
-          <Suspense fallback={<div>Loading...</div>}>
-            <StaticTable />
-          </Suspense>
-        : 
-          <Suspense fallback={<div>Loading...</div>}>
-            <CustomTable />
-          </Suspense>
+            <Suspense fallback={<div>Loading...</div>}>
+              <CustomTable />
+            </Suspense>
       }
     </div>
   )
@@ -97,6 +143,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  addMetaTableStart: (tableInfo) => dispatch(addMetaTableStart(tableInfo)),
   updateTableStart: (option) => dispatch(updateTableStart(option)),
   updateMonthStart: (option) => dispatch(updateMonthStart(option)),
   updateYearStart: (option) => dispatch(updateYearStart(option)),

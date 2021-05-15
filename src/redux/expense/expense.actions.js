@@ -1,5 +1,33 @@
 import ExpenseActionTypes from './expense.types';
 
+export const addMetaTableStart = (tableInfo) => ({
+  type: ExpenseActionTypes.ADD_META_TABLE_START,
+  payload: { tableInfo },
+});
+
+export const addMetaTableSuccess = () => ({
+  type: ExpenseActionTypes.ADD_META_TABLE_SUCCESS,
+});
+
+export const addMetaTableFailure = (errorMessage) => ({
+  type: ExpenseActionTypes.ADD_META_TABLE_FAILURE,
+  payload: errorMessage,
+});
+
+export const removeMetaTableStart = (selectedValue) => ({
+  type: ExpenseActionTypes.REMOVE_META_TABLE_START,
+  payload: { selectedValue },
+});
+
+export const removeMetaTableSuccess = () => ({
+  type: ExpenseActionTypes.REMOVE_META_TABLE_SUCCESS,
+});
+
+export const removeMetaTableFailure = (errorMessage) => ({
+  type: ExpenseActionTypes.REMOVE_META_TABLE_FAILURE,
+  payload: errorMessage,
+});
+
 export const addItem = () => ({
   type: ExpenseActionTypes.ADD_ITEM,
 });
@@ -43,14 +71,14 @@ export const updateItemsFailure = (errorMessage) => ({
   payload: errorMessage,
 });
 
-export const updateOverviewItemsStart = (expenses, column) => ({
+export const updateOverviewItemsStart = (tables, column) => ({
   type: ExpenseActionTypes.UPDATE_OVERVIEW_ITEMS_START,
-  payload: {expenses, column},
+  payload: {tables, column},
 });
 
-export const updateMonthStart = (selectedIndex) => ({
+export const updateMonthStart = (selectedValue) => ({
   type: ExpenseActionTypes.UPDATE_MONTH_START,
-  payload: {selectedIndex},
+  payload: {selectedValue},
 });
 
 export const updateMonthSuccess = (option) => ({
@@ -63,9 +91,9 @@ export const updateMonthFailure  = (errorMessage) => ({
   payload: errorMessage,
 });
 
-export const updateYearStart = (selectedIndex) => ({
+export const updateYearStart = (selectedValue) => ({
   type: ExpenseActionTypes.UPDATE_YEAR_START,
-  payload: {selectedIndex},
+  payload: {selectedValue},
 });
 
 export const updateYearSuccess = (option) => ({
@@ -78,9 +106,9 @@ export const updateYearFailure  = (errorMessage) => ({
   payload: errorMessage,
 });
 
-export const updateTableStart = (selectedIndex) => ({
+export const updateTableStart = (selectedValue) => ({
   type: ExpenseActionTypes.UPDATE_TABLE_START,
-  payload: {selectedIndex},
+  payload: {selectedValue},
 });
 
 export const updateTableSuccess = (option) => ({
@@ -97,7 +125,7 @@ export const fetchMetaStart = () => ({
   type: ExpenseActionTypes.FETCH_META_START,
 });
 
-export const fetchMonthsSuccess = ({months}) => ({
+export const fetchMonthsSuccess = (months) => ({
   type: ExpenseActionTypes.FETCH_MONTHS_SUCCESS,
   payload: months,
 });
@@ -107,7 +135,7 @@ export const fetchMonthsFailure = ({errorMessage}) => ({
   payload: errorMessage,
 });
 
-export const fetchYearsSuccess = ({years}) => ({
+export const fetchYearsSuccess = (years) => ({
   type: ExpenseActionTypes.FETCH_YEARS_SUCCESS,
   payload: years,
 });
@@ -131,9 +159,9 @@ export const fetchItemsStart = () => ({
   type: ExpenseActionTypes.FETCH_ITEMS_START,
 });
 
-export const fetchItemsSuccess = ({expenses}) => ({
+export const fetchItemsSuccess = ({tables}) => ({
   type: ExpenseActionTypes.FETCH_ITEMS_SUCCESS,
-  payload: expenses,
+  payload: tables,
 });
 
 export const fetchItemsFailure = (errorMessage) => ({

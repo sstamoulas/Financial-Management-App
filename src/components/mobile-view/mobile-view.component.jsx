@@ -40,23 +40,26 @@ const MobileView = ({ options, tableOptions, credits, debits,
     setSelectedIndex(index)
   }
 
-  if(!!options.length && options.length < (selectedIndex + 1)) {
+  if(options && !!options.length && options.length < (selectedIndex + 1)) {
     setSelectedIndex(0);
   }
 
-  const selectOptions = options.map(({paid, label}, index) => {
+  const selectOptions = options && options.map(({paid, label}, index) => {
     return {label: `${label.substring(0, 25)} - $${!isNaN(paid) ? thousandsSeparator(invertNegative(parseFloat(paid).toFixed(2))) : 0}`, index}
   });
 
-  let creditTotal = generateTotal(credits, 'paid'), total = creditTotal;
+  let creditPaidTotal = generateTotal(credits, 'paid'), totalPaid = creditPaidTotal;
+  let creditDueTotal = generateTotal(credits, 'due'), totalDue = creditDueTotal;
 
   if(debits) {
-    const debitTotal = generateTotal(debits, 'paid');
+    const debitPaidTotal = generateTotal(debits, 'paid');
+    const debitDueTotal = generateTotal(debits, 'due');
 
-    total = debitTotal - creditTotal;
+    totalPaid = debitPaidTotal - creditPaidTotal;
+    totalDue = debitDueTotal - creditDueTotal;
   }
 
-  return !!options.length ?
+  return options && !!options.length ?
     (
       <>
         <div className='d-flex justify-content-center'>
@@ -68,18 +71,22 @@ const MobileView = ({ options, tableOptions, credits, debits,
             selectedItem={selectOptions[selectedIndex]}
           />
         </div>
-        <div className={`mt-5 d-flex justify-content-center ${isNegative(total)}`} style={{fontSize: '25px'}}>Total: ${thousandsSeparator(invertNegative((total).toFixed(2)))}</div>
+        <div className={'mt-5 d-flex justify-content-center'} style={{fontSize: '25px'}}>Budget: ${thousandsSeparator(invertNegative((totalDue).toFixed(2)))}</div>
+        <div className={`d-flex justify-content-center ${isNegative(totalPaid)}`} style={{fontSize: '25px'}}>Total: ${thousandsSeparator(invertNegative((totalPaid).toFixed(2)))}</div>
         {     
           !options[selectedIndex].hasOwnProperty('due') &&
             <CustomButton text='Add New Expense' handler={addRow} className="mt-5" />
         }
         {        
           options[selectedIndex].hasOwnTable ?
-            <MobileViewUneditable tabHandler={tabHandler} {...options[selectedIndex]} />
+            <MobileViewUneditable 
+              tabHandler={tabHandler} 
+              updateHandler={update} 
+              option={options[selectedIndex]} 
+            />
           :
             <MobileViewEditable 
-              index={selectedIndex}
-              options={options} 
+              option={options[selectedIndex]} 
               updateHandler={update} 
               addHandler={addRow} 
               removeHandler={removeRow}
@@ -90,7 +97,8 @@ const MobileView = ({ options, tableOptions, credits, debits,
   :
     (
       <>
-        <div className="mt-5 d-flex justify-content-center" style={{fontSize: '25px'}}>Total: ${thousandsSeparator(parseFloat(total).toFixed(2))}</div>
+        <div className={'mt-5 d-flex justify-content-center'} style={{fontSize: '25px'}}>Budget: ${thousandsSeparator(invertNegative((totalDue).toFixed(2)))}</div>
+        <div className="d-flex justify-content-center" style={{fontSize: '25px'}}>Total: ${thousandsSeparator(parseFloat(totalPaid).toFixed(2))}</div>
         <CustomButton text='Add New Expense' handler={addRow} className="mt-5" />
       </>
     )
@@ -98,8 +106,8 @@ const MobileView = ({ options, tableOptions, credits, debits,
 
 const mapStateToProps = (state) => ({
   options: state.root.data,
-  credits: state.root.data.filter(data => data.isExpense),
-  debits: state.root.data.filter(data => !data.isExpense),
+  credits: state.root.data && state.root.data.filter(data => data.isExpense),
+  debits: state.root.data && state.root.data.filter(data => !data.isExpense),
 });
 
 const mapDispatchToProps = (dispatch) => ({

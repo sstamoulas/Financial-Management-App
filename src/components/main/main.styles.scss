@@ -1,0 +1,43 @@
+.input-control {
+  height: 40px;
+  border: none;
+  outline: none;
+  color: #212112;
+  transition: .3s;
+  font-weight: 500;
+  box-shadow: unset;
+  border-radius: 4px;
+  padding-left: 15px;
+  padding-right: 15px;
+  background: #F2F2F2;
+  box-sizing: border-box;
+  text-shadow: 0 0 0 #212112;
+
+  &:focus {
+    outline: none;
+    background: darken(#F2F2F2, 4%);
+  }
+}
+
+.medium-size {
+  min-width: 329px;
+  width: 329px;
+}
+
+.small-size {
+  min-width: 150px;
+  width: 150px;
+}
+
+.new-table-container {
+  margin: 0 auto;
+  width: 480px;
+}
+
+.checkbox-top-margin {
+  margin-top: 7px;
+}
+
+.checkbox-margin{
+  margin-left: -70px;
+}
