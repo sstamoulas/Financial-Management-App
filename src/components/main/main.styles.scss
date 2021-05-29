@@ -32,6 +32,19 @@
 .new-table-container {
   margin: 0 auto;
   width: 480px;
+
+  @media (max-width: 576px) {
+    width: unset;
+  }
+}
+
+.checkbox-width {
+  margin: 0 auto;
+  width: 450px;
+
+  @media (max-width: 576px) {
+    width: 360px;
+  }
 }
 
 .checkbox-top-margin {
@@ -39,5 +52,9 @@
 }
 
 .checkbox-margin{
-  margin-left: -70px;
+  margin-left: -60px;
+
+  @media (max-width: 576px) {
+    margin-left: -20px;
+  }
 }

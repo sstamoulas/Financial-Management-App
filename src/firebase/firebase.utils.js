@@ -15,6 +15,7 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 export const createFiscalMonthlyDocument = async (path, tableName, data) => {
+  console.log(path, tableName, data)
   const docRef = firestore.doc(`${path}/${tableName}`);
   const snapShot = await docRef.get();
 

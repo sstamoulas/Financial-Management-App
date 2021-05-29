@@ -4,7 +4,7 @@ import MobileViewItem from '../mobile-view-item/mobile-view-item.component';
 
 import './mobile-view-editable.styles.scss';
 
-const MobileViewSection = ({ option, updateHandler, addHandler, removeHandler }) => (
+const MobileViewSection = ({ option, updateHandler, addHandler, removeHandler }) => console.log(option) || (
   <>
     {
       option && option.hasOwnProperty('due') ? 
@@ -19,6 +19,7 @@ const MobileViewSection = ({ option, updateHandler, addHandler, removeHandler })
           label='Label'
           updateHandler={updateHandler} 
           addHandler={addHandler} 
+          isDisabled={!!option.hasOwnProperty('isExpense')}
           usesButton 
         />
     }

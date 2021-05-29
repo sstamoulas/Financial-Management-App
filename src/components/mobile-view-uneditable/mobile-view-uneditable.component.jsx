@@ -4,7 +4,7 @@ import MobileViewItem from '../mobile-view-item/mobile-view-item.component';
 
 import './mobile-view-uneditable.styles.scss';
 
-const MobileViewUneditable = ({ option, tabHandler, updateHandler }) => (
+const MobileViewUneditable = ({ option, tabHandler, updateHandler }) => console.log(option) || (
   <>
     <div className="mt-5">
       <MobileViewItem 
@@ -19,7 +19,7 @@ const MobileViewUneditable = ({ option, tabHandler, updateHandler }) => (
       <div className="w-100">
         <label>Date:&nbsp;</label>
         <a href='/#' 
-          onClick={() => tabHandler(option.label)}
+          onClick={() => tabHandler(option.value)}
         >
           See Columns
         </a>

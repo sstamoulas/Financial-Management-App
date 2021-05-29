@@ -1,4 +1,4 @@
-import React, { Fragment, Suspense, lazy, useCallback, useState } from 'react';
+import React, { Suspense, lazy, useCallback, useState } from 'react';
 import { connect, batch } from 'react-redux';
 
 import MobileView from '../mobile-view/mobile-view.component';
@@ -66,6 +66,8 @@ const Main = ({ monthOptions, yearOptions, tableOptions,
   const findTable = (value) => {
     const option = tableOptions.find(option => option.value === value);
 
+    console.log('tableOptions and value:', tableOptions, value)
+
     return option.value;
   }
 
@@ -102,28 +104,30 @@ const Main = ({ monthOptions, yearOptions, tableOptions,
         />
       </div>
       {
+        selectedTable && selectedTable.value === 0 && (
+          <div className='text-center new-table-container'>
+            <div>Add A Table</div>
+            <div className='d-flex justify-content-center'>
+              <input type='text' id='tableName' className='input-control medium-size' placeholder='Table Name' value={table.label} onChange={handleAddMetaTableText} />
+            </div>
+            <div className='d-flex justify-content-space-evenly checkbox-top-margin checkbox-width'>
+              <label htmlFor='hasOwnTable'>Is Multiple Payments:&nbsp;</label>
+              <input type='checkbox' className='checkbox-margin checkbox-top-margin' id='hasOwnTable' name='hasOwnTable' checked={table.hasOwnTable} onChange={handleAddMetaTableCheckbox} />
+              <label htmlFor='isExpense'>Is Expense:&nbsp;</label>
+              <input type='checkbox' className='checkbox-margin checkbox-top-margin' id='isExpense' name='isExpense' checked={table.isExpense} onChange={handleAddMetaTableCheckbox} />
+            </div>
+            <div className='d-flex justify-content-center'>
+              <input type='button' value='Submit' onClick={onSubmit} />
+            </div>
+          </div>
+        )
+      }
+      {
         width <= 576 ?
           <MobileView tabHandler={(value) => handleTableSelectChange(findTable(value))} />
         :
           selectedTable && selectedTable.value === 0 ?
-              <Fragment>
-                <div className='text-center new-table-container'>
-                  <div>Add A Table</div>
-                  <div className='d-flex justify-content-center'>
-                    <input type='text' id='tableName' className='input-control medium-size' placeholder='Table Name' value={table.label} onChange={handleAddMetaTableText} />
-                  </div>
-                  <div className='d-flex justify-content-space-evenly checkbox-top-margin'>
-                    <label htmlFor='hasOwnTable'>Has Own Table:&nbsp;</label>
-                    <input type='checkbox' className='checkbox-margin checkbox-top-margin' id='hasOwnTable' name='hasOwnTable' checked={table.hasOwnTable} onChange={handleAddMetaTableCheckbox} />
-                    <label htmlFor='isExpense'>Is Expense:&nbsp;</label>
-                    <input type='checkbox' className='checkbox-margin checkbox-top-margin' id='isExpense' name='isExpense' checked={table.isExpense} onChange={handleAddMetaTableCheckbox} />
-                  </div>
-                  <div className='d-flex justify-content-center'>
-                    <input type='button' value='Submit' onClick={onSubmit} />
-                  </div>
-                </div>
-                <OverviewTableContainer tabHandler={(value) => handleTableSelectChange(findTable(value))} />
-              </Fragment>
+            <OverviewTableContainer tabHandler={(value) => handleTableSelectChange(findTable(value))} />
           :
             <Suspense fallback={<div>Loading...</div>}>
               <CustomTable />

@@ -90,10 +90,10 @@ export function* addMetaTableAsync({ payload: { tableInfo }}) {
     yield put(fetchItemsStart());
     const tables = [...tableOptions, tableInfo]
 
-    console.log(tableOptions, tableInfo, tables);
     yield call(updateMetaTable, tables);
     yield call(addTableToOverview, `${selectedMonth.label}-${selectedYear.label}`, tableInfo);
     const task = yield fork(fetchTables);
+    
     yield join([task]);
     yield call(fetchItemsAsync);
     yield put(addMetaTableSuccess());

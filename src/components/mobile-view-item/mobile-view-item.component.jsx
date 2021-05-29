@@ -6,7 +6,7 @@ import ReactDatePicker from '../react-date-picker/react-date-picker.component';
 
 import './mobile-view-item.styles.scss';
 
-const MobileViewItem = ({ label, option, isDate, updateHandler, addHandler, removeHandler }) => (
+const MobileViewItem = ({ label, option, isDate, isDisabled, updateHandler, addHandler, removeHandler }) => (
   <div className='row my-4 d-flex justify-content-center'>
     <div className='col'>
       <label htmlFor={`${label.toLowerCase()}-0`}>{label}:&nbsp;</label>
@@ -32,6 +32,7 @@ const MobileViewItem = ({ label, option, isDate, updateHandler, addHandler, remo
               value={option[label.toLowerCase()] || ''} 
               className='form-control'
               handler={updateHandler}
+              isDisabled={isDisabled}
             />
         }
         </div>

@@ -22,7 +22,7 @@ const CustomTD = ({ index, label, value, handler, isDate, hasOwnTable, isTotal, 
   :
     (hasOwnTable || isTotal) ?
       value ?
-        <td className={isNegative(value)}>${thousandsSeparator(invertNegative(value))}</td>
+        <td className={isNegative(value)}>${thousandsSeparator(invertNegative(parseFloat(value)))}</td>
       :
         <td className={isNegative(0)}>${thousandsSeparator(invertNegative(0))}</td>
   :

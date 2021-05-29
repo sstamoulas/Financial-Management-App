@@ -7,7 +7,7 @@ const areEqual = (prevProps, nextProps) => {
   prevProps.label === nextProps.label;
 }
 
-const CustomInput = ({ index, label, value, handler, className }) => (
+const CustomInput = ({ index, label, value, isDisabled, handler, className }) => (
   <>
     <label htmlFor={`${label}-${index}`} className='hide'>{value}</label>
     <input 
@@ -15,6 +15,7 @@ const CustomInput = ({ index, label, value, handler, className }) => (
       id={`${label}-${index}`}
       value={value || ''} 
       className={className}
+      disabled={isDisabled}
       onChange={(e) => handler(e.target.value, label.toLowerCase(), index)} 
     />
   </>

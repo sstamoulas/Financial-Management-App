@@ -1,5 +1,5 @@
 import React, { useState }  from 'react';
-import { connect } from 'react-redux';
+import { connect, batch } from 'react-redux';
 
 import CustomButton from '../custom-button/custom-button.component';
 import CustomSelect from '../custom-select/custom-select.component';
@@ -11,29 +11,36 @@ import { formatDate, generateTotal, invertNegative, isNegative, thousandsSeparat
 
 import './mobile-view.styles.scss';
 
-const MobileView = ({ options, tableOptions, credits, debits, 
+const MobileView = ({ options, credits, debits, 
   tabHandler, updateItems, updateItemsStart, 
   removeItems, removeItemsStart, addItem }) => {
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedIndex, setSelectedIndex] = useState(options.length ? options[0].value : 0);
 
   const update = (value, label) => {
     if(label === 'date') {
       value = formatDate(value)
     }
 
-    updateItems(selectedIndex, value, label);
-    updateItemsStart(selectedIndex, value, label);
+    batch(() => {
+      updateItems(selectedIndex, value, label);
+      updateItemsStart(selectedIndex, value, label);
+    });
   }
 
   const addRow = () => {
-    addItem();
-    setSelectedIndex(options.length)
+    console.log(options)
+    batch(() => {
+      addItem();
+      setSelectedIndex(options.length ? options[options.length - 1].value : 0);
+    });
   }
 
   const removeRow = () => {
-    removeItems(selectedIndex);
-    removeItemsStart(selectedIndex);
-    setSelectedIndex(selectedIndex > 0 ? (selectedIndex - 1) : 0);
+    batch(() => {
+      removeItems(selectedIndex);
+      removeItemsStart(selectedIndex);
+      setSelectedIndex(options.length ? (options[options.length - 1].value) : 0);
+    });
   }
 
   const setIndex = (index) => {
@@ -44,8 +51,8 @@ const MobileView = ({ options, tableOptions, credits, debits,
     setSelectedIndex(0);
   }
 
-  const selectOptions = options && options.map(({paid, label}, index) => {
-    return {label: `${label.substring(0, 25)} - $${!isNaN(paid) ? thousandsSeparator(invertNegative(parseFloat(paid).toFixed(2))) : 0}`, index}
+  const selectOptions = options && options.map(({paid, label, value}) => {
+    return {label: `${label.substring(0, 25)} - $${!isNaN(paid) ? thousandsSeparator(invertNegative(parseFloat(paid))) : 0}`, value}
   });
 
   let creditPaidTotal = generateTotal(credits, 'paid'), totalPaid = creditPaidTotal;
@@ -59,34 +66,33 @@ const MobileView = ({ options, tableOptions, credits, debits,
     totalDue = debitDueTotal - creditDueTotal;
   }
 
+  //console.log(selectedIndex, options, credits)
+
   return options && !!options.length ?
     (
       <>
-        <div className='d-flex justify-content-center'>
+        <div className='mt-5 d-flex justify-content-center'>
           <CustomSelect
             size='medium-size'
             identifier='labels'
             handler={setIndex}
             options={selectOptions}
-            selectedItem={selectOptions[selectedIndex]}
+            selectedItem={selectOptions.find((option) => option.value === selectedIndex)}
           />
         </div>
-        <div className={'mt-5 d-flex justify-content-center'} style={{fontSize: '25px'}}>Budget: ${thousandsSeparator(invertNegative((totalDue).toFixed(2)))}</div>
-        <div className={`d-flex justify-content-center ${isNegative(totalPaid)}`} style={{fontSize: '25px'}}>Total: ${thousandsSeparator(invertNegative((totalPaid).toFixed(2)))}</div>
-        {     
-          !options[selectedIndex].hasOwnProperty('due') &&
-            <CustomButton text='Add New Expense' handler={addRow} className="mt-5" />
-        }
+        <div className={'mt-5 d-flex justify-content-center'} style={{fontSize: '25px'}}>Budget: ${thousandsSeparator(invertNegative(parseFloat(totalDue)))}</div>
+        <div className={`d-flex justify-content-center ${isNegative(totalPaid)}`} style={{fontSize: '25px'}}>Total: ${thousandsSeparator(invertNegative(parseFloat(totalPaid)))}</div>
+        <CustomButton text='Add New Expense' handler={addRow} className="mt-5" />
         {        
-          options[selectedIndex].hasOwnTable ?
+          options.find((option) => option.value === selectedIndex).hasOwnTable ?
             <MobileViewUneditable 
               tabHandler={tabHandler} 
               updateHandler={update} 
-              option={options[selectedIndex]} 
+              option={options.find((option) => option.value === selectedIndex)} 
             />
           :
             <MobileViewEditable 
-              option={options[selectedIndex]} 
+              option={options.find((option) => option.value === selectedIndex)} 
               updateHandler={update} 
               addHandler={addRow} 
               removeHandler={removeRow}
@@ -97,8 +103,8 @@ const MobileView = ({ options, tableOptions, credits, debits,
   :
     (
       <>
-        <div className={'mt-5 d-flex justify-content-center'} style={{fontSize: '25px'}}>Budget: ${thousandsSeparator(invertNegative((totalDue).toFixed(2)))}</div>
-        <div className="d-flex justify-content-center" style={{fontSize: '25px'}}>Total: ${thousandsSeparator(parseFloat(totalPaid).toFixed(2))}</div>
+        <div className={'mt-5 d-flex justify-content-center'} style={{fontSize: '25px'}}>Budget: ${thousandsSeparator(invertNegative(parseFloat(totalDue)))}</div>
+        <div className="d-flex justify-content-center" style={{fontSize: '25px'}}>Total: ${thousandsSeparator(parseFloat(totalPaid))}</div>
         <CustomButton text='Add New Expense' handler={addRow} className="mt-5" />
       </>
     )
