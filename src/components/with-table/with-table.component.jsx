@@ -31,10 +31,7 @@ const WithTable = (WrappedComponent) => (props) => {
     batch(() => {
       removeItems(index);
       removeItemsStart(index);
-
-      if(removeMetaTableStart) {
-        removeMetaTableStart(index);
-      }
+      removeMetaTableStart(index);
     })
   }
 

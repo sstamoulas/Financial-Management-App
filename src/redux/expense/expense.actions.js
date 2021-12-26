@@ -47,9 +47,9 @@ export const removeItemsStart = (index) => ({
   payload: {index},
 });
 
-export const removeItemsSuccess = ({expenses}) => ({
+export const removeItemsSuccess = ({tables}) => ({
   type: ExpenseActionTypes.REMOVE_ITEMS_SUCCESS,
-  payload: expenses,
+  payload: tables,
 });
 
 export const removeItemsFailure = (errorMessage) => ({
@@ -145,7 +145,7 @@ export const fetchYearsFailure = ({errorMessage}) => ({
   payload: errorMessage,
 });
 
-export const fetchTablesSuccess = ({tables}) => ({
+export const fetchTablesSuccess = (tables) => ({
   type: ExpenseActionTypes.FETCH_TABLES_SUCCESS,
   payload: tables,
 });
@@ -159,9 +159,9 @@ export const fetchItemsStart = () => ({
   type: ExpenseActionTypes.FETCH_ITEMS_START,
 });
 
-export const fetchItemsSuccess = ({tables}) => ({
+export const fetchItemsSuccess = (data) => ({
   type: ExpenseActionTypes.FETCH_ITEMS_SUCCESS,
-  payload: tables,
+  payload: data,
 });
 
 export const fetchItemsFailure = (errorMessage) => ({

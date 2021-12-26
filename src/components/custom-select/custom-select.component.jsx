@@ -31,7 +31,7 @@ const CustomSelect = ({size, identifier, options, handler, selectedItem}) => {
               id={`${identifier}`}
               className={`input-control ${identifier} ${size}`}
               onChange={() => console.log('changed')}
-              value={selectedItem.label}
+              value={selectedItem.label || ''}
             />
             <label className='visuallyhidden' htmlFor={`${identifier}`}>Choose {identifier}</label>
           </div>

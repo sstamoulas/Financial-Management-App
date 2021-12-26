@@ -66,8 +66,6 @@ const Main = ({ monthOptions, yearOptions, tableOptions,
   const findTable = (value) => {
     const option = tableOptions.find(option => option.value === value);
 
-    console.log('tableOptions and value:', tableOptions, value)
-
     return option.value;
   }
 

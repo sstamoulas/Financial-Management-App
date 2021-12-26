@@ -63,7 +63,7 @@ const OverviewTable = ({ credits, debits, tableOptions, selectedTable, removeIte
 }
 
 const mapStateToProps = (state) => ({
-  debits: state.root.data && state.root.data.filter(data => !data.isExpense),
+  debits: !!state.root.data && !!state.root.data.length ? state.root.data.filter(dataItem => !dataItem.isExpense) : [],
 });
 
 export default connect(mapStateToProps)(OverviewTable);

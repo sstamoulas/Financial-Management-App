@@ -10,7 +10,7 @@ const mapStateToProps = (state) => ({
   tableOptions: state.root.tableOptions,
   selectedTable: state.root.selectedTable,
   headers: ['Remove', 'Name', 'Due', 'Paid', 'Date'],
-  credits: state.root.data && state.root.data.filter(data => data.isExpense),
+  credits: !!state.root.data && !!state.root.data.length ? state.root.data.filter(dataItem => dataItem.isExpense) : [],
   hasDueItems: true,
   usesLink: true,
 });

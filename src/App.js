@@ -1,22 +1,25 @@
 import React, { useEffect, useRef } from 'react';
-import { connect } from 'react-redux';
+import { batch, connect } from 'react-redux';
 
 import Main from './components/main/main.component';
 import CustomeLoader from './components/custom-loader/custom-loader.component';
 
-import { fetchMetaStart } from './redux/expense/expense.actions';
+import { fetchItemsStart, fetchMetaStart } from './redux/expense/expense.actions';
 
 import './App.styles.scss';
 
-const App = ({ isFetching, fetchMetaStart }) => {
+const App = ({ isFetching, fetchItemsStart, fetchMetaStart }) => {
   const isMounted = useRef(false);
 
   useEffect(() => {
     if (!isMounted.current) {
-      fetchMetaStart();
+      batch(() => {
+        fetchItemsStart();
+        fetchMetaStart();
+      })
       isMounted.current = true;
     }
-  }, [isFetching, fetchMetaStart]);
+  }, [isFetching, fetchItemsStart, fetchMetaStart]);
 
   return isMounted.current && !isFetching ?
     (
@@ -33,6 +36,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  fetchItemsStart: () => dispatch(fetchItemsStart()),
   fetchMetaStart: () => dispatch(fetchMetaStart()),
 });
 

@@ -30,20 +30,24 @@ const expenseReducer = (state = INITIAL_STATE, action) => {
         ...state,
         data: updateItem(state.data, {...action.payload}),
       };
-    case ExpenseActionTypes.REMOVE_META_TABLE_START:
-    case ExpenseActionTypes.ADD_META_TABLE_START:
-    case ExpenseActionTypes.REMOVE_ITEMS_START:
     case ExpenseActionTypes.UPDATE_ITEMS_START:
     case ExpenseActionTypes.UPDATE_MONTH_START:
     case ExpenseActionTypes.UPDATE_YEAR_START:
     case ExpenseActionTypes.UPDATE_TABLE_START:
-    case ExpenseActionTypes.REMOVE_ITEMS_SUCCESS:
     case ExpenseActionTypes.UPDATE_ITEMS_SUCCESS:
     case ExpenseActionTypes.REMOVE_META_TABLE_SUCCESS:
     case ExpenseActionTypes.ADD_META_TABLE_SUCCESS:
       return {
         ...state,
       };
+    case ExpenseActionTypes.REMOVE_ITEMS_SUCCESS:
+      return {
+        ...state,
+        isFetching: false,
+      };
+    case ExpenseActionTypes.REMOVE_META_TABLE_START:
+    case ExpenseActionTypes.REMOVE_ITEMS_START:
+    case ExpenseActionTypes.ADD_META_TABLE_START:
     case ExpenseActionTypes.FETCH_ITEMS_START:
       return {
         ...state,
